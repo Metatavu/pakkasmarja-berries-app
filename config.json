@@ -1,0 +1,12 @@
+{
+  "server": {
+    "host": "localhost",
+    "port": 8000,
+    "secure": false
+  },
+  "generic": {
+    "defaultSrc": "'self' http: https: data: gap: ws: wss: https://ssl.gstatic.com *.metatavu.io 'unsafe-inline'",
+    "styleSrc": "'self' http: https: *.metatavu.io 'unsafe-inline'",
+    "mediaSrc": "*"
+  }
+}
