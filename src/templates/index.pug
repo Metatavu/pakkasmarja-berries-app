@@ -8,36 +8,138 @@ html
     meta(charset='UTF-8')
     // bower:css 
     // endbower 
-    link(rel='stylesheet', href='css/viljelija.min.css')
+    link(rel='stylesheet', href='css/pakkasmarja-berries.min.css')
     link(rel='stylesheet', href='css/overrides.css')
     script(src="cordova.js",type="text/javascript")
     // bower:js 
     // endbower 
     script(src='https://auth.metatavu.io/auth/js/keycloak.js',type='text/javascript')
     script(src='js/config.js')
+    script(src='js/pakkasmarja-berries.js')
     title Viljelija
   body
     nav.navbar.navbar-toggleable-md.navbar-light.bg-faded
-      button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
-        i.fa.fa-bars
-      a.navbar-brand(href='#')
-        img(src='gfx/top_logo.png')
-      #navbarContent.collapse.navbar-collapse
-        ul.navbar-nav.mr-auto
-          li.nav-item.active
-            a.nav-link.query-selection(href='#') Back to query selection
-          li.nav-item
-            a.nav-link(href='#') Settings
-    .container.chart-view
-      .row.chart-row
-        .chart-container
-          canvas#chart
-      .row.query-row
-        p.query-thesis
-      .row.chat-row
-        .swiper-container
-          .swiper-wrapper
-    .container.query-view
-      .row
-        .query-container
-          ul.available-queries.list-group
+      .container-fluid
+        .row.no-gutters
+          .col-2.flex-last
+            a.btn.menu-btn(data-toggle='collapse', href='#collapseExample', aria-expanded='false', aria-controls='collapseExample')
+              i.fa.fa-bars
+          .col-8
+            a.top-logo-container(href='#')
+              img.top-logo(src='gfx/top_logo.png')
+          .col-2.flex-first
+            a.settings-btn
+              img.settings-icon(src='gfx/settings.png')
+    .row.no-gutters.secondary-menu
+      .col-4.menu-item-container
+        a.menu-item.active(href='#', data-slide-index='0') Ajankohtaista
+      .col-4.menu-item-container
+        a.menu-item(href='#', data-slide-index='1') Keskustelu
+      .col-4.menu-item-container
+        a.menu-item(href='#', data-slide-index='2') Kysymykset
+    .swiper-container.swiper-horizontal
+      .swiper-wrapper
+        .swiper-slide
+          .swiper-container.swiper-vertical
+            .swiper-wrapper
+              .swiper-slide.swiper-slide-inner
+                .container-fluid.list-view.news-view
+                  ul.list-unstyled
+                   li.media.item-row
+                     .media-body
+                       h5.mt-0.mb-1 List-based media object
+                       small 10.02
+                   li.media.item-row
+                     .media-body
+                       h5.mt-0.mb-1 List-based media object
+                       small 10.02
+                   li.media.item-row
+                     .media-body
+                       h5.mt-0.mb-1 List-based media object
+                       small 10.02
+                   li.media.item-row
+                     .media-body
+                       h5.mt-0.mb-1 List-based media object
+                       small 10.02
+                   li.media.item-row
+                     .media-body
+                       h5.mt-0.mb-1 List-based media object
+                       small 10.02
+                   li.media.item-row
+                     .media-body
+                       h5.mt-0.mb-1 List-based media object
+                       small 10.02
+                   li.media.item-row
+                     .media-body
+                       h5.mt-0.mb-1 List-based media object
+                       small 10.02
+                   li.media.item-row
+                     .media-body
+                       h5.mt-0.mb-1 List-based media object
+                       small 10.02
+                   li.media.item-row
+                     .media-body
+                       h5.mt-0.mb-1 List-based media object
+                       small 10.02
+                   li.media.item-row
+                     .media-body
+                       h5.mt-0.mb-1 List-based media object
+                       small 10.02
+                   li.media.item-row
+                     .media-body
+                       h5.mt-0.mb-1 List-based media object
+                       small 10.02
+                   li.media.item-row
+                     .media-body
+                       h5.mt-0.mb-1 List-based media object
+                       small 10.02
+            .swiper-scrollbar
+        .swiper-slide
+          .swiper-container.swiper-vertical
+            .swiper-wrapper
+              .swiper-slide.swiper-slide-inner
+                .container-fluid.list-view.conversations-view
+                  ul.list-unstyled
+                    li.media.item-row
+                      img.d-flex.mr-3(src='gfx/placeholder.png', alt='Generic placeholder image')
+                      .media-body
+                        h5.mt-0.mb-1 Jääkiekkoilijat
+                        small 10.02
+                    li.media.item-row
+                      img.d-flex.mr-3(src='gfx/placeholder.png', alt='Generic placeholder image')
+                      .media-body
+                        h5.mt-0.mb-1 Mansikanviljelijät
+                        small 10.02
+                    li.media.item-row
+                      img.d-flex.mr-3(src='gfx/placeholder.png', alt='Generic placeholder image')
+                      .media-body
+                        h5.mt-0.mb-1 Mustikanviljelijät
+                        small 10.02
+            .swiper-scrollbar
+        .swiper-slide
+          .swiper-container.swiper-vertical
+            .swiper-wrapper
+              .swiper-slide.swiper-slide-inner
+                .container-fluid.list-view.questions-view
+                  ul.list-unstyled
+                    li.media.item-row
+                      img.d-flex.mr-3(src='gfx/placeholder.png', alt='Generic placeholder image')
+                      .media-body
+                        h5.mt-0.mb-1 Tuoremarjat
+                        small 10.02
+                    li.media.item-row
+                      img.d-flex.mr-3(src='gfx/placeholder.png', alt='Generic placeholder image')
+                      .media-body
+                        h5.mt-0.mb-1 Mansikat
+                        small 10.02
+                    li.media.item-row
+                      img.d-flex.mr-3(src='gfx/placeholder.png', alt='Generic placeholder image')
+                      .media-body
+                        h5.mt-0.mb-1 Mustikat
+                        small 10.02
+                    li.media.item-row
+                      img.d-flex.mr-3(src='gfx/placeholder.png', alt='Generic placeholder image')
+                      .media-body
+                        h5.mt-0.mb-1 Puolukat
+                        small 10.02
+            .swiper-scrollbar
