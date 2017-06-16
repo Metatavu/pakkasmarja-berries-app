@@ -4,6 +4,7 @@
   $.widget("custom.pakkasmarjaBerries", { 
     _create : function() {
       this.element.pakkasmarjaBerriesChat();
+      this.element.pakkasmarjaBerriesNews();
       this.horizontalSwiper = new Swiper('.swiper-horizontal', {});
       this.verticalSwiper = new Swiper('.swiper-vertical', {
         scrollbar: '.swiper-scrollbar',
