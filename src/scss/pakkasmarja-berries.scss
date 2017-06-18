@@ -160,6 +160,7 @@ html, body {
     position: fixed;
     z-index: 5;
     width: 100%;
+    
    .chat-back-menu {
       background-color: #fff;
       box-sizing: border-box;
@@ -273,26 +274,29 @@ html, body {
     width: 85%;
     height: auto;
     display: block;
-    background: #AFF1FA;
+    background: #aff1fa;
     border-radius: 4px;
     box-shadow: 1px -1px 3px #000;
     position: relative;
     margin: 0 0 20px 40px;
    
-    .txt-admin{
+    .txt-admin {
       padding: 8px 30px 8px 14px;
+      
       .admin{
         font-weight: 600;
         font-size: 16px;
         margin: 0 0 4px;
-        color: #FF0000;
+        color: #ff0000;
       }
-      .message-admin{
+      
+      .message-admin {
         font-size: 14px;
         margin: 0;
         color: #2b2b2b;
       }
     }
+    
     .admin-bubble-arrow {
       position: absolute;
       right: -14px;
@@ -302,7 +306,7 @@ html, body {
       
       i {
         font-size: 36px;
-        color: #AFF1FA;
+        color: #aff1fa;
         text-shadow: 1px -1px 3px #000;
       }
     }
