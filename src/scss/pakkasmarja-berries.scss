@@ -295,6 +295,7 @@ html, body {
         margin: 0;
         color: #2b2b2b;
       }
+      
     }
     
     .admin-bubble-arrow {
@@ -303,12 +304,13 @@ html, body {
       z-index: 5;
       width: 15px;
       bottom: 8px;
-      
+
       i {
         font-size: 36px;
         color: #aff1fa;
         text-shadow: 1px -1px 3px #000;
       }
+
     }
   } 
 }
