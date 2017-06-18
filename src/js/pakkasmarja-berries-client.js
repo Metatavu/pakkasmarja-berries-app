@@ -60,7 +60,7 @@
       this._reconnectTimeout = setTimeout($.proxy(function () {
         console.log("timeout socket state: " + this._webSocket.readyState);
         
-        this.element.liveDelphiAuth('join');
+        this.element.pakkasmarjaBerriesAuth('join');
         
         if (this._webSocket.readyState === this._webSocket.CLOSED) {
           this._reconnect();

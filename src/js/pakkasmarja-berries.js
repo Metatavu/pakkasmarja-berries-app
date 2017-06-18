@@ -27,7 +27,9 @@
         serverUrl: serverUrl
       });
       
+      this.element.pakkasmarjaBerriesNews();
       this.element.pakkasmarjaBerriesChat();
+      
       this.horizontalSwiper = new Swiper('.swiper-horizontal', {});
       this.verticalSwiper = new Swiper('.swiper-vertical', {
         scrollbar: '.swiper-scrollbar',
@@ -36,9 +38,9 @@
         mousewheelControl: true,
         freeMode: true
       });
-      this.horizontalSwiper.on('onSlideChangeEnd', (swiper) => {this._onSlideChangeEnd(swiper); });
-      $(this.element).find('.secondary-menu .menu-item').on('click', (event) => { this._onMenuItemClick(event); });
       
+      this.horizontalSwiper.on('onSlideChangeEnd', (swiper) => {this._onSlideChangeEnd(swiper); });
+      this.element.find('.secondary-menu .menu-item').on('click', (event) => { this._onMenuItemClick(event); });
       
       this.element.pakkasmarjaBerriesAuth('authenticate'); 
     },
