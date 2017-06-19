@@ -17,22 +17,26 @@
     },
     
     connect: function (sessionId) {
+      alert("Yhdistetään...");
       this._state = 'CONNECTING';
       
       this._webSocket = this._createWebSocket(sessionId);
       if (!this._webSocket) {
-        // Handle error
+        alert("Client !this._webSocket");
         return;
       } 
       
       switch (this._webSocket.readyState) {
         case this._webSocket.CONNECTING:
+          alert("case this._webSocket.CONNECTING");
           this._webSocket.onopen = $.proxy(this._onWebSocketOpen, this);
         break;
         case this._webSocket.OPEN:
+          alert("case this._webSocket.OPEN");
           this._onWebSocketOpen();
         break;
         default:
+          alert("case default");
           this._reconnect();
         break;
       }
@@ -43,10 +47,12 @@
     },
     
     sendMessage: function (data) {
+      alert("Client sendMessage");
       this._sendMessage(data);
     },
     
     _reconnect: function () {
+      alert("Client _reconnect");
       console.log("Reconnecting...");
       
       if (this._reconnectTimeout) {
@@ -69,6 +75,7 @@
     },
 
     _createWebSocket: function (sessionId) {
+      alert("Client _createWebSocket, sessionId: " + sessionId);
       const url = this.options.wsUrl + '/' + sessionId;
       if ((typeof window.WebSocket) !== 'undefined') {
         return new WebSocket(url);
@@ -78,6 +85,7 @@
     },
     
     _sendMessage: function (data) {
+      alert("Client _sendMessage");
       const message = JSON.stringify(data);
       
       if (this._state === 'CONNECTED') {
@@ -88,6 +96,7 @@
     },
     
     _onWebSocketOpen: function (event) {
+      alert("Client _onWebSocketOpen");
       while (this._pendingMessages.length) {
         this._webSocket.send(this._pendingMessages.shift());
       }
@@ -100,6 +109,7 @@
     },
     
     _onWebSocketMessage: function (event) {
+      alert("Client _onWebSocketMessage");
       const message = JSON.parse(event.data);
       this.element.trigger("message:" + message.type, message.data); 
     },

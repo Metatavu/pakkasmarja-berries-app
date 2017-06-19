@@ -1,6 +1,6 @@
 {
   "server": {
-    "host": "localhost",
+    "host": "dev-berries.metatavu.io",
     "port": 8000,
     "secure": false
   },
