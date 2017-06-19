@@ -1,0 +1,10 @@
+li.media.item-row.news-item(data-id=id, data-title=title, data-created=created, data-modified=modified, data-contents=contents)
+  .media-body
+    h5.mt-0.mb-1
+      =title
+    small
+      span.news-item-created
+      =createdFormatted
+      if created !== modified
+        span.news-item-modified
+          =modifiedFormatted

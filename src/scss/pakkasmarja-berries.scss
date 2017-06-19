@@ -160,6 +160,7 @@ html, body {
     position: fixed;
     z-index: 5;
     width: 100%;
+    
    .chat-back-menu {
       background-color: #fff;
       box-sizing: border-box;
@@ -192,7 +193,7 @@ html, body {
 }
 
 .chat-conversation-wrapper {
-  background-image: url('/../gfx/taustatapetti.png');
+  background-image: url("/../gfx/taustatapetti.png");
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
