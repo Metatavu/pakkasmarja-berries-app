@@ -11,7 +11,8 @@
     
     _create: function() {
       this.page = 1;
-      this.morePages = true;
+      this.morePages = true;      
+      $(`.news-view`).addClass('loading');           
       this.element.on('click', '.news-open-btn', $.proxy(this._onNewsElementClick, this));
       this.element.on('click', '.news-close-btn', $.proxy(this._onNewsCloseElementClick, this));
       $(document.body).on('connect', $.proxy(this._onConnect, this));
@@ -34,6 +35,7 @@
     },
     
     _addNewsItem: function (newsItems) {
+      $(`.news-view`).removeClass('loading');
       newsItems.forEach((newsItem) => {              
         $(`.news-item[data-id=${newsItem.id}]`).remove();
         $('.news-view ul').append(pugNewsItem(Object.assign(newsItem, {

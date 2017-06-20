@@ -193,7 +193,7 @@ html, body {
 }
 
 .chat-conversation-wrapper {
-  background-image: url("/../gfx/taustatapetti.png");
+  background-image: url("../gfx/taustatapetti.png");
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
@@ -223,7 +223,7 @@ html, body {
     
     .message-send-btn {
       font-size: 28px;
-      color: #FF0000;
+      color: #ff0000;
       margin-left: 18px;
       margin-top: 3px;
       display: block;
@@ -236,10 +236,18 @@ html, body {
     }
   }
   
-  .speech-wrapper{
+  .speech-wrapper {
     padding: 15px 20px;
     overflow: auto;
-    .bubble{
+    
+    &.loading {
+      background-image: url("../gfx/loader.svg");
+      background-repeat: no-repeat;
+      min-height:120px;
+      background-position: center;
+    }
+    
+    .bubble {
       width: 85%;
       height: auto;
       display: block;
@@ -249,15 +257,20 @@ html, body {
       position: relative;
       margin: 0 0 15px;
 
-      .txt{
-        padding: 8px 30px 8px 14px;
-        .name{
+      .txt {
+        padding-top: 8px;
+        padding-right: 30px;
+        padding-bottom: 8px;
+        padding-left: 14px;
+        
+        .name {
           font-weight: 600;
           font-size: 16px;
           margin: 0 0 4px;
           color: #3498db;
         }
-        .message{
+        
+        .message {
           font-size: 14px;
           margin: 0;
           color: #2b2b2b;
@@ -278,30 +291,39 @@ html, body {
       }
     }
 
-    .bubble-admin{
+    .bubble-admin {
       width: 85%;
       height: auto;
       display: block;
-      background: #AFF1FA;
+      background: #aff1fa;
       border-radius: 4px;
       box-shadow: 1px 0px 3px #000;
-      position: relative;
-      margin: 0 0 20px 40px;
+      position: relative; 
+      margin-top: 0;
+      margin-right: 0;
+      margin-bottom: 20px,
+      margin-left: 40px;
 
-      .txt-admin{
-        padding: 8px 30px 8px 14px;
-        .admin{
+      .txt-admin {
+        padding-top: 8px;
+        padding-right: 30px;
+        padding-bottom: 8px;
+        padding-left: 14px;
+        
+        .admin {
           font-weight: 600;
           font-size: 16px;
           margin: 0 0 4px;
-          color: #FF0000;
+          color: #ff0000;
         }
-        .message-admin{
+        
+        .message-admin {
           font-size: 14px;
           margin: 0;
           color: #2b2b2b;
         }
       }
+      
       .admin-bubble-arrow {
         position: absolute;
         right: -13px;
@@ -311,18 +333,29 @@ html, body {
 
         i {
           font-size: 36px;
-          color: #AFF1FA;
+          color: #aff1fa;
         }
       }
     } 
   }
 }
 
+.news-view {
+  
+  &.loading {
+    background-image: url("../gfx/loader.svg");
+    background-repeat: no-repeat;
+    min-height:120px;
+    background-position: center;
+  }
+  
+}
+
 .news-wrapper {
   display: none;
   width: 100%;
-  position:absolute;
-  top: 0px;
+  position: absolute;
+  top: 0;
   
   .news-image {
     width: 100%;

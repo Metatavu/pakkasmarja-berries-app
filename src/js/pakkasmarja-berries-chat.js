@@ -22,7 +22,7 @@
     },
     
     joinThread: function(threadId) {
-      $(`.chat-container .speech-wrapper`).empty();
+      $(`.chat-container .speech-wrapper`).empty().addClass('loading');
       
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'get-messages',
@@ -47,6 +47,7 @@
     },
     
     _addMessages: function (messages) {
+      $(`.chat-container .speech-wrapper`).removeClass('loading');
       messages.forEach((message) => {      
         $(`.chat-message[data-id=${message.id}]`).remove();
         $(`.chat-container .speech-wrapper`).append(pugChatMessage(message));
