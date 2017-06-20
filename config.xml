@@ -8,6 +8,7 @@
     <access origin="https://auth.metatavu.io" />
     <access origin="https://cdn.metatavu.io" />
     <access origin="http://localhost:8000" />
+    <access origin="https://pakkasmarja-berries.metatavu.io" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="ws://*/*" />

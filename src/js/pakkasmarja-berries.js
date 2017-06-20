@@ -18,7 +18,6 @@
       this.element.on('authenticated', $.proxy(this._onAuthenticated, this));
       this.element.on('joined', $.proxy(this._onJoined, this));
       this.element.on('connect', $.proxy(this._onConnect, this));
-      this.element.on('message:message-added', $.proxy(this._onMessageNewMessageAdded, this));
       
       this.element.pakkasmarjaBerriesClient({
         wsUrl: wsUrl,
@@ -77,10 +76,6 @@
     
     _onConnect: function (event, data) {
       
-    },
-    
-    _onMessageNewMessageAdded: function (event, data) {
-      alert('_onMessageNewMessageAdded');
     }
     
   });
