@@ -1,8 +1,8 @@
 {
   "server": {
-    "host": "localhost",
-    "port": 8000,
-    "secure": false
+    "host": "pakkasmarja-berries.metatavu.io",
+    "port": 443,
+    "secure": true
   },
   "generic": {
     "defaultSrc": "'self' http: https: data: gap: ws: wss: https://ssl.gstatic.com *.metatavu.io localhost:8000 'unsafe-inline'",

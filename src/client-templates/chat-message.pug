@@ -1,0 +1,17 @@
+.chat-message(data-id=id)
+  if admin 
+    .bubble-admin
+      .txt-admin
+        p.admin Pakkasmarja
+        p.message-admin
+          =contents
+      .admin-bubble-arrow
+        i.fa.fa-caret-right.fa-x3(aria-hidden='true')
+  else
+    .bubble
+      .txt
+        p.name Esimerkki viljelijä
+        p.message
+          =contents
+      .bubble-arrow
+        i.fa.fa-caret-left.fa-x3(aria-hidden='true')

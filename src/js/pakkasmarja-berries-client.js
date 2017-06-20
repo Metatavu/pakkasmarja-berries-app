@@ -22,7 +22,6 @@
       
       this._webSocket = this._createWebSocket(sessionId);
       if (!this._webSocket) {
-        // Handle error
         return;
       } 
       
