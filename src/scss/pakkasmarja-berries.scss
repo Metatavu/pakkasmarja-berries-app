@@ -367,7 +367,7 @@ $slide-margin-top: 25px;
     margin-top: -120px;
     width: 100%; 
     background-position: center;
-    content: '';
+    content: "";
     display: block;
     position: absolute;
   }
@@ -375,9 +375,9 @@ $slide-margin-top: 25px;
   &.sending::after {
     background-image: url("../gfx/loader.svg");
     background-repeat: no-repeat;
-    height:120px;
+    height: 120px;
     background-position: center;
-    content: '';
+    content: "";
     display: block;
   }
   
@@ -387,9 +387,9 @@ $slide-margin-top: 25px;
   &.loading::after {
     background-image: url("../gfx/loader.svg");
     background-repeat: no-repeat;
-    height:120px;
+    height: 120px;
     background-position: center;
-    content: '';
+    content: "";
     display: block;
   }
 }
