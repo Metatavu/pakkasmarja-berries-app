@@ -8,16 +8,20 @@
     options: {
       serverUrl: 'http://localhost:8000',
       wsUrl: 'ws://localhost:8000',
-      reconnectTimeout: 3000
+      reconnectTimeout: 3000,
+      logDebug: false
     },
     
     _create : function() {
       this._state = null;
       this._pendingMessages = [];
-      this._queryId = null;
     },
     
     connect: function (sessionId) {
+      if (this.options.logDebug) {
+        console.log("Connecting...");
+      }
+      
       this._state = 'CONNECTING';
       
       this._webSocket = this._createWebSocket(sessionId);
@@ -47,8 +51,10 @@
     },
     
     _reconnect: function () {
-      console.log("Reconnecting...");
-      
+      if (this.options.logDebug) {
+        console.log("Reconnecting...");
+      }
+    
       if (this._reconnectTimeout) {
         clearTimeout(this._reconnectTimeout);
       }
@@ -58,7 +64,9 @@
       }
       
       this._reconnectTimeout = setTimeout($.proxy(function () {
-        console.log("timeout socket state: " + this._webSocket.readyState);
+        if (this.options.logDebug) {
+          console.log("timeout socket state: " + this._webSocket.readyState);
+        }
         
         this.element.pakkasmarjaBerriesAuth('join');
         
@@ -95,8 +103,9 @@
       this._state = 'CONNECTED';
       
       this.element.trigger("connect", { }); 
-      
-      console.log("Connected");
+      if (this.options.logDebug) {
+        console.log("Connected");
+      }
     },
     
     _onWebSocketMessage: function (event) {
@@ -105,12 +114,18 @@
     },
     
     _onWebSocketClose: function (event) {
-      console.log("Socket closed");
+      if (this.options.logDebug) {
+        console.log("Socket closed");
+      }
+      
       this._reconnect();
     },
     
     _onWebSocketError: function (event) {
-      console.log("Socket error");
+      if (this.options.logDebug) {
+        console.log("Socket error");
+      }
+      
       this._reconnect();
     }
     
