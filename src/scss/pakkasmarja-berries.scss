@@ -372,6 +372,15 @@ $slide-margin-top: 25px;
     position: absolute;
   }
   
+  &.sending::after {
+    background-image: url("../gfx/loader.svg");
+    background-repeat: no-repeat;
+    height:120px;
+    background-position: center;
+    content: '';
+    display: block;
+  }
+  
 }
 
 .news-view {

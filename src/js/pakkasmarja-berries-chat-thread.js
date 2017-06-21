@@ -13,6 +13,7 @@
       this.activeThreadId = null;
       this.morePages = true;
       this.loading = false;
+      this.sending = false;
       this.page = 0;
       this.element.on('click', '.chat-close-btn', $.proxy(this._onChatCloseElementClick, this));
       this.element.on('keydown', '.message-input', $.proxy(this._onMessageInputClick, this));
@@ -70,23 +71,28 @@
       const scrollTop = $(`.chat-conversation-wrapper`).scrollTop();
       const marginTop = 120;
       
-      $('.chat-container .speech-wrapper').removeClass('loading');
+      $('.chat-container .speech-wrapper').removeClass('loading sending');
       
       const heightOld = $('.chat-container .speech-wrapper').height();
-      messages.forEach((message) => {      
-        $(`.chat-message[data-id=${message.id}]`).remove();
-        $('.chat-container .speech-wrapper').append(pugChatMessage(message));
+      
+      messages.forEach((message) => {
+        if (this.activeThreadId === message.threadId) {
+          $(`.chat-message[data-id=${message.id}]`).remove();
+          $('.chat-container .speech-wrapper').append(pugChatMessage(message));
+        }
       });
+      
       const heightNew = $('.chat-container .speech-wrapper').height();
       const heightDiff = heightNew - heightOld;
       
       this._sortMessages();
       
       $(`.chat-conversation-wrapper`).animate({
-        scrollTop: this.initialLoad ? 5000 : heightDiff + marginTop - (marginTop - scrollTop)
+        scrollTop: this.initialLoad || this.sending ? heightNew : heightDiff + marginTop - (marginTop - scrollTop)
       }, 0, "swing", () => {
         this.initialLoad = false;
         this.loading = false;
+        this.sending = false;
       });
     },
     
@@ -95,7 +101,7 @@
     },
     
     _onWrapperScroll: function () {
-      if (this.loading || !this.isActive()) {
+      if (this.sending || this.loading || !this.isActive()) {
         return;
       }
       
@@ -112,11 +118,20 @@
     
     _onMessageInputClick: function (event) {
       if (event.which === 13) {
-        const content = $(event.target).val();
+        const input = $(event.target);
+        const content = input.val();
         if (content) {
+          this.sending = true;
+          $(`.chat-container .speech-wrapper`).addClass('sending');
+          input.val('').blur();
+          
+          $(`.chat-conversation-wrapper`).animate({
+            scrollTop: $('.chat-container .speech-wrapper').height()
+          }, 200);
+          
           $(document.body).pakkasmarjaBerriesClient('sendMessage', {
             'type': 'send-message',
-            'threadId': '8c8ba345-8f8c-4283-ab4c-a1b5ec323be8',
+            'threadId': this.activeThreadId,
             'contents': content
           });
         }
