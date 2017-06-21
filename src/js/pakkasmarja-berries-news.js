@@ -32,7 +32,7 @@
     
     closeNews: function() {
       $(".news-wrapper").hide("slide", { direction: "right" }, 300);
-      $(".swiper-slide, .secondary-menu, .navbar-top").show("slide", { direction: "left" }, 300);
+      $(document.body).pakkasmarjaBerries('restoreMainView');      
     },
     
     loadPage: function () {

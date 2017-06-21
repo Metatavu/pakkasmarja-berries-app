@@ -28,13 +28,14 @@
       this.loadMessages(this.page);
       
       $(".swiper-slide, .secondary-menu").hide("slide", { direction: "left" }, 300);
+      
       $(".chat-container").show("slide", { direction: "right" }, 300);
     },
       
     leaveThread: function() {
       this.activeThreadId = null;
       $(".chat-container").hide("slide", { direction: "right" }, 300);
-      $(".swiper-slide, .secondary-menu").show("slide", { direction: "left" }, 300);
+      $(document.body).pakkasmarjaBerries('restoreMainView');
     },
       
     loadMessages: function (page) {

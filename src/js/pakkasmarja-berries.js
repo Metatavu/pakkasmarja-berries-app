@@ -53,8 +53,25 @@
       return this.element.pakkasmarjaBerriesAuth('sessionId');
     },
     
+    restoreMainView() {
+      $('.swiper-slide, .secondary-menu, .navbar-top').show("slide", { direction: "left", complete: () => {
+        this.updateSwiper();
+      } }, 300);
+    },
+    
     activePage: function () {
       return $('.menu-item.active').attr('data-page');
+    },
+    
+    activeIndex: function () {
+      return $('.menu-item.active').attr('data-slide-index');
+    },
+    
+    updateSwiper: function () {
+      const activePage = this.activeIndex();
+      this.horizontalSwiper.update();
+      this.horizontalSwiper.slideTo(activePage, 0);
+      this._resizeSlides();
     },
     
     _resizeSlides: function () {
@@ -113,3 +130,4 @@
   });
 
 })();
+
