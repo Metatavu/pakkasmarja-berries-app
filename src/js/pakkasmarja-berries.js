@@ -58,8 +58,15 @@
     },
     
     _resizeSlides: function () {
-      $('.swiper-slide-active').css('height', 'auto');
-      $('.swiper-slide:not(.swiper-slide-active)').css('height', '0px');
+      $('.swiper-slide-active').css({
+        'height': 'auto',
+        'min-height': 'calc(100vh - 95px)'
+      });
+      
+      $('.swiper-slide:not(.swiper-slide-active)').css({
+        'height': '0',
+        'min-height': '0'
+      });
     },
     
     _onWindowScroll: function (event) {
