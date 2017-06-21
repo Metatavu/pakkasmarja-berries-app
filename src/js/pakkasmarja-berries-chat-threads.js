@@ -38,6 +38,11 @@
         'type': 'get-threads',
         'thread-type': 'conversation'
       });
+      
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'get-threads',
+        'thread-type': 'question'
+      });
     },
     
     _onThreadsAdded: function (event, data) {
