@@ -18,13 +18,14 @@
       $(document.body).on('message:news-items-added', $.proxy(this._onNewsItemsAdded, this));
     },
     
-    openNews: function(title, contents, created, modified) {
+    openNews: function(title, contents, created, modified, image) {
       $(".swiper-slide, .secondary-menu, .navbar-top").hide("slide", { direction: "left" }, 300);
       $(".news-wrapper").html(pugNewsItemOpen({
         createdFormatted: this._formatDate(created),
         modifiedFormatted: this._formatDate(modified),
         title: title,
-        contents: contents
+        contents: contents,
+        image: image
       })).show("slide", { direction: "right" }, 300);
     },
     
@@ -38,7 +39,9 @@
         $(`.news-item[data-id=${newsItem.id}]`).remove();
         $('.news-view ul').append(pugNewsItem(Object.assign(newsItem, {
           createdFormatted: this._formatDate(newsItem.created),
-          modifiedFormatted: this._formatDate(newsItem.modified)
+          createdTime: this._formatDate(newsItem.created),
+          modifiedFormatted: this._formatDate(newsItem.modified),
+          modifiedTime: this._formatDate(newsItem.modified)
         })));
       });
       
@@ -58,7 +61,11 @@
     },
     
     _formatDate: function (date) {
-      return moment(date).locale('fi').format('LLLL');
+      return moment(date).locale('fi').format('DD.MM.YYYY');
+    },
+    
+    _formatTime: function (date) {
+      return moment(date).locale('fi').format('H HH');
     },
     
     _onConnect: function (event, data) {
@@ -81,8 +88,9 @@
       const contents = item.attr('data-contents');
       const created = item.attr('data-created');
       const modified = item.attr('data-modified');
+      const image = item.attr('data-image');
       
-      this.openNews(title, contents, created, modified);
+      this.openNews(title, contents, created, modified, image);
     },
     
     _onNewsCloseElementClick: function(event) {
