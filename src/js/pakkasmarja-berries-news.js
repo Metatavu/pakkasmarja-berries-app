@@ -6,16 +6,18 @@
   
   $.widget("custom.pakkasmarjaBerriesNews", {
     options: {
-      pageSize: 15
+      pageSize: 10
     },
     
     _create: function() {
       this.page = 1;
       this.morePages = true;
+      this.loading = false;
       this.element.on('click', '.news-open-btn', $.proxy(this._onNewsElementClick, this));
       this.element.on('click', '.news-close-btn', $.proxy(this._onNewsCloseElementClick, this));
       $(document.body).on('connect', $.proxy(this._onConnect, this));
       $(document.body).on('message:news-items-added', $.proxy(this._onNewsItemsAdded, this));
+      $(document).on('scrollBottom', $.proxy(this._onScrollBottom, this));
     },
     
     openNews: function(title, contents, created, modified, image) {
@@ -31,11 +33,31 @@
     
     closeNews: function() {
       $(".news-wrapper").hide("slide", { direction: "right" }, 300);
-      $(".swiper-slide, .secondary-menu, .navbar-top").show("slide", { direction: "left" }, 300);
+      $(document.body).pakkasmarjaBerries('restoreMainView');      
+    },
+    
+    loadPage: function () {
+      if (!this.morePages) {
+        return;  
+      }
+      
+      $('.news-view').addClass('loading');
+      this.loading = true;
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'get-news',
+        'page': this.page,
+        'perPage': this.options.pageSize
+      });
+    },
+    
+    isActive: function () {
+      return $(document.body).pakkasmarjaBerries('activePage') === 'news';
     },
     
     _addNewsItem: function (newsItems) {
-      newsItems.forEach((newsItem) => {              
+      this.loading = false;
+      $(`.news-view`).removeClass('loading');
+      newsItems.forEach((newsItem) => {
         $(`.news-item[data-id=${newsItem.id}]`).remove();
         $('.news-view ul').append(pugNewsItem(Object.assign(newsItem, {
           createdFormatted: this._formatDate(newsItem.created),
@@ -45,7 +67,7 @@
         })));
       });
       
-      if (newsItems.length < this.pageSize) {
+      if (newsItems.length < this.options.pageSize) {
         this.morePages = false;
       }
 
@@ -68,12 +90,17 @@
       return moment(date).locale('fi').format('H HH');
     },
     
+    _onScrollBottom: function () {
+      if (this.loading || !this.isActive()) {
+        return;
+      }
+      
+      this.page++;
+      this.loadPage();
+    },
+    
     _onConnect: function (event, data) {
-      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
-        'type': 'get-news',
-        'page': this.page,
-        'perPage': this.options.pageSize
-      });
+      this.loadPage();
     },
     
     _onNewsItemsAdded: function (event, data) {

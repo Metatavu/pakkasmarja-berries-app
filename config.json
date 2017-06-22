@@ -1,6 +1,6 @@
 {
   "server": {
-    "host": "dev-berries.metatavu.io",
+    "host": "local-shady.metatavu.io",
     "port": 8000,
     "secure": false
   },
