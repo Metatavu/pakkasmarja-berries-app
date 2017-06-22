@@ -20,13 +20,14 @@
       $(document).on('scrollBottom', $.proxy(this._onScrollBottom, this));
     },
     
-    openNews: function(title, contents, created, modified) {
+    openNews: function(title, contents, created, modified, image) {
       $(".swiper-slide, .secondary-menu, .navbar-top").hide("slide", { direction: "left" }, 300);
       $(".news-wrapper").html(pugNewsItemOpen({
         createdFormatted: this._formatDate(created),
         modifiedFormatted: this._formatDate(modified),
         title: title,
-        contents: contents
+        contents: contents,
+        image: image  ? image : 'https://cdn.metatavu.io/assets/pakkasmarja-berries/background.jpg'
       })).show("slide", { direction: "right" }, 300);
     },
     
@@ -80,7 +81,7 @@
     },
     
     _formatDate: function (date) {
-      return moment(date).locale('fi').format('LLLL');
+      return moment(date).locale('fi').format('DD.MM.YYYY HH:mm');
     },
     
     _onScrollBottom: function () {
@@ -108,8 +109,9 @@
       const contents = item.attr('data-contents');
       const created = item.attr('data-created');
       const modified = item.attr('data-modified');
+      const image = item.attr('data-image');
       
-      this.openNews(title, contents, created, modified);
+      this.openNews(title, contents, created, modified, image);
     },
     
     _onNewsCloseElementClick: function(event) {
