@@ -148,6 +148,15 @@ $slide-margin-top: 25px;
   
 }
 
+.chat-thread {
+  
+  img {
+    max-height: 64px;
+    max-width: 64px;
+  }
+  
+}
+
 .chat-container {
   display: none;
   width: 100%;

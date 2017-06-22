@@ -5,6 +5,7 @@
   $.widget("custom.pakkasmarjaBerriesChatThreads", {
     
     options: {
+      serverUrl: 'http://localhost:8000'
     },
     
     _create: function() {
@@ -22,14 +23,18 @@
       threads.forEach((thread) => {      
         const categorySelector = thread.type === 'conversation' ? '.conversations-view' : '.questions-view';  
         $(`.chat-thread[data-id=${thread.id}]`).remove();
-        $(`${categorySelector} ul`).append(pugChatThread(thread));
+        
+        const threadData = Object.assign(thread, {
+          imageUrl: thread.imagePath ? this.options.serverUrl + thread.imagePath : 'gfx/placeholder.png'
+        });
+        
+        $(`${categorySelector} ul`).append(pugChatThread(threadData));
       });
     },
     
     _onChatThreadClick: function(event) {
       event.preventDefault();
       const element = $(event.target).closest('.chat-thread');
-      
       this.joinThread($(element).attr('data-id'));
     },
     
