@@ -61,9 +61,7 @@
         $(`.news-item[data-id=${newsItem.id}]`).remove();
         $('.news-view ul').append(pugNewsItem(Object.assign(newsItem, {
           createdFormatted: this._formatDate(newsItem.created),
-          createdTime: this._formatDate(newsItem.created),
-          modifiedFormatted: this._formatDate(newsItem.modified),
-          modifiedTime: this._formatDate(newsItem.modified)
+          modifiedFormatted: this._formatDate(newsItem.modified)
         })));
       });
       
@@ -83,11 +81,7 @@
     },
     
     _formatDate: function (date) {
-      return moment(date).locale('fi').format('DD.MM.YYYY');
-    },
-    
-    _formatTime: function (date) {
-      return moment(date).locale('fi').format('H HH');
+      return moment(date).locale('fi').format('DD.MM.YYYY HH:mm');
     },
     
     _onScrollBottom: function () {

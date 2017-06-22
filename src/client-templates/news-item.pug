@@ -4,8 +4,8 @@ li.news-open-btn.media.item-row.news-item(data-id=id, data-title=title, data-cre
       =title
     small
       span.news-item-created
-        =createdFormatted + ' klo '+ createdTime
+        =createdFormatted
       if created !== modified
         br
         span.news-item-modified
-          ='Muokattu: ' + modifiedFormatted + ' klo ' + modifiedTime
+          ='Muokattu: ' + modifiedFormatted
