@@ -149,6 +149,15 @@ $news-view-height: calc(100vh - 91px);
   
 }
 
+.chat-thread {
+  
+  img {
+    max-height: 64px;
+    max-width: 64px;
+  }
+  
+}
+
 .chat-container {
   display: none;
   width: 100%;

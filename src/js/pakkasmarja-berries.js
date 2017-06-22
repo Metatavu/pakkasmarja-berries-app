@@ -35,7 +35,10 @@
       });
       
       this.element.pakkasmarjaBerriesNews();
-      this.element.pakkasmarjaBerriesChatThreads();
+      this.element.pakkasmarjaBerriesChatThreads({
+        serverUrl: serverUrl
+      });
+      
       $(".chat-container").pakkasmarjaBerriesChatThread();
       
       this.horizontalSwiper = new Swiper('.swiper-horizontal', { });
