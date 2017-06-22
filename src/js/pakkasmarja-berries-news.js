@@ -27,7 +27,7 @@
         modifiedFormatted: this._formatDate(modified),
         title: title,
         contents: contents,
-        image: image
+        image: image  ? image : 'https://cdn.metatavu.io/assets/pakkasmarja-berries/background.jpg'
       })).show("slide", { direction: "right" }, 300);
     },
     

@@ -1,7 +1,8 @@
 $banner-height: 50px;
 $menu-height: 41px;
 $header-height: $banner-height + $menu-height;
-$slide-margin-top: 25px;
+$slide-margin-top: 5px;
+$news-view-height: calc(100vh - 91px);
 
 .no-gutters {
   margin-right: 0;
@@ -390,6 +391,8 @@ $slide-margin-top: 25px;
 }
 
 .news-view {
+  height: $news-view-height;
+  overflow: auto;
   &.loading::after {
     background-image: url("../gfx/loader.svg");
     background-repeat: no-repeat;
