@@ -35,7 +35,12 @@
       });
       
       this.element.pakkasmarjaBerriesNews();
+      
       this.element.pakkasmarjaBerriesChatThreads({
+        serverUrl: serverUrl
+      });
+      
+      this.element.pakkasmarjaBerriesQuestionGroups({
         serverUrl: serverUrl
       });
       
