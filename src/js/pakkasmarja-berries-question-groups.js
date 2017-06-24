@@ -10,20 +10,28 @@
     
     _create: function() {
       // TODO: Paging questionGroups
+      this.selectedQuestionGroupId = null;
       this.element.on('click', '.question-group', $.proxy(this._onQuestionGroupClick, this));
       $(document.body).on('connect', $.proxy(this._onConnect, this));
       $(document.body).on('message:question-groups-added', $.proxy(this._onQuestionGroupsAdded, this));
       $(document.body).on('message:question-thread-selected', $.proxy(this._onQuestionThreadSelected, this));
+      $(document.body).on('message:question-group-threads-added', $.proxy(this._onQuestionGroupThreadsAdded, this));
     },
     
     selectQuestionGroup: function(questionGroupId, role) {
       if (role === 'user') {
+        $(`.questions-view ul`).empty();
         $(document.body).pakkasmarjaBerriesClient('sendMessage', {
           'type': 'select-question-group-thread',
           'question-group-id': questionGroupId
         });
       } else if (role === 'manager') {
-        // TODO: List threads
+        this.selectedQuestionGroupId = questionGroupId;
+        $(`.questions-view ul`).empty();
+        $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+          'type': 'get-question-group-threads',
+          'question-group-id': questionGroupId
+        });
       } else {
         console.error(`Invalid question group role '${role}'`);
       }
@@ -38,6 +46,22 @@
         });
         
         $(`.questions-view ul`).append(pugQuestionGroup(questionGroupData));
+      });
+    },
+    
+    _addQuestionGroupThreads: function (threads, questionGroupId) {
+      if (this.selectedQuestionGroupId !== questionGroupId) {
+        return;
+      }
+      
+      threads.forEach((thread) => {      
+        $(`.chat-question-group-thread[data-id=${thread.id}]`).remove();
+        
+        const threadData = Object.assign(thread, {
+          imageUrl: thread.imagePath ? this.options.serverUrl + thread.imagePath : 'gfx/placeholder.png'
+        });
+        
+        $('.questions-view ul').append(pugChatQuestionGroupThread(threadData));
       });
     },
     
@@ -60,6 +84,10 @@
     _onQuestionThreadSelected: function (event, data) {
       const threadId = data['thread-id'];
       $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId);
+    },
+    
+    _onQuestionGroupThreadsAdded: function (event, data) {
+      this._addQuestionGroupThreads(data['threads'], data['question-group-id']);
     }
     
   });
