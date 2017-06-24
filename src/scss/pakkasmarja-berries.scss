@@ -149,7 +149,9 @@ $news-view-height: calc(100vh - 91px);
   
 }
 
-.chat-thread {
+.chat-thread,
+.question-group,
+.chat-question-group-thread {
   
   img {
     max-height: 64px;
