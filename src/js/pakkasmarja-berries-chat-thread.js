@@ -10,19 +10,25 @@
     },
     
     _create: function() {
-      this.activeThreadId = null;
-      this.morePages = true;
-      this.loading = false;
-      this.sending = false;
-      this.page = 0;
+      this.reset();
       this.element.on('click', '.chat-close-btn', $.proxy(this._onChatCloseElementClick, this));
       this.element.on('keydown', '.message-input', $.proxy(this._onMessageInputClick, this));
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
       $(`.chat-conversation-wrapper`).scroll($.proxy(this._onWrapperScroll, this));
     },
     
-    joinThread: function (threadId) {
+    reset: function () {
+      this.activeThreadId = null;
+      this.morePages = true;
+      this.loading = false;
+      this.sending = false;
       this.initialLoad = true;
+      this.page = 0;
+    },
+    
+    joinThread: function (threadId) {
+      this.reset();
+      
       $(`.chat-container .speech-wrapper`).empty();
       this.activeThreadId = threadId;
       this.loadMessages(this.page);
@@ -39,6 +45,10 @@
     },
       
     loadMessages: function (page) {
+      if (!this.morePages) {
+        return;  
+      }
+      
       this.loading = true;
       $(`.chat-container .speech-wrapper`).addClass('loading');
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
@@ -66,8 +76,10 @@
       }).appendTo('.speech-wrapper');
     },
     
-    _addMessages: function (messages) {
-      // TODO: correct thread?
+    _addMessages: function (threadId, messages) {
+      if (this.activeThreadId !== threadId) {
+        return;
+      }
       
       const scrollTop = $(`.chat-conversation-wrapper`).scrollTop();
       const marginTop = 120;
@@ -82,6 +94,10 @@
           $('.chat-container .speech-wrapper').append(pugChatMessage(message));
         }
       });
+      
+      if (messages.length < this.options.messagesLimit) {
+        this.morePages = false;
+      }
       
       const heightNew = $('.chat-container .speech-wrapper').height();
       const heightDiff = heightNew - heightOld;
@@ -140,7 +156,7 @@
     },
     
     _onMessagesAdded: function (event, data) {
-      this._addMessages(data.messages);
+      this._addMessages(data['thread-id'], data['messages']);
     }
     
   });
