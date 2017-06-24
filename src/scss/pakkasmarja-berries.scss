@@ -1,8 +1,7 @@
 $banner-height: 50px;
 $menu-height: 41px;
 $header-height: $banner-height + $menu-height;
-$slide-margin-top: 5px;
-$news-view-height: calc(100vh - 91px);
+$slide-margin-top: 25px;
 
 .no-gutters {
   margin-right: 0;
@@ -149,7 +148,9 @@ $news-view-height: calc(100vh - 91px);
   
 }
 
-.chat-thread {
+.chat-thread,
+.question-group,
+.chat-question-group-thread {
   
   img {
     max-height: 64px;
@@ -400,8 +401,6 @@ $news-view-height: calc(100vh - 91px);
 }
 
 .news-view {
-  height: $news-view-height;
-  overflow: auto;
   &.loading::after {
     background-image: url("../gfx/loader.svg");
     background-repeat: no-repeat;

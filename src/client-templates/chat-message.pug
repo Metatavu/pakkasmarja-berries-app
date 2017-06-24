@@ -2,7 +2,8 @@
   if admin 
     .bubble-admin
       .txt-admin
-        p.admin Pakkasmarja
+        p.admin
+          =userName
         p.message-admin
           =contents
       .admin-bubble-arrow
@@ -10,7 +11,8 @@
   else
     .bubble
       .txt
-        p.name Esimerkki viljelijä
+        p.name
+          =userName
         p.message
           =contents
       .bubble-arrow
