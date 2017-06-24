@@ -12,6 +12,8 @@
       // TODO: Paging questionGroups
       this.selectedQuestionGroupId = null;
       this.element.on('click', '.question-group', $.proxy(this._onQuestionGroupClick, this));
+      this.element.on('click', '.chat-question-group-thread', $.proxy(this._onChatQuestionGroupThreadClick, this));
+      
       $(document.body).on('connect', $.proxy(this._onConnect, this));
       $(document.body).on('message:question-groups-added', $.proxy(this._onQuestionGroupsAdded, this));
       $(document.body).on('message:question-thread-selected', $.proxy(this._onQuestionThreadSelected, this));
@@ -69,6 +71,12 @@
       event.preventDefault();
       const element = $(event.target).closest('.question-group');
       this.selectQuestionGroup($(element).attr('data-id'), $(element).attr('data-role'));
+    },
+    
+    _onChatQuestionGroupThreadClick: function(event) {
+      event.preventDefault();
+      const element = $(event.target).closest('.chat-question-group-thread');
+      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', $(element).attr('data-id'));
     },
     
     _onConnect: function (event, data) {
