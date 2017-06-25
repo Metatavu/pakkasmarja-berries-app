@@ -12,7 +12,7 @@
       // TODO: Paging threads
       this.element.on('click', '.chat-thread', $.proxy(this._onChatThreadClick, this));
       $(document.body).on('connect', $.proxy(this._onConnect, this));
-      $(document.body).on('message:threads-added', $.proxy(this._onThreadsAdded, this));
+      $(document.body).on('message:conversation-threads-added', $.proxy(this._onThreadsAdded, this));
     },
     
     joinThread: function(threadId) {
@@ -21,14 +21,13 @@
     
     _addThreads: function (threads) {
       threads.forEach((thread) => {      
-        const categorySelector = thread.type === 'conversation' ? '.conversations-view' : '.questions-view';  
         $(`.chat-thread[data-id=${thread.id}]`).remove();
         
         const threadData = Object.assign(thread, {
           imageUrl: thread.imagePath ? this.options.serverUrl + thread.imagePath : 'gfx/placeholder.png'
         });
         
-        $(`${categorySelector} ul`).append(pugChatThread(threadData));
+        $('.conversations-view ul').append(pugChatThread(threadData));
       });
     },
     
@@ -40,8 +39,7 @@
     
     _onConnect: function (event, data) {
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
-        'type': 'get-threads',
-        'thread-type': 'conversation'
+        'type': 'get-conversation-threads'
       });
     },
     

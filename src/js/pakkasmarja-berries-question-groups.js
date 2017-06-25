@@ -10,7 +10,7 @@
     
     _create: function() {
       // TODO: Paging questionGroups
-      this.selectedQuestionGroupId = null;
+      this.reset();
       this.element.on('click', '.question-group', $.proxy(this._onQuestionGroupClick, this));
       this.element.on('click', '.chat-question-group-thread', $.proxy(this._onChatQuestionGroupThreadClick, this));
       
@@ -18,6 +18,10 @@
       $(document.body).on('message:question-groups-added', $.proxy(this._onQuestionGroupsAdded, this));
       $(document.body).on('message:question-thread-selected', $.proxy(this._onQuestionThreadSelected, this));
       $(document.body).on('message:question-group-threads-added', $.proxy(this._onQuestionGroupThreadsAdded, this));
+    },
+    
+    reset: function () {
+      this.selectedQuestionGroupId = null;  
     },
     
     selectQuestionGroup: function(questionGroupId, role) {
