@@ -118,7 +118,7 @@
         .addClass('active');
     },
     
-    _onMenuItemClick: function(event)  {
+    _onMenuItemClick: function(event) {
       const clickedIndex = $(event.target).attr('data-slide-index');
       this.horizontalSwiper.slideTo(clickedIndex);
     },
