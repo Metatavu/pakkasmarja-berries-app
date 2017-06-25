@@ -1,19 +1,12 @@
 .chat-message(data-id=id, data-created=created, data-modified=modified)
-  if admin 
-    .bubble-admin
-      .txt-admin
-        p.admin
-          =userName
-        p.message-admin
-          =contents
-      .admin-bubble-arrow
+  div(class='bubble-' + role)
+    .txt
+      p.name
+        =userName
+      p.message
+        =contents
+    .bubble-arrow
+      if role === 'manager' 
         i.fa.fa-caret-right.fa-x3(aria-hidden='true')
-  else
-    .bubble
-      .txt
-        p.name
-          =userName
-        p.message
-          =contents
-      .bubble-arrow
+      else
         i.fa.fa-caret-left.fa-x3(aria-hidden='true')
