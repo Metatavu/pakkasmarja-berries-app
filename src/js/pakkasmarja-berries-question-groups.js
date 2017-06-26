@@ -14,7 +14,8 @@
       this.element.on('click', '.question-group', $.proxy(this._onQuestionGroupClick, this));
       this.element.on('click', '.chat-question-group-thread', $.proxy(this._onChatQuestionGroupThreadClick, this));
       
-      $(document.body).on('connect', $.proxy(this._onConnect, this));
+      $(document.body).on('pageChange', $.proxy(this._onPageChange, this));
+      $(document.body).on('mainViewRestore', $.proxy(this._onMainViewRestore, this));      
       $(document.body).on('message:question-groups-added', $.proxy(this._onQuestionGroupsAdded, this));
       $(document.body).on('message:question-thread-selected', $.proxy(this._onQuestionThreadSelected, this));
       $(document.body).on('message:question-group-threads-added', $.proxy(this._onQuestionGroupThreadsAdded, this));
@@ -25,15 +26,16 @@
     },
     
     selectQuestionGroup: function(questionGroupId, role) {
+      $('.questions-view').addClass('loading');
+      $('.questions-view ul').empty();
+        
       if (role === 'user') {
-        $(`.questions-view ul`).empty();
         $(document.body).pakkasmarjaBerriesClient('sendMessage', {
           'type': 'select-question-group-thread',
           'question-group-id': questionGroupId
         });
       } else if (role === 'manager') {
         this.selectedQuestionGroupId = questionGroupId;
-        $(`.questions-view ul`).empty();
         $(document.body).pakkasmarjaBerriesClient('sendMessage', {
           'type': 'get-question-group-threads',
           'question-group-id': questionGroupId
@@ -44,6 +46,8 @@
     },
     
     _addQuestionGroups: function (questionGroups) {
+      $('.questions-view').removeClass('loading');
+      
       questionGroups.forEach((questionGroup) => {      
         $(`.question-group[data-id=${questionGroup.id}]`).remove();
         
@@ -60,6 +64,8 @@
         return;
       }
       
+      $('.questions-view').removeClass('loading');
+      
       threads.forEach((thread) => {      
         $(`.chat-question-group-thread[data-id=${thread.id}]`).remove();
         let imageUrl = thread.imageUrl;
@@ -75,6 +81,15 @@
       });
     },
     
+    _loadGroups: function () {
+      this.reset();
+      $('.questions-view ul').empty();
+      $('.questions-view').addClass('loading');
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'get-question-groups'
+      });
+    },
+    
     _onQuestionGroupClick: function(event) {
       event.preventDefault();
       const element = $(event.target).closest('.question-group');
@@ -87,10 +102,18 @@
       $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', $(element).attr('data-id'));
     },
     
-    _onConnect: function (event, data) {
-      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
-        'type': 'get-question-groups'
-      });
+    _onPageChange: function (event, data) {
+      if (data.activePage === 'questions') {
+        this._loadGroups();
+      } else {
+        $('.questions-view ul').empty();
+      }
+    },
+    
+    _onMainViewRestore: function (event, data) {
+      if (data.activePage === 'questions') {
+        this._loadGroups();
+      }
     },
     
     _onQuestionGroupsAdded: function (event, data) {
