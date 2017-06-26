@@ -52,7 +52,8 @@
         $(`.question-group[data-id=${questionGroup.id}]`).remove();
         
         const questionGroupData = Object.assign(questionGroup, {
-          imageUrl: questionGroup.imageUrl || 'gfx/placeholder.png'
+          imageUrl: questionGroup.imageUrl || 'gfx/placeholder.png',
+          latestMessageFormatted: questionGroup.latestMessage ? moment(questionGroup.latestMessage).locale('fi').format('LLLL') : null
         });
         
         $(`.questions-view ul`).append(pugQuestionGroup(questionGroupData));
@@ -70,7 +71,8 @@
         $(`.chat-question-group-thread[data-id=${thread.id}]`).remove();
         
         const threadData = Object.assign(thread, {
-          imageUrl: thread.imageUrl || 'gfx/placeholder.png'
+          imageUrl: thread.imageUrl || 'gfx/placeholder.png',
+          latestMessageFormatted: thread.latestMessage ? moment(thread.latestMessage).locale('fi').format('LLLL') : null
         });
         
         $('.questions-view ul').append(pugChatQuestionGroupThread(threadData));
