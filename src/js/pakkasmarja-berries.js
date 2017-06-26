@@ -44,6 +44,10 @@
         serverUrl: serverUrl
       });
       
+      this.element.pakkasmarjaBerriesPushNotifications({
+        logDebug: this.options.logDebug
+      });
+      
       $(".chat-container").pakkasmarjaBerriesChatThread();
       
       this.horizontalSwiper = new Swiper('.swiper-horizontal', { });

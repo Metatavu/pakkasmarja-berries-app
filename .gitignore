@@ -13,3 +13,4 @@ npm-debug.log
 /www/js
 /www/index.html
 /www/bower_components
+/google-services.json
