@@ -24,7 +24,7 @@
         $(`.chat-thread[data-id=${thread.id}]`).remove();
         
         const threadData = Object.assign(thread, {
-          imageUrl: thread.imagePath ? this.options.serverUrl + thread.imagePath : 'gfx/placeholder.png'
+          imageUrl: thread.imageUrl || 'gfx/placeholder.png'
         });
         
         $('.conversations-view ul').append(pugChatThread(threadData));

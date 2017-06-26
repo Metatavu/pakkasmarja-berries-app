@@ -52,7 +52,7 @@
         $(`.question-group[data-id=${questionGroup.id}]`).remove();
         
         const questionGroupData = Object.assign(questionGroup, {
-          imageUrl: questionGroup.imagePath ? this.options.serverUrl + questionGroup.imagePath : 'gfx/placeholder.png'
+          imageUrl: questionGroup.imageUrl || 'gfx/placeholder.png'
         });
         
         $(`.questions-view ul`).append(pugQuestionGroup(questionGroupData));
@@ -68,13 +68,9 @@
       
       threads.forEach((thread) => {      
         $(`.chat-question-group-thread[data-id=${thread.id}]`).remove();
-        let imageUrl = thread.imageUrl;
-        if (!imageUrl && thread.imagePath) {
-          imageUrl = this.options.serverUrl + thread.imagePath;
-        }
         
         const threadData = Object.assign(thread, {
-          imageUrl: imageUrl || 'gfx/placeholder.png'
+          imageUrl: thread.imageUrl || 'gfx/placeholder.png'
         });
         
         $('.questions-view ul').append(pugChatQuestionGroupThread(threadData));
