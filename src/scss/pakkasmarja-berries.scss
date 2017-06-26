@@ -153,8 +153,9 @@ $slide-margin-top: 25px;
 .chat-question-group-thread {
   
   img {
-    max-height: 64px;
-    max-width: 64px;
+    height: 64px;
+    width: 64px;
+    border-radius: 50%;
   }
   
 }

@@ -62,9 +62,13 @@
       
       threads.forEach((thread) => {      
         $(`.chat-question-group-thread[data-id=${thread.id}]`).remove();
+        let imageUrl = thread.imageUrl;
+        if (!imageUrl && thread.imagePath) {
+          imageUrl = this.options.serverUrl + thread.imagePath;
+        }
         
         const threadData = Object.assign(thread, {
-          imageUrl: thread.imagePath ? this.options.serverUrl + thread.imagePath : 'gfx/placeholder.png'
+          imageUrl: imageUrl || 'gfx/placeholder.png'
         });
         
         $('.questions-view ul').append(pugChatQuestionGroupThread(threadData));
