@@ -64,6 +64,11 @@
     restoreMainView() {
       $('.swiper-slide, .secondary-menu, .navbar-top').show("slide", { direction: "left", complete: () => {
         this.updateSwiper();
+
+        this.element.trigger('mainViewRestore', {
+          'activePage': this.activePage()
+        });
+        
       } }, 300);
     },
     
@@ -116,6 +121,10 @@
       $('.secondary-menu')
         .find('.menu-item[data-slide-index="'+ swiper.activeIndex +'"]')
         .addClass('active');
+
+      this.element.trigger('pageChange', {
+        'activePage': this.activePage()
+      });
     },
     
     _onMenuItemClick: function(event) {
