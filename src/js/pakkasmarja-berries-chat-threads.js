@@ -1,4 +1,6 @@
 /* jshint esversion: 6 */
+/* global moment */
+
 (function() {
   'use strict';
   
@@ -24,7 +26,8 @@
         $(`.chat-thread[data-id=${thread.id}]`).remove();
         
         const threadData = Object.assign(thread, {
-          imageUrl: thread.imageUrl || 'gfx/placeholder.png'
+          imageUrl: thread.imageUrl || 'gfx/placeholder.png',
+          latestMessageFormatted: thread.latestMessage ? moment(thread.latestMessage).locale('fi').format('LLLL') : null
         });
         
         $('.conversations-view ul').append(pugChatThread(threadData));
