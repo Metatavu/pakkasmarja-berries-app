@@ -1,4 +1,6 @@
 /* jshint esversion: 6 */
+/* global Camera */
+
 (function() {
   'use strict';
   
@@ -6,13 +8,18 @@
     
     options: {
       messagesLimit: 7,
-      topScrollOffset: 150
+      topScrollOffset: 150,
+      logDebug: false,
+      serverUrl: 'http://localhost:8000',      
+      imageTargetHeight: 1000,
+      imageTargetWidth: 1000
     },
     
     _create: function() {
       this.reset();
       this.element.on('click', '.chat-close-btn', $.proxy(this._onChatCloseElementClick, this));
       this.element.on('keydown', '.message-input', $.proxy(this._onMessageInputClick, this));
+      this.element.on('click', '.upload-image', $.proxy(this._onUploadImageClick, this));      
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
       $(`.chat-conversation-wrapper`).scroll($.proxy(this._onWrapperScroll, this));
     },
@@ -125,12 +132,56 @@
       const scrollTop = $(`.chat-conversation-wrapper`).scrollTop();
       if (scrollTop <= this.options.topScrollOffset) {
         this.loadMessages(++this.page);
-      }      
+      }
     },
     
     _onChatCloseElementClick: function(event) {
       event.preventDefault();
       this.leaveThread();
+    },
+    
+    _onUploadImageClick: function (event) {
+      event.preventDefault();
+      
+       navigator.camera.getPicture($.proxy(this._onCapturePhoto, this), $.proxy(this._onCapturePhotoFail, this), {
+         quality: 90,
+         destinationType: Camera.DestinationType.FILE_URI,
+         encodingType: Camera.EncodingType.JPEG,
+         mediaType: Camera.MediaType.PICTURE,
+         targetHeight: this.options.imageTargetHeight,
+         targetWidth: this.options.imageTargetWidth
+       });
+    },
+    
+    _onCapturePhoto: function (fileURI) {
+      const options = new FileUploadOptions();
+      const fileTransfer = new FileTransfer();
+      
+      options.fileKey = "image";
+      options.fileName = fileURI.substr(fileURI.lastIndexOf('/') + 1);
+      options.mimeType = "image/jpeg";
+      options.params = {
+        threadId: this.activeThreadId,
+        sessionId: $(document.body).pakkasmarjaBerriesAuth('sessionId')
+      };
+      
+      fileTransfer.upload(fileURI, encodeURI(`${this.options.serverUrl}/images/upload/message`), $.proxy(this._onUploadSuccess, this), $.proxy(this._onUploadFailure, this), options);
+    },
+    
+    _onUploadSuccess: function (res) {
+      navigator.camera.cleanup();
+    },
+    
+    _onUploadFailure: function (message) {
+      if (this.options.logDebug) {
+        console.error(`Image upload failed on ${message}`);
+      }
+    },
+    
+    _onCapturePhotoFail: function (message) {
+      if (this.options.logDebug) {
+        console.error(`Capture failed on ${message}`);
+      }
     },
     
     _onMessageInputClick: function (event) {
