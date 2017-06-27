@@ -1,4 +1,6 @@
 /* jshint esversion: 6 */
+/* global moment */
+
 (function() {
   'use strict';
   
