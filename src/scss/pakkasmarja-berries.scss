@@ -427,8 +427,8 @@ $slide-margin-top: 25px;
   z-index: 10;
   
   ul {
-    border-top: none;
-    background-color: rgba(255,255,255,0.5);
+    border-top: 0;
+    background-color: rgba(255,255,255,0.5) ;
     box-sizing: border-box;
     padding: 15px;
     
@@ -442,7 +442,8 @@ $slide-margin-top: 25px;
         margin-right: 10px;
       }
 
-      h3, i {
+      h3, 
+      i {
         display: inline-block;
         font-size: 20px;
       }
