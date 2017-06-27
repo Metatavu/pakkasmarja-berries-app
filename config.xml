@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="fi.metatavu.pakkasmarjaBerriesApp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="fi.metatavu.pakkasmarjaBerriesApp" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Pakkasmarja Berries App</name>
     <description>Application to make communicating with berry farmers easier</description>
     <author email="info@metatavu.fi" href="https://metatavu.fi">Metatavu Oy</author>
@@ -7,6 +7,7 @@
     <access origin="https://ssl.gstatic.com" />
     <access origin="https://auth.metatavu.io" />
     <access origin="https://cdn.metatavu.io" />
+    <access origin="https://www.gravatar.com" />
     <access origin="http://localhost:8000" />
     <access origin="https://pakkasmarja-berries.metatavu.io" />
     <access origin="http://local-shady.metatavu.io:8000" />
@@ -18,5 +19,7 @@
     <preference name="target-device" value="handset" />
     <engine name="browser" spec="^4.1.0" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
+    <plugin name="cordova-plugin-camera" spec="~2.4.1" />
+    <plugin name="cordova-plugin-file-transfer" spec="~1.6.3" />
     <plugin name="cordova-plugin-inappbrowser" spec="~1.7.1" />
 </widget>
