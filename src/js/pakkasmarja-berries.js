@@ -48,6 +48,8 @@
         logDebug: this.options.logDebug
       });
       
+      this.element.pakkasmarjaBerriesMenu();
+      
       $(".chat-container").pakkasmarjaBerriesChatThread();
       
       this.horizontalSwiper = new Swiper('.swiper-horizontal', { });
