@@ -52,6 +52,11 @@
       
       $(".chat-container").pakkasmarjaBerriesChatThread();
       
+      $(".chat-container").pakkasmarjaBerriesChatThread({
+        serverUrl: serverUrl,
+        logDebug: this.options.logDebug
+      });
+      
       this.horizontalSwiper = new Swiper('.swiper-horizontal', { });
       this.horizontalSwiper.on('onSlideChangeEnd', (swiper) => {this._onSlideChangeEnd(swiper); });
       this._resizeSlides();

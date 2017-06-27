@@ -17,7 +17,7 @@ html
     script(src='https://auth.metatavu.io/auth/js/keycloak.js',type='text/javascript')
     script(src='js/config.js')
     script(src='js/pug-templates.js')
-    script(src='https://cdn.metatavu.io/libs/tools/debug/0.0.3/debug.js')
+    script(src='https://cdn.metatavu.io/libs/tools/debug/0.0.4/debug.js')
     script(src='js/pakkasmarja-berries-client.js')
     script(src='js/pakkasmarja-berries-auth.js')
     script(src='js/pakkasmarja-berries-news.js')
@@ -72,8 +72,8 @@ html
         .speech-wrapper
         .chat-footer
           .row
-            a.settings-btn.chat-close-btn(href='#')
-              img.upload-image(src='gfx/lisaa-kuva-icon.png')
+            a.upload-image(href='#')
+              img(src='gfx/lisaa-kuva-icon.png')
             .form-group
               input.form-control.message-input(type="text")
             i.fa.fa-paper-plane.message-send-btn(aria-hidden='true')
