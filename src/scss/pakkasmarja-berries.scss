@@ -404,6 +404,7 @@ $slide-margin-top: 25px;
 }
 
 .news-view,
+.conversations-view,
 .questions-view {
   &.loading::after {
     background-image: url("../gfx/loader.svg");
