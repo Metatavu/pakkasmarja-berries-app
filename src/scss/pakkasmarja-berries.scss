@@ -97,6 +97,13 @@ $slide-margin-top: 25px;
         color: #e01e36;
         font-weight: bold;
       }
+      
+      &.unread::after {
+        content: '●';
+        margin-left: 8px;
+        color: #e01e36;
+        position: absolute;
+      }
     }
     
   }
@@ -374,6 +381,13 @@ $slide-margin-top: 25px;
         }
       }
     } 
+  }
+}
+
+.news-item {
+  
+  &.read h5 {
+    font-weight: normal;
   }
 }
 
