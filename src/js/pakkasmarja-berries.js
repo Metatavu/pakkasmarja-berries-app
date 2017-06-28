@@ -50,8 +50,6 @@
       
       this.element.pakkasmarjaBerriesMenu();
       
-      $(".chat-container").pakkasmarjaBerriesChatThread();
-      
       $(".chat-container").pakkasmarjaBerriesChatThread({
         serverUrl: serverUrl,
         logDebug: this.options.logDebug
