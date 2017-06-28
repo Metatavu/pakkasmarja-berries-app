@@ -73,7 +73,6 @@
     },
     
     _onConnect: function (event, data) {
-      this._loadChatThreads();
       this._loadUnreadStatus();
     },
     
