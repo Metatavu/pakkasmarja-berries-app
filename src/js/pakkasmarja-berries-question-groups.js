@@ -106,6 +106,7 @@
     _onChatQuestionGroupThreadClick: function(event) {
       event.preventDefault();
       const element = $(event.target).closest('.chat-question-group-thread');
+      element.removeClass('unread').addClass('read');
       $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', $(element).attr('data-id'));
     },
     
