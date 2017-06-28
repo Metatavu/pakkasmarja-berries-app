@@ -99,7 +99,7 @@ $slide-margin-top: 25px;
       }
       
       &.unread::after {
-        content: '●';
+        content: "●";
         margin-left: 8px;
         color: #e01e36;
         position: absolute;
