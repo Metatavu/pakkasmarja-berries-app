@@ -106,6 +106,10 @@
     
     _onNewsItemsAdded: function (event, data) {
       this._addNewsItem(data.items);
+      
+      if ($(document.body).pakkasmarjaBerries('activePage') !== 'news') {
+        $('.menu-item[data-page="news"]').addClass('unread');  
+      }
     },
     
     _onNewsUnread: function (event, data) {

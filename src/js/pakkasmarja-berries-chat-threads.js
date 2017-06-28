@@ -17,6 +17,7 @@
       $(document.body).on('pageChange', $.proxy(this._onPageChange, this));
       $(document.body).on('message:conversation-threads-added', $.proxy(this._onThreadsAdded, this));
       $(document.body).on('message:conversations-unread', $.proxy(this._onConversationsUnread, this));
+      $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
     },
     
     joinThread: function(threadId) {
@@ -82,6 +83,16 @@
     
     _onConversationsUnread: function (event, data) {
       $('.menu-item[data-page="conversations"]').addClass('unread');
+    },
+    
+    _onMessagesAdded: function (event, data) {
+      if ($(document.body).pakkasmarjaBerries('activePage') === 'conversations') {
+        return;
+      }
+      
+      if (data['thread-type'] === "conversation") {
+        $('.menu-item[data-page="conversations"]').addClass('unread');  
+      }
     }
     
   });

@@ -76,8 +76,7 @@
         return false;
       }
       
-      const activePage = $(document.body).pakkasmarjaBerries('activePage');
-      return (activePage === 'conversations') || (activePage === 'questions');
+      return $(document.body).pakkasmarjaBerries('activePage') === 'conversations';
     },
     
     _sortMessages: function () {

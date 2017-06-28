@@ -22,6 +22,7 @@
       $(document.body).on('message:question-thread-selected', $.proxy(this._onQuestionThreadSelected, this));
       $(document.body).on('message:question-group-threads-added', $.proxy(this._onQuestionGroupThreadsAdded, this));
       $(document.body).on('message:questions-unread', $.proxy(this._onQuestionsUnread, this));
+      $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
     },
     
     reset: function () {
@@ -154,6 +155,16 @@
     
     _onQuestionsUnread: function (event, data) {
       $('.menu-item[data-page="questions"]').addClass('unread');
+    },
+    
+    _onMessagesAdded: function (event, data) {
+      if ($(document.body).pakkasmarjaBerries('activePage') === 'questions') {
+        return;
+      }
+      
+      if (data['thread-type'] === "question") {
+        $('.menu-item[data-page="questions"]').addClass('unread');  
+      }
     }
     
   });
