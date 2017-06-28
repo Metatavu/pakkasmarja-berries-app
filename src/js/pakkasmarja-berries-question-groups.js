@@ -31,6 +31,11 @@
     selectQuestionGroup: function(questionGroupId, role) {
       $('.questions-view').addClass('loading');
       $('.questions-view ul').empty();
+      
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'mark-item-read',
+        'id': questionGroupId
+      });
         
       if (role === 'user') {
         $(document.body).pakkasmarjaBerriesClient('sendMessage', {
@@ -100,6 +105,7 @@
     _onQuestionGroupClick: function(event) {
       event.preventDefault();
       const element = $(event.target).closest('.question-group');
+      element.removeClass('unread').addClass('read');
       this.selectQuestionGroup($(element).attr('data-id'), $(element).attr('data-role'));
     },
     

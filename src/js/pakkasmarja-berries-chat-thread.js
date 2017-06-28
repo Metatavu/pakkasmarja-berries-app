@@ -207,6 +207,11 @@
             'threadId': this.activeThreadId,
             'contents': content
           });
+          
+          $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+            'type': 'mark-item-read',
+            'id': this.activeThreadId
+          });
         }
       }
     },
