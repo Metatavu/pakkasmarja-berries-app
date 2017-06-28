@@ -385,10 +385,23 @@ $slide-margin-top: 25px;
 }
 
 .news-item,
-.chat-thread {
+.chat-thread,
+.chat-question-group-thread,
+.question-group {
+  
+  .new-text {
+    display: none;
+    color: #e01e36;
+    font-weight: bold;
+    margin-left: 5px;
+  }
   
   &.read h5 {
     font-weight: normal;
+  }
+   
+  &.unread .new-text {
+    display: inline;
   }
 }
 
