@@ -29,6 +29,13 @@
         });
     },
     
+    logout: function () {
+      this._keycloak.logout({
+        redirectUri : this.options.serverUrl
+      });
+      location.reload();
+    },
+    
     token: function () {
       return this._keycloak.token;
     },

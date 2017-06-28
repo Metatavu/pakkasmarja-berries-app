@@ -48,6 +48,8 @@
         logDebug: this.options.logDebug
       });
       
+      this.element.pakkasmarjaBerriesMenu();
+      
       $(".chat-container").pakkasmarjaBerriesChatThread({
         serverUrl: serverUrl,
         logDebug: this.options.logDebug
