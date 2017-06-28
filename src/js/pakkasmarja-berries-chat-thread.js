@@ -40,19 +40,21 @@
       this.activeThreadId = threadId;
       this.loadMessages(this.page);
       
-      $(".swiper-slide, .secondary-menu").hide("slide", { direction: "left" }, 300);
-      
+      $(".swiper-slide, .secondary-menu").hide("slide", { direction: "left" }, 300);      
       $(".chat-container").show("slide", { direction: "right" }, 300);
-      
+
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'mark-item-read',
         'id': threadId
       });
+      
+      $(".chat-container").addClass("chat-conversation-open");
     },
       
     leaveThread: function() {
       this.activeThreadId = null;
       $(".chat-container").hide("slide", { direction: "right" }, 300);
+      $(".chat-container").removeClass("chat-conversation-open");
       $(document.body).pakkasmarjaBerries('restoreMainView');
     },
       

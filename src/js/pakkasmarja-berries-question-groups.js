@@ -44,6 +44,7 @@
           'question-group-id': questionGroupId
         });
       } else if (role === 'manager') {
+        $('.questions-view').addClass('question-group-threads');
         this.selectedQuestionGroupId = questionGroupId;
         $(document.body).pakkasmarjaBerriesClient('sendMessage', {
           'type': 'get-question-group-threads',

@@ -36,6 +36,7 @@
         'id': id
       });
       
+      $(".news-wrapper").addClass("news-article-open");
     },
     
     closeNews: function() {
