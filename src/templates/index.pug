@@ -26,6 +26,7 @@ html
     script(src='js/pakkasmarja-berries-question-groups.js')
     script(src='js/pakkasmarja-berries-news.js')
     script(src='js/pakkasmarja-berries-push-notifications.js')
+    script(src='js/pakkasmarja-berries-menu.js')
     script(src='js/pakkasmarja-berries.js')
     title Viljelija
   body
@@ -33,7 +34,7 @@ html
       .container-fluid
         .row.no-gutters
           .col-2.flex-last
-            a.btn.menu-btn(data-toggle='collapse', href='#collapseExample', aria-expanded='false', aria-controls='collapseExample')
+            a.btn.menu-btn.hamburger-menu-button(data-toggle='collapse', href='#')
               i.fa.fa-bars
           .col-8
             a.top-logo-container(href='#')
@@ -77,3 +78,8 @@ html
               input.form-control.message-input(type="text")
             i.fa.fa-paper-plane.message-send-btn(aria-hidden='true')
     .news-wrapper
+    .hamburger-menu
+      ul.list-unstyled
+        li.logout-button
+          i.fa.fa-sign-out(aria-hidden='true')
+          h3 Kirjaudu ulos
