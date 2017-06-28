@@ -43,11 +43,13 @@
       $(".swiper-slide, .secondary-menu").hide("slide", { direction: "left" }, 300);
       
       $(".chat-container").show("slide", { direction: "right" }, 300);
+      $(".chat-container").addClass("chat-conversation-open");
     },
       
     leaveThread: function() {
       this.activeThreadId = null;
       $(".chat-container").hide("slide", { direction: "right" }, 300);
+      $(".chat-container").removeClass("chat-conversation-open");
       $(document.body).pakkasmarjaBerries('restoreMainView');
     },
       

@@ -64,6 +64,8 @@
       this.element.pakkasmarjaBerriesAuth('authenticate'); 
       
       $(window).scroll($.proxy(this._onWindowScroll, this));
+      
+      this.element.pakkasmarjaBerriesDeviceControls();
     },
     
     sessionId: function () {
@@ -89,10 +91,10 @@
       return $('.menu-item.active').attr('data-slide-index');
     },
     
-    updateSwiper: function () {
+    updateSwiper: function (pageIndex) {
       const activePage = this.activeIndex();
       this.horizontalSwiper.update();
-      this.horizontalSwiper.slideTo(activePage, 0);
+      this.horizontalSwiper.slideTo(pageIndex >= 0 ? pageIndex : activePage, 0);
       this._resizeSlides();
     },
     

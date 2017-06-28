@@ -29,6 +29,7 @@
         contents: contents,
         image: image  ? image : 'https://cdn.metatavu.io/assets/pakkasmarja-berries/background.jpg'
       })).show("slide", { direction: "right" }, 300);
+      $(".news-wrapper").addClass("news-article-open");
     },
     
     closeNews: function() {
