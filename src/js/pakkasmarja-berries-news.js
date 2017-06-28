@@ -122,11 +122,7 @@
       const created = item.attr('data-created');
       const modified = item.attr('data-modified');
       const image = item.attr('data-image');
-      
-      item
-        .removeClass('unread')
-        .addClass('read');
-      
+      item.removeClass('unread').addClass('read');      
       this.openNews(id, title, contents, created, modified, image);
     },
     

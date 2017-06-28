@@ -384,7 +384,8 @@ $slide-margin-top: 25px;
   }
 }
 
-.news-item {
+.news-item,
+.chat-thread {
   
   &.read h5 {
     font-weight: normal;

@@ -43,6 +43,11 @@
       $(".swiper-slide, .secondary-menu").hide("slide", { direction: "left" }, 300);
       
       $(".chat-container").show("slide", { direction: "right" }, 300);
+      
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'mark-item-read',
+        'id': threadId
+      });
     },
       
     leaveThread: function() {

@@ -53,6 +53,7 @@
     _onChatThreadClick: function (event) {
       event.preventDefault();
       const element = $(event.target).closest('.chat-thread');
+      element.removeClass('unread').addClass('read');
       this.joinThread($(element).attr('data-id'));
     },
     
