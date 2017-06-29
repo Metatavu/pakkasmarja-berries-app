@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-/* global moment */
+/* global moment, device */
 
 (function() {
   'use strict';
@@ -10,6 +10,7 @@
     },
     
     _create: function() {
+      this.loadingClassByPlatform = device.platform.toLowerCase() === 'ios' ? 'loading-ios' : 'loading';
       this.page = 1;
       this.morePages = true;
       this.loading = false;
@@ -42,7 +43,7 @@
         return;  
       }
       
-      $('.news-view').addClass('loading');
+      $('.news-view').addClass(this.loadingClassByPlatform);
       this.loading = true;
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'get-news',
@@ -57,7 +58,7 @@
     
     _addNewsItem: function (newsItems) {
       this.loading = false;
-      $(`.news-view`).removeClass('loading');
+      $(`.news-view`).removeClass(this.loadingClassByPlatform);
       newsItems.forEach((newsItem) => {
         $(`.news-item[data-id=${newsItem.id}]`).remove();
         $('.news-view ul').append(pugNewsItem(Object.assign(newsItem, {

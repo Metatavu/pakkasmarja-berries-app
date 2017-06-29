@@ -273,10 +273,31 @@ $slide-margin-top: 25px;
       display: block;
     }
     
+    &.loading-ios::before {
+      background-image: url("../gfx/ring.gif");
+      background-repeat: no-repeat;
+      height: 120px;
+      margin-top: -120px;
+      width: 100%; 
+      background-position: center;
+      content: "";
+      display: block;
+      position: absolute;
+    }
+
+    &.sending-ios::after {
+      background-image: url("../gfx/ring.gif");
+      background-repeat: no-repeat;
+      height: 120px;
+      background-position: center;
+      content: "";
+      display: block;
+    }
+    
     .bubble-user,
     .bubble-manager {
       .txt .message {
-        font-size: 14px;
+        font-size: 14px; 
         margin: 0;
         
         img {
@@ -300,9 +321,12 @@ $slide-margin-top: 25px;
         padding-top: 8px;
         padding-right: 30px;
         padding-bottom: 8px;
-        padding-left: 14px;
+        padding-left: 14px; 
         
         .name {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           font-weight: 600;
           font-size: 16px;
           margin: 0 0 4px;
@@ -349,6 +373,9 @@ $slide-margin-top: 25px;
         padding-left: 14px;
         
         .name {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           font-weight: 600;
           font-size: 16px;
           margin: 0 0 4px;
@@ -417,6 +444,15 @@ $slide-margin-top: 25px;
 .questions-view {
   &.loading::after {
     background-image: url("../gfx/loader.svg");
+    background-repeat: no-repeat;
+    height: 120px;
+    background-position: center;
+    content: "";
+    display: block;
+  }
+  
+  &.loading-ios::after {
+    background-image: url("../gfx/ring.gif");
     background-repeat: no-repeat;
     height: 120px;
     background-position: center;

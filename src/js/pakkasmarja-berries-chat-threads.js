@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-/* global moment */
+/* global moment, device */
 
 (function() {
   'use strict';
@@ -12,6 +12,7 @@
     
     _create: function() {
       // TODO: Paging threads
+      this.loadingClassByPlatform = device.platform.toLowerCase() === 'ios' ? 'loading-ios' : 'loading';
       this.element.on('click', '.chat-thread', $.proxy(this._onChatThreadClick, this));
       $(document.body).on('connect', $.proxy(this._onConnect, this));
       $(document.body).on('pageChange', $.proxy(this._onPageChange, this));
@@ -23,7 +24,7 @@
     },
     
     _addThreads: function (threads) {
-      $('.conversations-view').removeClass('loading');
+      $('.conversations-view').removeClass(this.loadingClassByPlatform);
       threads.forEach((thread) => {      
         $(`.chat-thread[data-id=${thread.id}]`).remove();
         
@@ -52,7 +53,7 @@
     
     _loadChatThreads: function () {
       $('.conversations-view ul').empty();
-      $('.conversations-view').addClass('loading');
+      $('.conversations-view').addClass(this.loadingClassByPlatform);
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'get-conversation-threads'
       });
