@@ -12,7 +12,6 @@
         "cordova-browser": "^4.1.0",
         "cordova-ios": "^4.4.0",
         "cordova-plugin-camera": "~2.4.1",
-        "cordova-plugin-device": "^1.1.6",
         "cordova-plugin-fcm": "^2.1.2",
         "cordova-plugin-file-transfer": "~1.6.3",
         "cordova-plugin-inappbrowser": "^1.7.1",
@@ -38,8 +37,7 @@
             "cordova-plugin-camera": {},
             "cordova-plugin-file-transfer": {},
             "cordova-plugin-fcm": {},
-            "cordova-plugin-inappbrowser": {},
-            "cordova-plugin-device": {}
+            "cordova-plugin-inappbrowser": {}
         }
     }
 }
