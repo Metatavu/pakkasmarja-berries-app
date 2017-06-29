@@ -1,3 +1,25 @@
 body {
   padding-top: 20px;
 }
+
+.speech-wrapper.loading::before,
+.speech-wrapper.sending::after,
+.news-view.loading::after,
+.conversations-view.loading::after,
+.questions-view.loading::after {
+  background-image: url("../gfx/ring.gif");
+}
+
+.navbar-top,
+.chat-container,
+.news-wrapper {
+  top: 27px;
+}
+
+.chat-conversation-wrapper .chat-footer .message-input {
+  width: 63vw;
+}
+
+.secondary-menu {
+  margin-top: 60px;
+}

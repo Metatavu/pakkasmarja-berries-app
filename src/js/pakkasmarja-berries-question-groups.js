@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-/* global moment, device */
+/* global moment */
 
 (function() {
   'use strict';
@@ -12,7 +12,6 @@
     
     _create: function() {
       // TODO: Paging questionGroups
-      this.loadingClassByPlatform = device.platform.toLowerCase() === 'ios' ? 'loading-ios' : 'loading';
       this.reset();
       this.element.on('click', '.question-group', $.proxy(this._onQuestionGroupClick, this));
       this.element.on('click', '.chat-question-group-thread', $.proxy(this._onChatQuestionGroupThreadClick, this));
@@ -29,7 +28,7 @@
     },
     
     selectQuestionGroup: function(questionGroupId, role) {
-      $('.questions-view').addClass(this.loadingClassByPlatform);
+      $('.questions-view').addClass('loading');
       $('.questions-view ul').empty();
         
       if (role === 'user') {
@@ -50,7 +49,7 @@
     },
     
     _addQuestionGroups: function (questionGroups) {
-      $('.questions-view').removeClass(this.loadingClassByPlatform);
+      $('.questions-view').removeClass('loading');
       
       questionGroups.forEach((questionGroup) => {      
         $(`.question-group[data-id=${questionGroup.id}]`).remove();
@@ -69,7 +68,7 @@
         return;
       }
       
-      $('.questions-view').removeClass(this.loadingClassByPlatform);
+      $('.questions-view').removeClass('loading');
       
       threads.forEach((thread) => {      
         $(`.chat-question-group-thread[data-id=${thread.id}]`).remove();
@@ -86,7 +85,7 @@
     _loadGroups: function () {
       this.reset();
       $('.questions-view ul').empty();
-      $('.questions-view').addClass(this.loadingClassByPlatform);
+      $('.questions-view').addClass('loading');
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'get-question-groups'
       });

@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-/* global Camera, device */
+/* global Camera */
 
 (function() {
   'use strict';
@@ -16,8 +16,6 @@
     },
     
     _create: function() {
-      this.loadingClassByPlatform = device.platform.toLowerCase() === 'ios' ? 'loading-ios' : 'loading';
-      this.sendingClassByPlatform = device.platform.toLowerCase() === 'ios' ? 'sending-ios' : 'sending';
       this.reset();
       this.element.on('click', '.chat-close-btn', $.proxy(this._onChatCloseElementClick, this));
       this.element.on('keydown', '.message-input', $.proxy(this._onMessageInputClick, this));
@@ -61,7 +59,7 @@
       }
       
       this.loading = true;
-      $(`.chat-container .speech-wrapper`).addClass(this.loadingClassByPlatform);
+      $(`.chat-container .speech-wrapper`).addClass('loading');
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'get-messages',
         'thread-id': this.activeThreadId,
@@ -95,7 +93,7 @@
       const scrollTop = $(`.chat-conversation-wrapper`).scrollTop();
       const marginTop = 120;
       
-      $('.chat-container .speech-wrapper').removeClass(`${this.loadingClassByPlatform } ${this.sendingClassByPlatform }`);
+      $('.chat-container .speech-wrapper').removeClass('loading sending');
       
       const heightOld = $('.chat-container .speech-wrapper').height();
       
@@ -194,7 +192,7 @@
         const content = input.val();
         if (content) {
           this.sending = true;
-          $(`.chat-container .speech-wrapper`).addClass(this.sendingClassByPlatform );
+          $(`.chat-container .speech-wrapper`).addClass('sending');
           input.val('').blur();
           
           $(`.chat-conversation-wrapper`).animate({
