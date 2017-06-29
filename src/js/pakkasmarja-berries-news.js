@@ -11,17 +11,18 @@
     
     _create: function() {
       this.loadingClassByPlatform = device.platform.toLowerCase() === 'ios' ? 'loading-ios' : 'loading';
-      this.page = 1;
+      this.page = 0;
       this.morePages = true;
       this.loading = false;
       this.element.on('click', '.news-open-btn', $.proxy(this._onNewsElementClick, this));
       this.element.on('click', '.news-close-btn', $.proxy(this._onNewsCloseElementClick, this));
       $(document.body).on('connect', $.proxy(this._onConnect, this));
       $(document.body).on('message:news-items-added', $.proxy(this._onNewsItemsAdded, this));
+      $(document.body).on('message:news-unread', $.proxy(this._onNewsUnread, this));
       $(document).on('scrollBottom', $.proxy(this._onScrollBottom, this));
     },
     
-    openNews: function(title, contents, created, modified, image) {
+    openNews: function(id, title, contents, created, modified, image) {
       $(".swiper-slide, .secondary-menu, .navbar-top").hide("slide", { direction: "left" }, 300);
       $(".news-wrapper").html(pugNewsItemOpen({
         createdFormatted: this._formatDate(created),
@@ -30,6 +31,12 @@
         contents: contents,
         image: image  ? image : 'https://cdn.metatavu.io/assets/pakkasmarja-berries/background.jpg'
       })).show("slide", { direction: "right" }, 300);
+      
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'mark-item-read',
+        'id': id
+      });
+      
       $(".news-wrapper").addClass("news-article-open");
     },
     
@@ -101,19 +108,28 @@
     
     _onNewsItemsAdded: function (event, data) {
       this._addNewsItem(data.items);
+      
+      if ($(document.body).pakkasmarjaBerries('activePage') !== 'news') {
+        $('.menu-item[data-page="news"]').addClass('unread');  
+      }
+    },
+    
+    _onNewsUnread: function (event, data) {
+      $('.menu-item[data-page="news"]').addClass('unread');
     },
     
     _onNewsElementClick: function(event) {
       event.preventDefault();
       
       const item = $(event.target).closest('.news-item');
+      const id = item.attr('data-id');
       const title = item.attr('data-title');
       const contents = item.attr('data-contents');
       const created = item.attr('data-created');
       const modified = item.attr('data-modified');
       const image = item.attr('data-image');
-      
-      this.openNews(title, contents, created, modified, image);
+      item.removeClass('unread').addClass('read');      
+      this.openNews(id, title, contents, created, modified, image);
     },
     
     _onNewsCloseElementClick: function(event) {

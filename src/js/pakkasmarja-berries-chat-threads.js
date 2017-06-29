@@ -17,6 +17,8 @@
       $(document.body).on('connect', $.proxy(this._onConnect, this));
       $(document.body).on('pageChange', $.proxy(this._onPageChange, this));
       $(document.body).on('message:conversation-threads-added', $.proxy(this._onThreadsAdded, this));
+      $(document.body).on('message:conversations-unread', $.proxy(this._onConversationsUnread, this));
+      $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
     },
     
     joinThread: function(threadId) {
@@ -40,6 +42,11 @@
     _onPageChange: function (event, data) {
       if (data.activePage === 'conversations') {
         this._loadChatThreads();
+        $('.menu-item[data-page="conversations"]').removeClass('unread');
+        $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+          'type': 'mark-item-read',
+          'id': 'conversations'
+        });
       } else {
         $('.conversations-view ul').empty();
       }
@@ -48,6 +55,7 @@
     _onChatThreadClick: function (event) {
       event.preventDefault();
       const element = $(event.target).closest('.chat-thread');
+      element.removeClass('unread').addClass('read');
       this.joinThread($(element).attr('data-id'));
     },
     
@@ -59,12 +67,32 @@
       });
     },
     
+    _loadUnreadStatus: function () {
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'get-conversations-unread-status'
+      });
+    },
+    
     _onConnect: function (event, data) {
-      this._loadChatThreads();
+      this._loadUnreadStatus();
     },
     
     _onThreadsAdded: function (event, data) {
       this._addThreads(data.threads);
+    },
+    
+    _onConversationsUnread: function (event, data) {
+      $('.menu-item[data-page="conversations"]').addClass('unread');
+    },
+    
+    _onMessagesAdded: function (event, data) {
+      if ($(document.body).pakkasmarjaBerries('activePage') === 'conversations') {
+        return;
+      }
+      
+      if (data['thread-type'] === "conversation") {
+        $('.menu-item[data-page="conversations"]').addClass('unread');  
+      }
     }
     
   });
