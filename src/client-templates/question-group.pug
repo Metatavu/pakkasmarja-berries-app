@@ -1,7 +1,9 @@
-li.media.item-row.question-group(data-id=id, data-role=role)
+li.media.item-row.question-group(data-id=id, data-role=role, class=read ? 'read' : 'unread')
   img.d-flex.mr-3(src=imageUrl)
   .media-body
     h5.mt-0.mb-1
       =title
     small
       =latestMessageFormatted
+    small.new-text
+      |Uusi
