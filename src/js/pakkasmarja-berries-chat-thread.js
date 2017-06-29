@@ -40,9 +40,14 @@
       this.activeThreadId = threadId;
       this.loadMessages(this.page);
       
-      $(".swiper-slide, .secondary-menu").hide("slide", { direction: "left" }, 300);
-      
+      $(".swiper-slide, .secondary-menu").hide("slide", { direction: "left" }, 300);      
       $(".chat-container").show("slide", { direction: "right" }, 300);
+
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'mark-item-read',
+        'id': threadId
+      });
+      
       $(".chat-container").addClass("chat-conversation-open");
     },
       
@@ -73,8 +78,7 @@
         return false;
       }
       
-      const activePage = $(document.body).pakkasmarjaBerries('activePage');
-      return (activePage === 'conversations') || (activePage === 'questions');
+      return $(document.body).pakkasmarjaBerries('activePage') === 'conversations';
     },
     
     _sortMessages: function () {
@@ -203,6 +207,11 @@
             'type': 'send-message',
             'threadId': this.activeThreadId,
             'contents': content
+          });
+          
+          $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+            'type': 'mark-item-read',
+            'id': this.activeThreadId
           });
         }
       }
