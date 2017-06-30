@@ -38,7 +38,7 @@
       this.reset();
       
       $(`.chat-container .speech-wrapper`).empty();
-      this.activeThreadId = threadId;
+      this.activeThreadId = parseInt(threadId);
       this.loadMessages(this.page);
       
       $(".swiper-slide, .secondary-menu").hide("slide", { direction: "left" }, 300);      
@@ -46,7 +46,7 @@
 
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'mark-item-read',
-        'id': threadId
+        'id': `thread-${threadId}`
       });
       
       $(".chat-container").addClass("chat-conversation-open");
@@ -228,7 +228,7 @@
 
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'mark-item-read',
-        'id': this.activeThreadId
+        'id': `message-${this.activeThreadId}`
       });
     },
     

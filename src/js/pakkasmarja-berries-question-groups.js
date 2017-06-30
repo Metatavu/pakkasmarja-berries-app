@@ -35,7 +35,7 @@
       
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'mark-item-read',
-        'id': questionGroupId
+        'id': `question-group-${questionGroupId}`
       });
         
       if (role === 'user') {
@@ -71,7 +71,7 @@
     },
     
     _addQuestionGroupThreads: function (threads, questionGroupId) {
-      if (this.selectedQuestionGroupId !== questionGroupId) {
+      if (parseInt(this.selectedQuestionGroupId) !== parseInt(questionGroupId)) {
         return;
       }
       

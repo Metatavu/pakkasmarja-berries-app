@@ -33,7 +33,7 @@
       
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'mark-item-read',
-        'id': id
+        'id': `news-article-${id}`
       });
       
       $(".news-wrapper").addClass("news-article-open");
