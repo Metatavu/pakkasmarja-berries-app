@@ -19,6 +19,7 @@
       this.reset();
       this.element.on('click', '.chat-close-btn', $.proxy(this._onChatCloseElementClick, this));
       this.element.on('keydown', '.message-input', $.proxy(this._onMessageInputClick, this));
+      this.element.on('click', '.message-send-btn', $.proxy(this._onMessageSendButtonClick, this));
       this.element.on('click', '.upload-image', $.proxy(this._onUploadImageClick, this));      
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
       $(`.chat-conversation-wrapper`).scroll($.proxy(this._onWrapperScroll, this));
@@ -195,26 +196,40 @@
         const input = $(event.target);
         const content = input.val();
         if (content) {
-          this.sending = true;
-          $(`.chat-container .speech-wrapper`).addClass('sending');
+          this._sendMessage(content);
           input.val('').blur();
-          
-          $(`.chat-conversation-wrapper`).animate({
-            scrollTop: $('.chat-container .speech-wrapper').height()
-          }, 200);
-          
-          $(document.body).pakkasmarjaBerriesClient('sendMessage', {
-            'type': 'send-message',
-            'threadId': this.activeThreadId,
-            'contents': content
-          });
-          
-          $(document.body).pakkasmarjaBerriesClient('sendMessage', {
-            'type': 'mark-item-read',
-            'id': this.activeThreadId
-          });
         }
       }
+    },
+    
+    _onMessageSendButtonClick: function () {
+      const input = $('.message-input');
+      const content = input.val();
+      if (content) {
+        this._sendMessage(content);
+        input.val('').blur();
+      }
+    },
+    
+    _sendMessage: function (content) {
+      this.sending = true;
+      
+      $(`.chat-container .speech-wrapper`).addClass('sending');
+      
+      $(`.chat-conversation-wrapper`).animate({
+        scrollTop: $('.chat-container .speech-wrapper').height()
+      }, 200);
+
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'send-message',
+        'threadId': this.activeThreadId,
+        'contents': content
+      });
+
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'mark-item-read',
+        'id': this.activeThreadId
+      });
     },
     
     _onMessagesAdded: function (event, data) {
