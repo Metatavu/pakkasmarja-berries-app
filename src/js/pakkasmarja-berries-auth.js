@@ -11,6 +11,7 @@
     
     _create : function() {
       this._sessionId = null;
+      this.element.on('join-error', $.proxy(this._onJoinError, this));
     },
     
     authenticate: function () {
@@ -58,6 +59,10 @@
     
     _getKeycloak: function () {
       return Keycloak(this.options.serverUrl + '/keycloak.json');
+    },
+    
+    _onJoinError: function () {
+      this.authenticate();
     }
     
   });

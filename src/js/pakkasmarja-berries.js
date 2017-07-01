@@ -21,6 +21,8 @@
       const serverUrl = httpProtocol + '://' + host + ':' + port;
       const wsUrl = wsProtocol + '://' + host + ':' + port;
       
+      $(document.body).on('connect', $.proxy(this._onConnect, this));
+      $(document.body).on('reconnect', $.proxy(this._onReconnect, this));
       this.element.on('authenticated', $.proxy(this._onAuthenticated, this));
       this.element.on('joined', $.proxy(this._onJoined, this));
       
@@ -149,6 +151,14 @@
     
     _onJoined: function () {
       this.element.pakkasmarjaBerriesClient('connect', this.sessionId());
+    },
+    
+    _onConnect: function () {
+      $('.connecting-modal').hide();
+    },
+    
+    _onReconnect: function () {
+      $('.connecting-modal').show();
     }
     
   });
