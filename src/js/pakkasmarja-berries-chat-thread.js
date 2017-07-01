@@ -131,6 +131,31 @@
       return $(`.chat-container .speech-wrapper .chat-message`).last().attr('data-id');
     },
     
+    _prepareSendMessage: function () {
+      this.sending = true;
+      
+      $(`.chat-container .speech-wrapper`).addClass('sending');
+      
+      $(`.chat-conversation-wrapper`).animate({
+        scrollTop: $('.chat-container .speech-wrapper').height()
+      }, 200);
+    },
+    
+    _sendMessage: function (content) {
+      this._prepareSendMessage();
+      
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'send-message',
+        'threadId': this.activeThreadId,
+        'contents': content
+      });
+
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'mark-item-read',
+        'id': `message-${this.activeThreadId}`
+      });
+    },
+    
     _onWrapperScroll: function () {
       if (this.sending || this.loading || !this.isActive()) {
         return;
@@ -150,17 +175,19 @@
     _onUploadImageClick: function (event) {
       event.preventDefault();
       
-       navigator.camera.getPicture($.proxy(this._onCapturePhoto, this), $.proxy(this._onCapturePhotoFail, this), {
-         quality: 90,
-         destinationType: Camera.DestinationType.FILE_URI,
-         encodingType: Camera.EncodingType.JPEG,
-         mediaType: Camera.MediaType.PICTURE,
-         targetHeight: this.options.imageTargetHeight,
-         targetWidth: this.options.imageTargetWidth
-       });
+      navigator.camera.getPicture($.proxy(this._onCapturePhoto, this), $.proxy(this._onCapturePhotoFail, this), {
+        quality: 90,
+        destinationType: Camera.DestinationType.FILE_URI,
+        encodingType: Camera.EncodingType.JPEG,
+        mediaType: Camera.MediaType.PICTURE,
+        targetHeight: this.options.imageTargetHeight,
+        targetWidth: this.options.imageTargetWidth
+      });
     },
     
     _onCapturePhoto: function (fileURI) {
+      this._prepareSendMessage();
+      
       const options = new FileUploadOptions();
       const fileTransfer = new FileTransfer();
       
@@ -209,27 +236,6 @@
         this._sendMessage(content);
         input.val('').blur();
       }
-    },
-    
-    _sendMessage: function (content) {
-      this.sending = true;
-      
-      $(`.chat-container .speech-wrapper`).addClass('sending');
-      
-      $(`.chat-conversation-wrapper`).animate({
-        scrollTop: $('.chat-container .speech-wrapper').height()
-      }, 200);
-
-      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
-        'type': 'send-message',
-        'threadId': this.activeThreadId,
-        'contents': content
-      });
-
-      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
-        'type': 'mark-item-read',
-        'id': `message-${this.activeThreadId}`
-      });
     },
     
     _onMessagesAdded: function (event, data) {
