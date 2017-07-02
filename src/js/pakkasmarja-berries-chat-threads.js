@@ -25,12 +25,15 @@
     },
     
     _addThreads: function (threads) {
+      const sessionId = $(document.body).pakkasmarjaBerriesAuth('sessionId');
+      
       $('.conversations-view').removeClass('loading');
+      
       threads.forEach((thread) => {      
         $(`.chat-thread[data-id=${thread.id}]`).remove();
         
         const threadData = Object.assign(thread, {
-          imageUrl: thread.imageUrl || 'gfx/placeholder.png',
+          imageUrl: thread.imageUrl ? `${thread.imageUrl}?sessionId=${sessionId}` : 'gfx/placeholder.png',
           latestMessageFormatted: thread.latestMessage ? moment(thread.latestMessage).locale('fi').format('LLLL') : null
         });
         
