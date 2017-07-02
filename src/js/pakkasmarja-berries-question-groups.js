@@ -56,6 +56,8 @@
     },
     
     _addQuestionGroups: function (questionGroups) {
+      const sessionId = $(document.body).pakkasmarjaBerriesAuth('sessionId');
+      
       $('.questions-view').removeClass('loading');
       
       if (!questionGroups.length) {
@@ -65,7 +67,7 @@
           $(`.question-group[data-id=${questionGroup.id}]`).remove();
 
           const questionGroupData = Object.assign(questionGroup, {
-            imageUrl: questionGroup.imageUrl || 'gfx/placeholder.png',
+            imageUrl: questionGroup.imageUrl ? `${questionGroup.imageUrl}?sessionId=${sessionId}` : 'gfx/placeholder.png',
             latestMessageFormatted: questionGroup.latestMessage ? moment(questionGroup.latestMessage).locale('fi').format('LLLL') : null
           });
 

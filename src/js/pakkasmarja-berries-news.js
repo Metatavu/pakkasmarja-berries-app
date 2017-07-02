@@ -127,8 +127,10 @@
       const created = item.attr('data-created');
       const modified = item.attr('data-modified');
       const image = item.attr('data-image');
+      const sessionId = $(document.body).pakkasmarjaBerriesAuth('sessionId');
+      
       item.removeClass('unread').addClass('read');      
-      this.openNews(id, title, contents, created, modified, image);
+      this.openNews(id, title, contents, created, modified, `${image}?sessionId=${sessionId}`);
     },
     
     _onNewsCloseElementClick: function(event) {

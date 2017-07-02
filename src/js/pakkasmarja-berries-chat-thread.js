@@ -97,6 +97,7 @@
       
       const scrollTop = $(`.chat-conversation-wrapper`).scrollTop();
       const marginTop = 120;
+      const sessionId = $(document.body).pakkasmarjaBerriesAuth('sessionId');
       
       $('.chat-container .speech-wrapper').removeClass('loading sending');
       
@@ -105,7 +106,14 @@
       messages.forEach((message) => {
         if (this.activeThreadId === message.threadId) {
           $(`.chat-message[data-id=${message.id}]`).remove();
-          $('.chat-container .speech-wrapper').append(pugChatMessage(message));
+          
+          const messageHtml = $(pugChatMessage(message));
+          messageHtml.find('img').each((index, image) => {
+            const src = $(image).attr('src');
+            $(image).attr('src',  `${src}?sessionId=${sessionId}`);
+          });
+          
+          $('.chat-container .speech-wrapper').append(messageHtml);
         }
       });
       
