@@ -29,16 +29,20 @@
       
       $('.conversations-view').removeClass('loading');
       
-      threads.forEach((thread) => {      
-        $(`.chat-thread[data-id=${thread.id}]`).remove();
-        
-        const threadData = Object.assign(thread, {
-          imageUrl: thread.imageUrl ? `${thread.imageUrl}?sessionId=${sessionId}` : 'gfx/placeholder.png',
-          latestMessageFormatted: thread.latestMessage ? moment(thread.latestMessage).locale('fi').format('LLLL') : null
+      if (!threads.length) {
+        $(`.questions-view ul`).html(pugNoThreads());
+      } else {
+        threads.forEach((thread) => {      
+          $(`.chat-thread[data-id=${thread.id}]`).remove();
+
+          const threadData = Object.assign(thread, {
+            imageUrl: thread.imageUrl ? `${thread.imageUrl}?sessionId=${sessionId}` : 'gfx/placeholder.png',
+            latestMessageFormatted: thread.latestMessage ? moment(thread.latestMessage).locale('fi').format('LLLL') : null
+          });
+
+          $('.conversations-view ul').append(pugChatThread(threadData));
         });
-        
-        $('.conversations-view ul').append(pugChatThread(threadData));
-      });
+      }
     },
     
     _onPageChange: function (event, data) {
