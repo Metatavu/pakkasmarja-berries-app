@@ -3,6 +3,25 @@ $menu-height: 41px;
 $header-height: $banner-height + $menu-height;
 $slide-margin-top: 25px;
 
+.connecting-modal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #fff;
+  text-align: center;
+  background-image: url("../gfx/loader-white.svg");
+  background-repeat: no-repeat;
+  z-index: 9999;
+  color: #fff;
+  background-color: #e01e36;
+  font-size: 24px;
+  font-family: "Sans Serif";
+  background-position: center 120px;
+  padding-top: 50px;
+}
+
 .no-gutters {
   margin-right: 0;
   margin-left: 0;
@@ -219,7 +238,8 @@ $slide-margin-top: 25px;
   padding-top: 50px;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-  height: 81vh;
+  height: 88vh;
+  margin-bottom: 30px;
   
   .chat-footer {
     position: fixed;
@@ -498,3 +518,6 @@ $slide-margin-top: 25px;
   }
 }
 
+.empty-list-message {
+  text-align: center;
+}

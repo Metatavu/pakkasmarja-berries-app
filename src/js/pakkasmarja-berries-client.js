@@ -59,7 +59,7 @@
         clearTimeout(this._reconnectTimeout);
       }
       
-      if (!this._webSocket || this._webSocket.readyState !== this._webSocket.CONNECTING) {
+      if (!this._webSocket || this._webSocket.readyState !== this._webSocket.CONNECTING) {
         this.connect();
       }
       

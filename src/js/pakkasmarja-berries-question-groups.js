@@ -56,18 +56,24 @@
     },
     
     _addQuestionGroups: function (questionGroups) {
+      const sessionId = $(document.body).pakkasmarjaBerriesAuth('sessionId');
+      
       $('.questions-view').removeClass('loading');
       
-      questionGroups.forEach((questionGroup) => {      
-        $(`.question-group[data-id=${questionGroup.id}]`).remove();
-        
-        const questionGroupData = Object.assign(questionGroup, {
-          imageUrl: questionGroup.imageUrl || 'gfx/placeholder.png',
-          latestMessageFormatted: questionGroup.latestMessage ? moment(questionGroup.latestMessage).locale('fi').format('LLLL') : null
+      if (!questionGroups.length) {
+        $(`.questions-view ul`).html(pugNoQuestionGroups());
+      } else {
+        questionGroups.forEach((questionGroup) => {      
+          $(`.question-group[data-id=${questionGroup.id}]`).remove();
+
+          const questionGroupData = Object.assign(questionGroup, {
+            imageUrl: questionGroup.imageUrl ? `${questionGroup.imageUrl}?sessionId=${sessionId}` : 'gfx/placeholder.png',
+            latestMessageFormatted: questionGroup.latestMessage ? moment(questionGroup.latestMessage).locale('fi').format('LLLL') : null
+          });
+
+          $(`.questions-view ul`).append(pugQuestionGroup(questionGroupData));
         });
-        
-        $(`.questions-view ul`).append(pugQuestionGroup(questionGroupData));
-      });
+      }
     },
     
     _addQuestionGroupThreads: function (threads, questionGroupId) {
@@ -76,17 +82,20 @@
       }
       
       $('.questions-view').removeClass('loading');
-      
-      threads.forEach((thread) => {      
-        $(`.chat-question-group-thread[data-id=${thread.id}]`).remove();
-        
-        const threadData = Object.assign(thread, {
-          imageUrl: thread.imageUrl || 'gfx/placeholder.png',
-          latestMessageFormatted: thread.latestMessage ? moment(thread.latestMessage).locale('fi').format('LLLL') : null
+      if (!threads.length) {
+        $(`.questions-view ul`).html(pugNoQuestionGroupThreads());
+      } else {
+        threads.forEach((thread) => {      
+          $(`.chat-question-group-thread[data-id=${thread.id}]`).remove();
+
+          const threadData = Object.assign(thread, {
+            imageUrl: thread.imageUrl || 'gfx/placeholder.png',
+            latestMessageFormatted: thread.latestMessage ? moment(thread.latestMessage).locale('fi').format('LLLL') : null
+          });
+
+          $('.questions-view ul').append(pugChatQuestionGroupThread(threadData));
         });
-        
-        $('.questions-view ul').append(pugChatQuestionGroupThread(threadData));
-      });
+      }
     },
     
     _loadGroups: function () {
