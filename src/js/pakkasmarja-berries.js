@@ -68,6 +68,7 @@
       $(window).scroll($.proxy(this._onWindowScroll, this));
       
       this.element.pakkasmarjaBerriesDeviceControls();
+      this.element.pakkasmarjaBerriesDatabase();
     },
     
     sessionId: function () {

@@ -22,13 +22,21 @@
     },
     
     openNews: function(id, title, contents, created, modified, image) {
+      let articleImage;
+      
+      if (image && image.length) {
+        articleImage = image;
+      } else {
+        articleImage = 'gfx/image_placeholder.png';
+      }
+      
       $(".swiper-slide, .secondary-menu, .navbar-top").hide("slide", { direction: "left" }, 300);
       $(".news-wrapper").html(pugNewsItemOpen({
         createdFormatted: this._formatDate(created),
         modifiedFormatted: this._formatDate(modified),
         title: title,
         contents: contents,
-        image: image  ? image : 'https://cdn.metatavu.io/assets/pakkasmarja-berries/background.jpg'
+        image: articleImage
       })).show("slide", { direction: "right" }, 300);
       
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {

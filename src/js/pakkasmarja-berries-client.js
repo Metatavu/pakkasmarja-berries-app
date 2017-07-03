@@ -85,7 +85,7 @@
         clearTimeout(this._reconnectTimeout);
       }
       
-      if (!this._webSocket || this._webSocket.readyState !== this._webSocket.CONNECTING) {
+      if (!this._webSocket || this._webSocket.readyState !== this._webSocket.CONNECTING) {
         this.connect($(document.body).pakkasmarjaBerriesAuth('sessionId'));
       }
       
@@ -136,7 +136,7 @@
     
     _onWebSocketMessage: function (event) {
       const message = JSON.parse(event.data);
-      if (message.type === 'pong') {
+      if (message.type === 'pong') {
         this._pong = new Date().getTime(); 
       } else {
         this.element.trigger("message:" + message.type, message.data); 
