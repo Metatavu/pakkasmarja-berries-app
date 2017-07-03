@@ -16,6 +16,7 @@
         "cordova-plugin-file-transfer": "~1.6.3",
         "cordova-plugin-inappbrowser": "^1.7.1",
         "cordova-plugin-whitelist": "^1.3.2",
+        "cordova-sqlite-storage": "^2.0.4",
         "grunt": "^1.0.1",
         "grunt-contrib-sass": "^1.0.0",
         "grunt-wiredep": "^3.0.1",
@@ -37,7 +38,8 @@
             "cordova-plugin-camera": {},
             "cordova-plugin-file-transfer": {},
             "cordova-plugin-fcm": {},
-            "cordova-plugin-inappbrowser": {}
+            "cordova-plugin-inappbrowser": {},
+            "cordova-sqlite-storage": {}
         }
     }
 }

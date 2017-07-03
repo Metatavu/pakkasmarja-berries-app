@@ -117,7 +117,7 @@
       if (this.options.logDebug) {
         console.log("Socket closed");
       }
-      
+      console.log("Ws closed... client 120");
       this._reconnect();
     },
     
@@ -125,7 +125,7 @@
       if (this.options.logDebug) {
         console.log("Socket error");
       }
-      
+      console.log("Reconnecting... client 128");
       this._reconnect();
     }
     
