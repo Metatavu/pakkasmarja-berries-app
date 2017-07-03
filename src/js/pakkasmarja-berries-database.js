@@ -39,7 +39,7 @@
     },
     
     initializeDatabase: function() {
-      this.executeTx('CREATE TABLE IF NOT EXISTS PushNotificationTopics (topic)')
+      this.executeTx('CREATE TABLE IF NOT EXISTS PushNotificationTopics (topic, type)')
         .then(() => {
           console.log("db Initialized");
           $(document.body).trigger("databaseInitialized");
@@ -66,9 +66,9 @@
       });
     },
     
-    insertPushNotificationTopic: function (topic) {
+    insertPushNotificationTopic: function (topic, type) {
       return new Promise((resolve, reject) => {
-        this.executeTx('INSERT INTO PushNotificationTopics (topic) values (?)', [topic])
+        this.executeTx('INSERT INTO PushNotificationTopics (topic, type) values (?, ?)', [topic, type])
           .then((rs) => {
             resolve(null);
           })
@@ -76,24 +76,34 @@
       });
     },
     
-    findItem: function(topic) {
+    deletePushNotificationTopic: function (topic, type) {
       return new Promise((resolve, reject) => {
-        this.executeTx('SELECT * from PushNotificationTopics where topic = ?', [topic])
+        this.executeTx('DELETE FROM PushNotificationTopics where topic = ? and type = ?', [topic, type])
           .then((rs) => {
-            if (rs.rows && rs.rows.length > 0) {
-              const row = rs.rows.item(0);
-              resolve(row.topic);
-            } else {
-              resolve(null);
-            }
+            resolve(null);
           })
           .catch(reject);
       });
     },
     
-    deleteNotSubscribedPushNotificationTopics: function (threads) {
+    listPushNotificationTopicsByType: function(type) {
+      return this.executeTx('SELECT * from PushNotificationTopics where type = ?', [type])
+        .then((rs) => {
+          const result = [];
+  
+          if (rs.rows) {
+            for (let i = 0; i < rs.rows.length; i++) {
+              result.push(rs.rows.item(i).topic);
+            }
+          }
+          
+          return result;
+        });
+    },
+    
+    deleteNotSubscribedPushNotificationTopicsByType: function (threads, type) {
       return new Promise((resolve, reject) => {
-        this.executeTx('DELETE (topic) FROM PushNotificationTopics WHERE topic NOT IN (?)', [threads])
+        this.executeTx('DELETE (topic) FROM PushNotificationTopics WHERE topic NOT IN (?) and type = ?', [threads, type])
           .then((rs) => {
             resolve(null);
           })

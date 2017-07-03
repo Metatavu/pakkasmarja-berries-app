@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-/* global FCMPlugin */
+/* global FCMPlugin, _, Promise */
 
 (function() {
   'use strict';
@@ -37,75 +37,112 @@
       }
     },
     
-    _onSubscribableQuestionGroupThreadsFound: function (event, data) {
-      let threads = [];
-      this.questionGroupThreads = data['thread-ids'];
-      
-      this.questionGroupThreads.forEach((thread) => {
-        threads.push(`question-group-thread-${thread}`);
-        
-        $(document.body).pakkasmarjaBerriesDatabase('findItem', `question-group-thread-${thread}`)
-          .then((item) => {
-            if (!item.length) {
-              $(document.body).pakkasmarjaBerriesDatabase('insertPushNotificationTopic', `question-group-thread-${thread}`);
-              FCMPlugin.subscribeToTopic(`question-group-thread-${thread}`, $.proxy(this._onSubscribeSuccess, this), $.proxy(this._onSubscribeFailure, this));
-            } else if (item && item.length) {
-              FCMPlugin.subscribeToTopic(`question-group-thread-${thread}`, $.proxy(this._onSubscribeSuccess, this), $.proxy(this._onSubscribeFailure, this));
-            }
-          })
-          .catch(this.handleError);
-        
-        $(document.body).pakkasmarjaBerriesDatabase('deleteNotSubscribedPushNotificationTopics', threads);
-        
+    _subscribeThreads: function (type, threads) {
+      const subscribePromises = _.map(threads, (thread) => {
+        return this._subscribeThread(type, thread);
       });
+      
+      return Promise.all(subscribePromises);
+    },
+    
+    _subscribeThread: function (type, thread) {
+      return this._subscribeTopic(thread)
+        .then(() => {
+          return $(document.body).pakkasmarjaBerriesDatabase('insertPushNotificationTopic', thread, type);
+        });
+    },
+    
+    _unsubscribeThreads: function (type, threads) {
+      const unsubscribePromises = _.map(threads, (thread) => {
+        return this._unsubscribeThread(type, thread);
+      });
+      
+      return Promise.all(unsubscribePromises);
+    },
+    
+    _unsubscribeThread: function (type, thread) {
+      return this._unsubscribeTopic(thread)
+        .then(() => {
+          return $(document.body).pakkasmarjaBerriesDatabase('deletePushNotificationTopic', thread, type);
+        });
+    },
+    
+    _subscribeTopic: function (topic) {
+      return new Promise((resolve, reject) => {
+        FCMPlugin.subscribeToTopic(topic, () => {
+          resolve();
+        }, () => {
+          reject();
+        });
+      });
+    },
+    
+    _unsubscribeTopic: function (topic) {
+      return new Promise((resolve, reject) => {
+        FCMPlugin.unsubscribeFromTopic(topic, () => {
+          resolve();
+        }, () => {
+          reject();
+        });
+      });
+    },
+    
+    _updateThreadSubscriptions: function (type, threads) {
+      return $(document.body).pakkasmarjaBerriesDatabase('listPushNotificationTopicsByType', type)
+        .then((subscribedThreads) => {
+          const subscribeThreads = [];
+          const unsubscribeThreads = [];
+          
+          _.forEach(threads, (thread) => {
+            if (_.indexOf(subscribedThreads, thread) < 0) {
+              subscribeThreads.push(thread);
+            }
+          });
+          
+          _.forEach(subscribedThreads, (subscribedThread) => {
+            if (_.indexOf(threads, subscribedThread) < 0) {
+              unsubscribeThreads.push(subscribedThread);
+            }
+          });
+          
+          return Promise.all(this._subscribeThreads(type, subscribeThreads), this._unsubscribeThreads(type, unsubscribeThreads));
+        });
+    },
+    
+    _onSubscribableQuestionGroupThreadsFound: function (event, data) {
+      const threads = _.map(data['thread-ids']||[], (threadId) => {
+        return `question-group-thread-${threadId}`;
+      });
+      
+      this._updateThreadSubscriptions('question', threads)
+        .then(() => {
+          if (this.options.logDebug) {
+            console.log("Question group thread subscriptions updated successfully");
+          }
+        })
+        .catch((err) => {
+          if (this.options.logDebug) {
+            console.error(`Question group thread subscriptions update failed on ${err}`);
+          }
+        });
     },
     
     _onSubscribableConversationThreadsFound: function (event, data) {
-      let threads = [];
-      this.conversationGroupThreads = data['thread-ids'];
-      console.log("conv " + this.conversationGroupThreads);
-      
-      this.conversationGroupThreads.forEach((thread) => {
-        threads.push(`conversation-thread-${thread}`);
-        
-        $(document.body).pakkasmarjaBerriesDatabase('findItem', `conversation-thread-${thread}`)
-          .then((item) => {
-            if (!item) {
-              $(document.body).pakkasmarjaBerriesDatabase('insertPushNotificationTopic', `question-group-thread-${thread}`);
-              FCMPlugin.subscribeToTopic(`question-group-thread-${thread}`, $.proxy(this._onSubscribeSuccess, this), $.proxy(this._onSubscribeFailure, this));
-            } else if (item) {
-              FCMPlugin.subscribeToTopic(`question-group-thread-${thread}`, $.proxy(this._onSubscribeSuccess, this), $.proxy(this._onSubscribeFailure, this));
-            }
-          })
-          .catch(this.handleError);
-        
-        $(document.body).pakkasmarjaBerriesDatabase('deleteNotSubscribedPushNotificationTopics', threads);
-        
+      const threads = _.map(data['thread-ids']||[], (threadId) => {
+        return `conversation-thread-${threadId}`;
       });
-    },
-    
-    _onSubscribeSuccess: function () {
-      if (this.options.logDebug) {
-        console.log("Subscribed topic successfully");
-      }
-    },
-    
-    _onSubscribeFailure: function () {
-      if (this.options.logDebug) {
-        console.log("Error while subscribing topic");
-      }
-    },
-    
-    _onUnsubscribeSuccess: function () {
-      if (this.options.logDebug) {
-        console.log("Unsubscribed topic successfully");
-      }
-    },
-    
-    _onUnubscribeFailure: function () {
-      if (this.options.logDebug) {
-        console.log("Error while unsubscribing topic");
-      }
+      
+      this._updateThreadSubscriptions('conversation', threads)
+        .then(() => {
+          if (this.options.logDebug) {
+            console.log("Conversation thread subscriptions updated successfully");
+          }
+        })
+        .catch((err) => {
+          if (this.options.logDebug) {
+            console.error(`Conversation thread subscriptions update failed on ${err}`);
+          }
+        });
     }
     
   });
