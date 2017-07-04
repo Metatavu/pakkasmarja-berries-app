@@ -14,3 +14,4 @@ npm-debug.log
 /www/index.html
 /www/bower_components
 /google-services.json
+/GoogleService-Info.plist
