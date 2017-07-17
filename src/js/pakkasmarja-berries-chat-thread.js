@@ -20,7 +20,10 @@
       this.element.on('click', '.chat-close-btn', $.proxy(this._onChatCloseElementClick, this));
       this.element.on('keydown', '.message-input', $.proxy(this._onMessageInputClick, this));
       this.element.on('click', '.message-send-btn', $.proxy(this._onMessageSendButtonClick, this));
-      this.element.on('click', '.upload-image', $.proxy(this._onUploadImageClick, this));      
+      this.element.on('click', '.upload-image', $.proxy(this._onUploadImageClick, this));
+      this.element.on('click', '.image-gallery', $.proxy(this._onImageFromGallery, this));
+      this.element.on('click', '.image-camera', $.proxy(this._onImageFromCamera, this));
+      this.element.on('click', '.close-dialog', $.proxy(this._onCloseDialogClick, this));
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
       $(`.chat-conversation-wrapper`).scroll($.proxy(this._onWrapperScroll, this));
     },
@@ -183,9 +186,32 @@
     _onUploadImageClick: function (event) {
       event.preventDefault();
       
+      $(".modal").show();
+    },
+    
+    _onCloseDialogClick: function () {
+      $(".modal").hide();
+    },
+    
+    _onImageFromGallery: function() {
+      $(".modal").hide();
       navigator.camera.getPicture($.proxy(this._onCapturePhoto, this), $.proxy(this._onCapturePhotoFail, this), {
         quality: 90,
         destinationType: Camera.DestinationType.FILE_URI,
+        sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+        encodingType: Camera.EncodingType.JPEG,
+        mediaType: Camera.MediaType.PICTURE,
+        targetHeight: this.options.imageTargetHeight,
+        targetWidth: this.options.imageTargetWidth
+      });
+    },
+    
+    _onImageFromCamera: function() {
+      $(".modal").hide();
+      navigator.camera.getPicture($.proxy(this._onCapturePhoto, this), $.proxy(this._onCapturePhotoFail, this), {
+        quality: 90,
+        destinationType: Camera.DestinationType.FILE_URI,
+        sourceType: navigator.camera.PictureSourceType.CAMERA,
         encodingType: Camera.EncodingType.JPEG,
         mediaType: Camera.MediaType.PICTURE,
         targetHeight: this.options.imageTargetHeight,

@@ -165,7 +165,7 @@
   });
   
   $(document).on("deviceready", () => {
-    $(document.body).pakkasmarjaBerries();      
+    $(document.body).pakkasmarjaBerries();
   });
 
 })();
