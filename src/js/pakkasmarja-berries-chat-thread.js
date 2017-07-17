@@ -274,6 +274,13 @@
     },
     
     _onMessagesAdded: function (event, data) {
+      data.messages.forEach((message) => {
+        const created = new Date(message.created); 
+        const date = created.getDate() + "." + (created.getMonth() + 1) + "." + created.getFullYear();
+        const time = created.getHours() + ":" + created.getMinutes();
+        
+        message.created = date + " " + time;
+      });
       this._addMessages(data['thread-id'], data['messages']);
     }
     
