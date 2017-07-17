@@ -5,6 +5,8 @@
         =userName
       p.message
         !=contents
+      p(style='font-size:12px;color:#6a6a6b')
+        =created
     .bubble-arrow
       if role === 'manager' 
         i.fa.fa-caret-right.fa-x3(aria-hidden='true')
