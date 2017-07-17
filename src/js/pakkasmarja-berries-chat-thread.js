@@ -111,6 +111,7 @@
           messageHtml.find('img').each((index, image) => {
             const src = $(image).attr('src');
             $(image).attr('src',  `${src}?sessionId=${sessionId}`);
+            $(image).wrap(`<a href="${src}?sessionId=${sessionId}"></a>`);
           });
           
           $('.chat-container .speech-wrapper').append(messageHtml);
