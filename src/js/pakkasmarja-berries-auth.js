@@ -12,6 +12,8 @@
     _create : function() {
       this._sessionId = null;
       this.element.on('join-error', $.proxy(this._onJoinError, this));
+      this.element.on('authentication-error', $.proxy(this._onAuthenticationError, this));
+      this.element.on('authentication-failure', $.proxy(this._onAuthenticationError, this));
     },
     
     authenticate: function () {
@@ -28,6 +30,11 @@
           console.error("Authentication failed", err);
           this.element.trigger("authentication-error");
         });
+    },
+    
+    _onAuthenticationError: function() {
+      this._clearToken();
+      this.authenticate();
     },
     
     logout: function () {
@@ -61,7 +68,14 @@
       return Keycloak(this.options.serverUrl + '/keycloak.json');
     },
     
+    _clearToken: function () {
+      if (this._keycloak) {
+        this._keycloak.clearToken()
+      }
+    },
+    
     _onJoinError: function () {
+      this._clearToken();
       this.authenticate();
     }
     

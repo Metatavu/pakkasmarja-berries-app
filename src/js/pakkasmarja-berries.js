@@ -156,6 +156,14 @@
     
     _onConnect: function () {
       $('.connecting-modal').hide();
+      cordova.plugins.photoLibrary.requestAuthorization(
+        () => { },
+        (err) => { },
+        {
+          read: true,
+          write: true
+        }
+      );
     },
     
     _onReconnect: function () {
