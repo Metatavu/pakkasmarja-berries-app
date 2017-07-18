@@ -5,6 +5,8 @@
         =userName
       p.message
         !=contents
+      p.message-time
+        =created
     .bubble-arrow
       if role === 'manager' 
         i.fa.fa-caret-right.fa-x3(aria-hidden='true')
