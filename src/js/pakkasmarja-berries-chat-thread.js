@@ -278,7 +278,7 @@
         const date = created.getDate() + "." + (created.getMonth() + 1) + "." + created.getFullYear();
         const time = created.getHours() + ":" + created.getMinutes();
         
-        message.created = date + " " + time;
+        message.sent = date + " " + time;
       });
       this._addMessages(data['thread-id'], data['messages']);
     }
