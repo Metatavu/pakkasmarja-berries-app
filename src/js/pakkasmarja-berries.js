@@ -103,7 +103,7 @@
     
     _checkVersion: function() {
       $.get(`${this.serverUrl}/version`, (version) => {
-        if (version !== '1.1') {
+        if (version != '1.1.1') {
           alert('Uusi versio sovelluksesta saatavilla.');
         }
       });
