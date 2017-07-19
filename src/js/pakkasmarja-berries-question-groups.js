@@ -114,14 +114,21 @@
     },
     
     _onQuestionGroupClick: function(event) {
-      event.preventDefault();
+      event.preventDefault();   
       const element = $(event.target).closest('.question-group');
       element.removeClass('unread').addClass('read');
+      
+      $("body").attr('question-group-id', $(element).attr('data-id'));
+      $("body").addClass('question-group-open');
+      
       this.selectQuestionGroup($(element).attr('data-id'), $(element).attr('data-role'));
     },
     
     _onChatQuestionGroupThreadClick: function(event) {
       event.preventDefault();
+      $("body").removeClass('question-group-open');
+      $("body").addClass('question-group-thread-open');
+      
       const element = $(event.target).closest('.chat-question-group-thread');
       element.removeClass('unread').addClass('read');
       $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', $(element).attr('data-id'));

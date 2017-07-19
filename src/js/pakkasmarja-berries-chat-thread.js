@@ -52,14 +52,11 @@
         'type': 'mark-item-read',
         'id': `thread-${threadId}`
       });
-      
-      $(".chat-container").addClass("chat-conversation-open");
     },
       
     leaveThread: function() {
       this.activeThreadId = null;
       $(".chat-container").hide("slide", { direction: "right" }, 300);
-      $(".chat-container").removeClass("chat-conversation-open");
       $(document.body).pakkasmarjaBerries('restoreMainView');
     },
       

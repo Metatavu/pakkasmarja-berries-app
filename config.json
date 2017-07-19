@@ -5,7 +5,7 @@
     "secure": false
   },
   "generic": {
-    "defaultSrc": "'self' http: https: data: gap: ws: wss: https://ssl.gstatic.com *.metatavu.io 192.168.100.20:8000 'unsafe-inline'",
+    "defaultSrc": "'self' cdvphotolibrary: http: https: data: gap: ws: wss: https://ssl.gstatic.com *.metatavu.io 192.168.100.20:8000 'unsafe-inline'",
     "styleSrc": "'self' http: https: *.metatavu.io localhost:8000 'unsafe-inline'",
     "mediaSrc": "*"
   }
