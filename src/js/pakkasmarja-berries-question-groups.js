@@ -63,15 +63,19 @@
       if (!questionGroups.length) {
         $(`.questions-view ul`).html(pugNoQuestionGroups());
       } else {
-        questionGroups.forEach((questionGroup) => {      
-          $(`.question-group[data-id=${questionGroup.id}]`).remove();
-
+        questionGroups.forEach((questionGroup) => {
           const questionGroupData = Object.assign(questionGroup, {
             imageUrl: questionGroup.imageUrl ? `${questionGroup.imageUrl}?sessionId=${sessionId}` : 'gfx/placeholder.png',
             latestMessageFormatted: questionGroup.latestMessage ? moment(questionGroup.latestMessage).locale('fi').format('LLLL') : null
           });
-
-          $(`.questions-view ul`).append(pugQuestionGroup(questionGroupData));
+          
+          if (!$("body").hasClass('question-group-open')) {
+            if ($(`.question-group[data-id=${questionGroup.id}]`).length) {
+              $(`.question-group[data-id=${questionGroup.id}]`).replaceWith(pugQuestionGroup(questionGroupData));
+            } else {
+              $(`.questions-view ul`).append(pugQuestionGroup(questionGroupData));
+            }
+          }
         });
       }
     },
@@ -85,15 +89,19 @@
       if (!threads.length) {
         $(`.questions-view ul`).html(pugNoQuestionGroupThreads());
       } else {
-        threads.forEach((thread) => {      
-          $(`.chat-question-group-thread[data-id=${thread.id}]`).remove();
-
+        threads.forEach((thread) => {
           const threadData = Object.assign(thread, {
             imageUrl: thread.imageUrl || 'gfx/placeholder.png',
             latestMessageFormatted: thread.latestMessage ? moment(thread.latestMessage).locale('fi').format('LLLL') : null
           });
-
-          $('.questions-view ul').append(pugChatQuestionGroupThread(threadData));
+          
+          if (!$("body").hasClass('question-group-thread-open')) {
+            if ($(`.chat-question-group-thread[data-id=${thread.id}]`).length) {
+              $(`.chat-question-group-thread[data-id=${thread.id}]`).replaceWith(pugChatQuestionGroupThread(threadData));
+            } else {
+              $(`.questions-view ul`).append(pugChatQuestionGroupThread(threadData));
+            }
+          }
         });
       }
     },
