@@ -32,15 +32,18 @@
       if (!threads.length) {
         $(`.questions-view ul`).html(pugNoThreads());
       } else {
-        threads.forEach((thread) => {      
-          $(`.chat-thread[data-id=${thread.id}]`).remove();
-
+        threads.forEach((thread) => {
           const threadData = Object.assign(thread, {
             imageUrl: thread.imageUrl ? `${thread.imageUrl}?sessionId=${sessionId}` : 'gfx/placeholder.png',
             latestMessageFormatted: thread.latestMessage ? moment(thread.latestMessage).locale('fi').format('LLLL') : null
           });
 
-          $('.conversations-view ul').append(pugChatThread(threadData));
+          if ($(`.chat-thread[data-id=${thread.id}]`).length) {
+            $(`.chat-thread[data-id=${thread.id}]`).replaceWith(pugChatThread(threadData));
+          } else {
+            $('.conversations-view ul').append(pugChatThread(threadData));
+          }
+          
         });
       }
     },
