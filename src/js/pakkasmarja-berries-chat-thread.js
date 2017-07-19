@@ -379,11 +379,8 @@
     
     _onMessagesAdded: function (event, data) {
       data.messages.forEach((message) => {
-        const created = new Date(message.created); 
-        const date = created.getDate() + "." + (created.getMonth() + 1) + "." + created.getFullYear();
-        const time = created.getHours() + ":" + created.getMinutes();
-        
-        message.sent = date + " " + time;
+        const created = moment(new Date(message.created));
+        message.sent = created.format('DD.M.YYYY HH:mm');
       });
       this._addMessages(data['thread-id'], data['messages']);
     }
