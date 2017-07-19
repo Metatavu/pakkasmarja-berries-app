@@ -38,10 +38,13 @@
     },
     
     logout: function () {
-      this._keycloak.logout({
-        redirectUri : this.options.serverUrl
+      $.ajax({
+        url: this._keycloak.createLogoutUrl(),
+        complete: () => {
+          this._clearToken();
+          location.reload();
+        }
       });
-      location.reload();
     },
     
     token: function () {
