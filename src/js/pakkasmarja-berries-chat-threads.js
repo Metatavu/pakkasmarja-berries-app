@@ -60,6 +60,7 @@
     
     _onChatThreadClick: function (event) {
       event.preventDefault();
+      $("body").addClass("chat-conversation-open");
       const element = $(event.target).closest('.chat-thread');
       element.removeClass('unread').addClass('read');
       this.joinThread($(element).attr('data-id'));

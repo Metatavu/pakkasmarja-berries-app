@@ -52,14 +52,11 @@
         'type': 'mark-item-read',
         'id': `thread-${threadId}`
       });
-      
-      $(".chat-container").addClass("chat-conversation-open");
     },
       
     leaveThread: function() {
       this.activeThreadId = null;
       $(".chat-container").hide("slide", { direction: "right" }, 300);
-      $(".chat-container").removeClass("chat-conversation-open");
       $(document.body).pakkasmarjaBerries('restoreMainView');
     },
       
@@ -304,6 +301,7 @@
         quality: 90,
         destinationType: Camera.DestinationType.FILE_URI,
         sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+        correctOrientation: true,
         encodingType: Camera.EncodingType.JPEG,
         mediaType: Camera.MediaType.PICTURE,
         targetHeight: this.options.imageTargetHeight,
@@ -317,6 +315,7 @@
         quality: 90,
         destinationType: Camera.DestinationType.FILE_URI,
         sourceType: navigator.camera.PictureSourceType.CAMERA,
+        correctOrientation: true,
         encodingType: Camera.EncodingType.JPEG,
         mediaType: Camera.MediaType.PICTURE,
         targetHeight: this.options.imageTargetHeight,
