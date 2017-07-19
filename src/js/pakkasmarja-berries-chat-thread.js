@@ -24,6 +24,7 @@
       this.element.on('click', '.image-gallery', $.proxy(this._onImageFromGallery, this));
       this.element.on('click', '.image-camera', $.proxy(this._onImageFromCamera, this));
       this.element.on('click', '.close-dialog', $.proxy(this._onCloseDialogClick, this));
+      this.element.on('click', '.full-image-btn', $.proxy(this._onFullImageBtnClick, this));
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
       $(`.chat-conversation-wrapper`).scroll($.proxy(this._onWrapperScroll, this));
     },
@@ -85,6 +86,104 @@
       return $(document.body).pakkasmarjaBerries('activePage') === 'conversations';
     },
     
+    _onFullImageBtnClick: function(e) {
+      e.preventDefault();
+      const sourceUrl = $(e.target).closest('.full-image-btn').attr('data-source-url');
+      PhotoViewer.show(sourceUrl);
+      //TODO: use local image
+    },
+    
+    _downloadImage: function(url, hash) {
+      return new Promise((resolve, reject) => {
+        const sessionId = $(document.body).pakkasmarjaBerriesAuth('sessionId');
+        const fileTransfer = new FileTransfer();
+        fileTransfer.download(`${url}?sessionId=${sessionId}`, `cdvfile://localhost/temporary/pakkasmarja-images/${hash}.jpg`, (entry) => {
+          const targetPath= entry.toURL();
+          cordova.plugins.photoLibrary.saveImage(targetPath, 'pakkasmarja', resolve, (err) => {
+            reject(err);
+          });
+        }, (downloadErr) => {
+          reject(downloadErr);
+        });
+      });
+
+    },
+    
+    _getImageFromGallery: function(libraryItemOrId) {
+      return new Promise((resolve, reject) => {
+        cordova.plugins.photoLibrary.getThumbnailURL(
+          libraryItemOrId,
+          (thumbnailURL) => {
+            cordova.plugins.photoLibrary.getPhotoURL(
+            libraryItemOrId,
+             (photoURL) => {
+               resolve({
+                 thumb: thumbnailURL,
+                 full: photoURL,
+                 imageId: typeof libraryItemOrId.id !== 'undefined' ? libraryItemOrId.id : libraryItemOrId
+               });
+            }, reject);
+          }, reject);
+      });
+    },
+    
+    _processMessageImage: function(image) {
+      return new Promise((resolve, reject) => {
+        const src = $(image).attr('data-src');
+        const srcHash = $(image).attr('data-src-hash');
+        $(image).removeAttr('data-src-hash');
+        const imageId =  window.localStorage.getItem(srcHash);
+        if (imageId) {
+          this._getImageFromGallery(imageId)
+            .then((imageData) => {
+              if (!imageData) {
+                window.localStorage.removeItem(srcHash);
+                return this._processMessageImage(image);
+              } else {
+                resolve(imageData); 
+              }
+            })
+            .catch((err) => {
+              window.localStorage.removeItem(srcHash);
+              return this._processMessageImage(image);
+            });
+        } else {
+          this._downloadImage(src, srcHash)
+            .then((imageItem) => {
+              window.localStorage.setItem(srcHash, imageItem.id);
+              this._getImageFromGallery(imageItem)
+                .then((imageData) => { resolve(imageData) });
+            })
+            .catch(reject);
+        }
+      });
+    },
+    
+    _processMessage: function(message) {
+      return new Promise((resolve, reject) => {
+          const imagesToLoad = $('.chat-container .speech-wrapper').find('img[data-src-hash]');
+          const sessionId = $(document.body).pakkasmarjaBerriesAuth('sessionId');
+          async.each(imagesToLoad, (image, callback) => {
+            this._processMessageImage(image)
+              .then((imageData) => {
+                $(image).attr('src', imageData.thumb);
+                const originalSrc = $(image).attr('data-src');
+                const sourceUrl = `${originalSrc}?sessionId=${sessionId}`
+                $(image).wrap(`<a data-source-url="${sourceUrl}" data-image-id="${imageData.imageId}" class='full-image-btn' href="${imageData.full}"></a>`);
+                callback();
+              })
+              .catch((err) => { callback(err) });
+          }, (err) => {
+            if (err) {
+              console.log('error loading image', err);
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+      });
+    },
+    
     _sortMessages: function () {
       $('.speech-wrapper .chat-message').sort((newsItem1, newsItem2) => {
         const created1 = moment($(newsItem1).attr('data-created'));
@@ -113,10 +212,16 @@
           const messageHtml = $(pugChatMessage(message));
           messageHtml.find('img').each((index, image) => {
             const src = $(image).attr('src');
-            $(image).attr('src',  `${src}?sessionId=${sessionId}`);
+            const srcHash = md5(src);
+            $(image).attr('src',  'gfx/ring.gif');
+            $(image).attr('data-src',  src);
+            $(image).attr('data-src-hash',  srcHash);
           });
           
           $('.chat-container .speech-wrapper').append(messageHtml);
+          this._processMessage(message)
+            .then(() => { })
+            .catch((err) => { console.log(err) });
         }
       });
       
@@ -276,11 +381,8 @@
     
     _onMessagesAdded: function (event, data) {
       data.messages.forEach((message) => {
-        const created = new Date(message.created); 
-        const date = created.getDate() + "." + (created.getMonth() + 1) + "." + created.getFullYear();
-        const time = created.getHours() + ":" + created.getMinutes();
-        
-        message.sent = date + " " + time;
+        const created = moment(new Date(message.created));
+        message.sent = created.format('DD.M.YYYY HH:mm');
       });
       this._addMessages(data['thread-id'], data['messages']);
     }

@@ -1,5 +1,4 @@
 /* jshint esversion: 6 */
-/* global FCMPlugin */
 
 (function() {
   'use strict';

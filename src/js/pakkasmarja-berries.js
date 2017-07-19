@@ -101,6 +101,14 @@
       this._resizeSlides();
     },
     
+    _checkVersion: function() {
+      $.get(`${this.serverUrl}/version`, (version) => {
+        if (version != '1.1.1') {
+          alert('Uusi versio sovelluksesta saatavilla.');
+        }
+      });
+    },
+    
     _resizeSlides: function () {
       $('.swiper-slide-active').css({
         'height': 'auto',
@@ -156,6 +164,14 @@
     
     _onConnect: function () {
       $('.connecting-modal').hide();
+      cordova.plugins.photoLibrary.requestAuthorization(
+        () => { },
+        (err) => { },
+        {
+          read: true,
+          write: true
+        }
+      );
     },
     
     _onReconnect: function () {

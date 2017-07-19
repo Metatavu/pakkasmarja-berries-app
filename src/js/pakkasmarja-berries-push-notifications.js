@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-/* global FCMPlugin, _, Promise */
+/* global _, Promise */
 
 (function() {
   'use strict';
@@ -22,19 +22,7 @@
         'type': 'get-subscribable-question-group-threads'
       });
       
-      FCMPlugin.subscribeToTopic('news', $.proxy(this._onNewsSubscribeSuccess, this), $.proxy(this._onNewsSubscribeFailure, this));
-    },
-    
-    _onNewsSubscribeSuccess: function (message) {
-      if (this.options.logDebug) {
-        console.log("Subscribed to topic news succesfully", message);
-      }
-    },
-    
-    _onNewsSubscribeFailure: function (err) {
-      if (this.options.logDebug) {
-        console.error("Could not subscribe to topic news", err);
-      }
+      window.FirebasePlugin.subscribe('news');
     },
     
     _subscribeThreads: function (type, threads) {
@@ -69,21 +57,15 @@
     
     _subscribeTopic: function (topic) {
       return new Promise((resolve, reject) => {
-        FCMPlugin.subscribeToTopic(topic, () => {
-          resolve();
-        }, () => {
-          reject();
-        });
+        window.FirebasePlugin.subscribe(topic);
+        resolve();
       });
     },
     
     _unsubscribeTopic: function (topic) {
       return new Promise((resolve, reject) => {
-        FCMPlugin.unsubscribeFromTopic(topic, () => {
-          resolve();
-        }, () => {
-          reject();
-        });
+        window.FirebasePlugin.unsubscribe(topic);
+        resolve();
       });
     },
     
