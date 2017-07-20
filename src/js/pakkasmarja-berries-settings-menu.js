@@ -8,9 +8,9 @@
     
     _create: function () {
       this.element.on('click', '.settings-btn', $.proxy(this._onSettingsMenuClick, this));
-      this.element.on('click', '.management-button', $.proxy(this._onManagementButtonClick, this));;
+      this.element.on('click', '.management-button', $.proxy(this._onManagementButtonClick, this));
       this.element.on('change', '.select-setting', $.proxy(this._onSettingsChanged, this));
-      $(document.body).on('message:user-settings', $.proxy(this._onUserSettings, this))
+      $(document.body).on('message:user-settings', $.proxy(this._onUserSettings, this));
     },
     
     _onSettingsMenuClick: function () {
