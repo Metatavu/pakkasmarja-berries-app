@@ -44,7 +44,6 @@
             "cordova-plugin-camera": {},
             "cordova-plugin-file-transfer": {},
             "cordova-plugin-inappbrowser": {},
-            "cordova-sqlite-storage": {},
             "com-sarriaroman-photoviewer": {},
             "cordova-plugin-firebase": {},
             "cordova-plugin-photo-library": {
