@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-/* global cordova */
+/* global cordova, _ */
 
 (function() {
   'use strict';
@@ -9,6 +9,8 @@
     _create: function () {
       this.element.on('click', '.settings-btn', $.proxy(this._onSettingsMenuClick, this));
       this.element.on('click', '.management-button', $.proxy(this._onManagementButtonClick, this));
+      this.element.on('change', '.select-setting', $.proxy(this._onSettingsChanged, this));
+      $(document.body).on('message:user-settings', $.proxy(this._onUserSettings, this));
     },
     
     _onSettingsMenuClick: function () {
@@ -24,12 +26,22 @@
       }
     },
     
+    _onUserSettings: function(event, data) {
+      _.forEach(data.userSettings, (userSetting) => {
+        $(this.element).find(`.select-setting[name="${userSetting.settingKey}"]`).val(userSetting.settingValue);
+      });
+    },
+    
     _openSettingsMenu: function () {
       if ($(document.body).pakkasmarjaBerriesAuth('isAppManager')) {
         $(this.element).find('.management-button').show();
       } else {
         $(this.element).find('.management-button').hide();
       }
+      
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'get-user-settings'
+      });
       
       $(".settings-menu").addClass('menu-open');
       $(".settings-menu").show("slide", { direction: "right" }, 200);
@@ -47,6 +59,22 @@
     _onManagementButtonClick: function () {
       cordova.InAppBrowser.open('https://staging-hallinta-pakkasmarja.metatavu.io/wp-admin"', '_self', 'location=no,hardwareback=no,zoom=no');
     },
+    
+    _onSettingsChanged: function () {
+      const userSettings = {};
+      $(this.element).find('.select-setting').each((index, input) => {
+        let settingKey = $(input).attr('name');
+        let settingValue = $(input).val();
+        
+        userSettings[settingKey] = settingValue;
+      });
+      
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'user-settings-changed',
+        'userSettings': userSettings
+      });
+    },
+    
     
     _disableScrolling: function () {
       $('html, body').css({

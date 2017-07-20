@@ -176,6 +176,7 @@
           'id': 'questions'
         });
       } else {
+        $("body").removeClass("question-group-open");
         if (this.selectedQuestionGroupId) {
           this._loadGroups();
         }
