@@ -10,6 +10,11 @@
     },
     
     _create : function() {
+      window.FirebasePlugin.onNotificationOpen(function(notification) {
+          console.log("Received push notification");
+      }, function(error) {
+          console.error(error);
+      });
     },
     
     subscribeTopic: function(userId) {

@@ -81,7 +81,9 @@
     restoreMainView() {
       $('.swiper-slide, .secondary-menu, .navbar-top').show("slide", { direction: "left", complete: () => {
         this.updateSwiper();
-
+        $("body").removeClass("chat-conversation-open");
+        $("body").removeClass("question-group-open");
+        $("body").removeClass("question-group-thread-open");
         this.element.trigger('mainViewRestore', {
           'activePage': this.activePage()
         });

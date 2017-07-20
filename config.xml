@@ -8,11 +8,8 @@
     <access origin="https://auth.metatavu.io" />
     <access origin="https://cdn.metatavu.io" />
     <access origin="https://www.gravatar.com" />
-    <access origin="http://192.168.100.20:8000" />
     <access origin="http://localhost:8000" />
-    <access origin="http://10.0.2.2:8000" />
     <access origin="https://pakkasmarja-berries.metatavu.io" />
-    <access origin="http://local-shady.metatavu.io:8000" />
     <allow-intent href="cdvphotolibrary://*/*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
