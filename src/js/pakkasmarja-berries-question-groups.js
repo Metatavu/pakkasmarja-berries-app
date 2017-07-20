@@ -56,8 +56,11 @@
     },
     
     _addQuestionGroups: function (questionGroups) {
-      const sessionId = $(document.body).pakkasmarjaBerriesAuth('sessionId');
+      if (this.selectedQuestionGroupId) {
+        return;
+      }
       
+      const sessionId = $(document.body).pakkasmarjaBerriesAuth('sessionId');
       $('.questions-view').removeClass('loading');
       
       if (!questionGroups.length) {
@@ -68,14 +71,23 @@
             imageUrl: questionGroup.imageUrl ? `${questionGroup.imageUrl}?sessionId=${sessionId}` : 'gfx/placeholder.png',
             latestMessageFormatted: questionGroup.latestMessage ? moment(questionGroup.latestMessage).locale('fi').format('LLLL') : null
           });
-          
-          if (!$("body").hasClass('question-group-open')) {
-            if ($(`.question-group[data-id=${questionGroup.id}]`).length) {
-              $(`.question-group[data-id=${questionGroup.id}]`).replaceWith(pugQuestionGroup(questionGroupData));
-            } else {
-              $(`.questions-view ul`).append(pugQuestionGroup(questionGroupData));
+
+          if ($(`.question-group[data-id=${questionGroup.id}]`).length) {
+            if (!questionGroupData.latestMessage) {
+              let prevLatestMessage = $(`.question-group[data-id=${questionGroup.id}]`).attr('data-latest-message');
+              if (prevLatestMessage) {
+                questionGroupData.latestMessage = prevLatestMessage;
+                questionGroupData.latestMessageFormatted = moment(prevLatestMessage).locale('fi').format('LLLL');
+              }
             }
+            if(typeof questionGroupData.read === 'undefined') {
+              questionGroupData.read = $(`.question-group[data-id=${questionGroup.id}]`).hasClass('read');
+            }
+            $(`.question-group[data-id=${questionGroup.id}]`).replaceWith(pugQuestionGroup(questionGroupData));
+          } else {
+            $(`.questions-view ul`).append(pugQuestionGroup(questionGroupData));
           }
+
         });
       }
     },
@@ -94,22 +106,35 @@
             imageUrl: thread.imageUrl || 'gfx/placeholder.png',
             latestMessageFormatted: thread.latestMessage ? moment(thread.latestMessage).locale('fi').format('LLLL') : null
           });
-          
-          if (!$("body").hasClass('question-group-thread-open')) {
-            if ($(`.chat-question-group-thread[data-id=${thread.id}]`).length) {
-              $(`.chat-question-group-thread[data-id=${thread.id}]`).replaceWith(pugChatQuestionGroupThread(threadData));
-            } else {
-              $(`.questions-view ul`).append(pugChatQuestionGroupThread(threadData));
+
+          if ($(`.chat-question-group-thread[data-id=${thread.id}]`).length) {
+            if (!threadData.latestMessage) {
+              let prevLatestMessage = $(`.chat-question-group-thread[data-id=${thread.id}]`).attr('data-latest-message');
+              if (prevLatestMessage) {
+                threadData.latestMessage = prevLatestMessage;
+                threadData.latestMessageFormatted = moment(prevLatestMessage).locale('fi').format('LLLL');
+              }
             }
+            if(typeof threadData.read === 'undefined') {
+              threadData.read = $(`.chat-question-group-thread[data-id=${thread.id}]`).hasClass('read');
+            }
+            $(`.chat-question-group-thread[data-id=${thread.id}]`).replaceWith(pugChatQuestionGroupThread(threadData));
+          } else {
+            $(`.questions-view ul`).append(pugChatQuestionGroupThread(threadData));
           }
+
         });
       }
     },
     
     _loadGroups: function () {
+      if (this.selectedQuestionGroupId) {
+        $('.questions-view ul').empty();
+      }
       this.reset();
-      $('.questions-view ul').empty();
-      $('.questions-view').addClass('loading');
+      if ($('.questions-view ul').is(':empty')) {
+        $('.questions-view').addClass('loading');
+      }
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'get-question-groups'
       });
@@ -151,7 +176,9 @@
           'id': 'questions'
         });
       } else {
-        $('.questions-view ul').empty();
+        if (this.selectedQuestionGroupId) {
+          this._loadGroups();
+        }
       }
     },
     

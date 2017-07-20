@@ -67,6 +67,14 @@
       }, this));
     },
     
+    isAppManager: function() {
+      if (this._keycloak) {
+        return this._keycloak.hasRealmRole('app-manager');
+      }
+      
+      return false;
+    },
+    
     _getKeycloak: function () {
       return Keycloak(this.options.serverUrl + '/keycloak.json');
     },

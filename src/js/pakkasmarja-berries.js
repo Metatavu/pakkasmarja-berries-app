@@ -54,6 +54,7 @@
       });
       
       this.element.pakkasmarjaBerriesMenu();
+      this.element.pakkasmarjaBerriesSettingsMenu();
       
       $(".chat-container").pakkasmarjaBerriesChatThread({
         serverUrl: serverUrl,
@@ -172,7 +173,7 @@
     _onConnect: function () {
       $('.connecting-modal').hide();
       cordova.plugins.photoLibrary.requestAuthorization(
-        () => { 
+        () => {
           if(!this._versionChecked) {
             this._versionChecked = true;
             setTimeout(() => {
