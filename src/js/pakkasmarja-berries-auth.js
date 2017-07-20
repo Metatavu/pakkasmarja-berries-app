@@ -41,6 +41,7 @@
       $.ajax({
         url: this._keycloak.createLogoutUrl(),
         complete: () => {
+          window.FirebasePlugin.unregister();
           this._clearToken();
           location.reload();
         }
