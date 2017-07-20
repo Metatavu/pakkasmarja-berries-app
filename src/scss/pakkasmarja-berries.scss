@@ -609,18 +609,3 @@ $slide-margin-top: 25px;
   text-decoration: none;
   cursor: pointer;
 }
-
-.notification-settings-view {
-  display: none;
-  width: 100%;
-  background-color: #fff;
-  position:absolute;
-  top:0;
-  height: 100vh;
-  z-index: 50;
-}
-
-.notification-wrapper {
-  margin: 0 auto;
-  align-content: center;
-}
