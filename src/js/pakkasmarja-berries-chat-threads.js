@@ -39,6 +39,16 @@
           });
 
           if ($(`.chat-thread[data-id=${thread.id}]`).length) {
+            if (!threadData.latestMessage) {
+              let prevLatestMessage = $(`.chat-thread[data-id=${thread.id}]`).attr('data-latest-message');
+              if (prevLatestMessage) {
+                threadData.latestMessage = prevLatestMessage;
+                threadData.latestMessageFormatted = moment(prevLatestMessage).locale('fi').format('LLLL');
+              }
+            }
+            if(typeof threadData.read === 'undefined') {
+              threadData.read = $(`.chat-thread[data-id=${thread.id}]`).hasClass('read');
+            }
             $(`.chat-thread[data-id=${thread.id}]`).replaceWith(pugChatThread(threadData));
           } else {
             $('.conversations-view ul').append(pugChatThread(threadData));
@@ -56,8 +66,6 @@
           'type': 'mark-item-read',
           'id': 'conversations'
         });
-      } else {
-        $('.conversations-view ul').empty();
       }
     },
     
@@ -70,8 +78,9 @@
     },
     
     _loadChatThreads: function () {
-      $('.conversations-view ul').empty();
-      $('.conversations-view').addClass('loading');
+      if ($('.conversations-view ul').is(':empty')) {
+        $('.conversations-view').addClass('loading');
+      }
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'get-conversation-threads'
       });

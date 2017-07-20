@@ -38,11 +38,13 @@
     },
     
     logout: function () {
-      window.FirebasePlugin.unregister();
-      this._keycloak.logout({
-        redirectUri : this.options.serverUrl
+      $.ajax({
+        url: this._keycloak.createLogoutUrl(),
+        complete: () => {
+          this._clearToken();
+          location.reload();
+        }
       });
-      location.reload();
     },
     
     token: function () {
@@ -68,6 +70,14 @@
       .fail( $.proxy(function () {
         this.element.trigger("join-error");
       }, this));
+    },
+    
+    isAppManager: function() {
+      if (this._keycloak) {
+        return this._keycloak.hasRealmRole('app-manager');
+      }
+      
+      return false;
     },
     
     _getKeycloak: function () {

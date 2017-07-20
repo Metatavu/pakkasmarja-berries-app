@@ -21,6 +21,9 @@
       const serverUrl = httpProtocol + '://' + host + ':' + port;
       const wsUrl = wsProtocol + '://' + host + ':' + port;
       
+      this._serverUrl = serverUrl;
+      this._versionChecked = false;
+      
       $(document.body).on('connect', $.proxy(this._onConnect, this));
       $(document.body).on('reconnect', $.proxy(this._onReconnect, this));
       this.element.on('authenticated', $.proxy(this._onAuthenticated, this));
@@ -51,6 +54,7 @@
       });
       
       this.element.pakkasmarjaBerriesMenu();
+      this.element.pakkasmarjaBerriesSettingsMenu();
       
       $(".chat-container").pakkasmarjaBerriesChatThread({
         serverUrl: serverUrl,
@@ -101,9 +105,13 @@
     },
     
     _checkVersion: function() {
-      $.get(`${this.serverUrl}/version`, (version) => {
-        if (version != '1.1.1') {
-          alert('Uusi versio sovelluksesta saatavilla.');
+      $.ajax({
+        url: `${this._serverUrl}/version`,
+        dataType: 'text',
+        success: (version) => {
+          if (version != '1.1.1') {
+            navigator.notification.alert('Uusi versio sovelluksesta saatavilla.', () => {}, 'Uusi versio', 'OK');
+          }
         }
       });
     },
@@ -164,8 +172,18 @@
     _onConnect: function () {
       $('.connecting-modal').hide();
       cordova.plugins.photoLibrary.requestAuthorization(
-        () => { },
-        (err) => { },
+        () => {
+          if(!this._versionChecked) {
+            this._versionChecked = true;
+            setTimeout(() => {
+              this._checkVersion();
+            }, 1000);
+          }
+          
+        },
+        (err) => {
+          navigator.app.exitApp();
+        },
         {
           read: true,
           write: true

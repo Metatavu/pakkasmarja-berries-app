@@ -10,10 +10,13 @@
     },
     
     _onHamburgerMenuClick: function () {
-      if ($(".hamburger-menu").hasClass('menu-open')) {
+      if (this.isMenuOpen()) {
         this._enableScrolling();
-        this._closeHamburgerMenu();
+        this.closeHamburgerMenu();
       } else {
+        if ($(document.body).pakkasmarjaBerriesSettingsMenu('isMenuOpen')) {
+          $(document.body).pakkasmarjaBerriesSettingsMenu('closeSettingsMenu');
+        }
         this._disableScrolling();
         this._openHamburgerMenu();
       }
@@ -24,9 +27,13 @@
       $(".hamburger-menu").show("slide", { direction: "right" }, 200);
     },
     
-    _closeHamburgerMenu: function () {
+    closeHamburgerMenu: function () {
       $(".hamburger-menu").removeClass('menu-open');
       $(".hamburger-menu").hide("slide", { direction: "right" }, 200);
+    },
+    
+    isMenuOpen: function() {
+      return $(".hamburger-menu").hasClass('menu-open');
     },
     
     _onLogOutButtonClick: function () {
