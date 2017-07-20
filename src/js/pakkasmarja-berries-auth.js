@@ -41,6 +41,7 @@
       $.ajax({
         url: this._keycloak.createLogoutUrl(),
         complete: () => {
+          window.FirebasePlugin.unregister();
           this._clearToken();
           location.reload();
         }
@@ -55,11 +56,16 @@
       return this._sessionId;
     },
     
+    getUserId: function (userId) {
+      this.userId = userId;
+    },
+    
     join: function () {
       $.post(this.options.serverUrl + '/join', {
         token: this.token()
       }, $.proxy(function (data) {
         this._sessionId = data.sessionId;
+        $(document.body).pakkasmarjaBerriesPushNotifications('subscribeTopic', data.userId);
         this.element.trigger("joined");
       }, this))
       .fail( $.proxy(function () {
