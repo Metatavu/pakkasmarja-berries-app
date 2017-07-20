@@ -9,6 +9,9 @@
     _create: function () {
       this.element.on('click', '.settings-btn', $.proxy(this._onSettingsMenuClick, this));
       this.element.on('click', '.management-button', $.proxy(this._onManagementButtonClick, this));
+      this.element.on('click', '.notification-button', $.proxy(this._onNotificationButtonClick, this));
+      this.element.on('click', '.close-notification-view', $.proxy(this._onNotificationCloseButtonClick, this));
+      this.element.on('change', '.select-setting', $.proxy(this._onSettingsChanged, this));
     },
     
     _onSettingsMenuClick: function () {
@@ -47,6 +50,30 @@
     _onManagementButtonClick: function () {
       cordova.InAppBrowser.open('https://staging-hallinta-pakkasmarja.metatavu.io/wp-admin"', '_self', 'location=no,hardwareback=no,zoom=no');
     },
+    
+    _onNotificationButtonClick: function () {
+      $('.notification-settings-view').show();
+    },
+    
+    _onNotificationCloseButtonClick: function () {
+      $('.notification-settings-view').hide();
+    },
+    
+    _onSettingsChanged: function () {
+      const userSettings = {};
+      $(this.element).find('.select-setting').each((index, input) => {
+        let settingKey = $(input).attr('name');
+        let settingValue = $(input).val();
+        
+        userSettings[settingKey] = settingValue;
+      });
+      
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'user-settings-changed',
+        'userSettings': userSettings
+      });
+    },
+    
     
     _disableScrolling: function () {
       $('html, body').css({

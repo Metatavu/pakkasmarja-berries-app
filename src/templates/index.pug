@@ -101,3 +101,40 @@ html
         li.management-button
           i.fa.fa-cogs(aria-hidden='true')
           h3 Hallinta
+        li.notification-button
+          i.fa.fa-bell(aria-hidden='true')
+          h3 Ilmoitukset
+    .notification-settings-view
+      .notification-wrapper
+        button.close-notification-view Sulje
+        h2.center='Ilmoitukset'
+        br
+        h3 Uutiset
+        .dropdown
+          select.select-setting(name="news-push-notification")
+            option(value="enabled")
+              |Päällä
+            option(value="disabled")
+              |Pois päältä
+            option(value="silent")
+              |Hiljainen
+        br
+        h3 Keskustelut
+        .dropdown
+          select.select-setting(name="conversation-push-notifications")
+            option(value="enabled")
+              a(href='#') Päällä
+            option(value="disabled")
+              a(href='#') Pois päältä
+            option(value="silent")
+              a(href='#') Hiljainen
+        br
+        h3 Kysymykset
+        .dropdown
+          select.select-setting(name="question-push-notifications")
+            option(value="enabled")
+              a(href='#') Päällä
+            option(value="disabled")
+              a(href='#') Pois päältä
+            option(value="silent")
+              a(href='#') Hiljainen
