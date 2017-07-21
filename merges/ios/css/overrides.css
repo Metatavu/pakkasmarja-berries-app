@@ -23,3 +23,12 @@ body {
 .secondary-menu {
   margin-top: 60px;
 }
+
+.hamburger-menu,
+.settings-menu {
+  top: 80px;
+}
+
+.settings-menu h5 {
+  font-size: 18px;
+}

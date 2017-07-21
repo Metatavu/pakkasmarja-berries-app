@@ -3,6 +3,10 @@ $menu-height: 41px;
 $header-height: $banner-height + $menu-height;
 $slide-margin-top: 25px;
 
+html {
+  cursor: pointer;
+}
+
 .connecting-modal {
   position: absolute;
   top: 0;
@@ -240,39 +244,8 @@ $slide-margin-top: 25px;
   -webkit-overflow-scrolling: touch;
   height: 88vh;
   margin-bottom: 30px;
-  
-  .chat-footer {
-    position: fixed;
-    z-index: 5;
-    bottom: 0;
-    height: 50px;
-    padding: 5px;
-    background-color: #fff;
-    width: 100%;
-    
-    .upload-image img {
-      height: 30px;
-      width: auto;
-      margin-left: 17px;
-      margin-top: 2px;
-      display: block;
-    }
-    
-    .message-send-btn {
-      font-size: 28px;
-      color: #ff0000;
-      margin-left: 18px;
-      margin-top: 3px;
-      display: block;
-    }
-    
-    .message-input {
-      width: 68vw;
-      margin-left: 20px;
-      display: block;
-    }
   }
-  
+
   .speech-wrapper {
     padding: 15px 20px;
     overflow: auto;
@@ -421,6 +394,37 @@ $slide-margin-top: 25px;
         }
       }
     } 
+}
+
+.chat-footer {
+  position: fixed;
+  z-index: 9999;
+  bottom: 0;
+  height: 50px;
+  padding: 5px;
+  background-color: #fff;
+  width: 100%;
+  
+  .upload-image img {
+    height: 30px;
+    width: auto;
+    margin-left: 17px;
+    margin-top: 2px;
+    display: block;
+  }
+
+  .message-send-btn {
+    font-size: 28px;
+    color: #ff0000;
+    margin-left: 13px;
+    margin-top: 3px;
+    display: block;
+  }
+
+  .message-input {
+    width: 68vw;
+    margin-left: 20px;
+    display: block;
   }
 }
 
@@ -617,7 +621,7 @@ $slide-margin-top: 25px;
   position: absolute;
   top: 0;
   height: 100vh;
-  z-index: 50;
+  z-index: 10;
 }
 
 .notification-wrapper {
