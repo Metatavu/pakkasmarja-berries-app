@@ -30,7 +30,7 @@
       $('.conversations-view').removeClass('loading');
       
       if (!threads.length) {
-        $(`.questions-view ul`).html(pugNoThreads());
+        $('.conversations-view ul').html(pugNoConversationThreads());
       } else {
         threads.forEach((thread) => {
           const threadData = Object.assign(thread, {
