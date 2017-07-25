@@ -10,6 +10,10 @@
     },
     
     _create : function() {
+      window.open = (url, target, options) => {
+        return cordova.InAppBrowser.open(url, target, options + ',zoom=no');
+      };
+      
       this._sessionId = null;
       this.element.on('join-error', $.proxy(this._onJoinError, this));
       this.element.on('authentication-error', $.proxy(this._onAuthenticationError, this));
