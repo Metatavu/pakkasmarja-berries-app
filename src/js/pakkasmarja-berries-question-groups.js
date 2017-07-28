@@ -23,6 +23,7 @@
       $(document.body).on('message:question-group-threads-added', $.proxy(this._onQuestionGroupThreadsAdded, this));
       $(document.body).on('message:questions-unread', $.proxy(this._onQuestionsUnread, this));
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
+      $(document.body).on('message:message-deleted', $.proxy(this._onMessageDeleted, this));
     },
     
     reset: function () {
@@ -218,6 +219,11 @@
       if (data['thread-type'] === "question") {
         $('.menu-item[data-page="questions"]').addClass('unread');  
       }
+    },
+    
+    _onMessageDeleted: function (event, data) {
+      const messageId = data.messageId;
+      $(`.chat-message[data-id="${messageId}"]`).remove();
     }
     
   });

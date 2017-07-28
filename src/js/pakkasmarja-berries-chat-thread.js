@@ -25,7 +25,9 @@
       this.element.on('click', '.image-camera', $.proxy(this._onImageFromCamera, this));
       this.element.on('click', '.close-dialog', $.proxy(this._onCloseDialogClick, this));
       this.element.on('click', '.full-image-btn', $.proxy(this._onFullImageBtnClick, this));
+      this.element.on('click', '.remove-message-btn', $.proxy(this._onRemoveMessageBtnClick, this));
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
+      $(document.body).on('message:message-deleted', $.proxy(this._onMessageDeleted, this));
       $(`.chat-conversation-wrapper`).scroll($.proxy(this._onWrapperScroll, this));
     },
     
@@ -81,6 +83,27 @@
       }
       
       return $(document.body).pakkasmarjaBerries('activePage') === 'conversations';
+    },
+
+    _onRemoveMessageBtnClick: function(e) {
+      e.preventDefault();
+      
+      const messageId = $(e.target).closest('.chat-message').attr('data-id');
+      if (!messageId) {
+        return;
+      }
+      navigator.notification.confirm('Halutko varmasti poistaa tämän viestin. Huomaa että viesti poistuu PYSYVÄSTI!', (buttonIndex) => {
+        if (buttonIndex === 1) {
+          this._removeMessage(messageId);
+        }
+      }, 'Oletko varma?', ['Kyllä', 'Peruuta']);
+    },
+    
+    _removeMessage: function(messageId) {
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'delete-message',
+        'id': messageId
+      });
     },
     
     _onFullImageBtnClick: function(e) {
@@ -194,6 +217,7 @@
         return;
       }
       
+      const canRemove = $(document.body).pakkasmarjaBerriesAuth('isAppManager');
       const scrollTop = $(`.chat-conversation-wrapper`).scrollTop();
       const marginTop = 120;
       const sessionId = $(document.body).pakkasmarjaBerriesAuth('sessionId');
@@ -206,7 +230,7 @@
         if (this.activeThreadId === message.threadId) {
           $(`.chat-message[data-id=${message.id}]`).remove();
           
-          const messageHtml = $(pugChatMessage(message));
+          const messageHtml = $(pugChatMessage({message:  message, canRemove: canRemove }));
           messageHtml.find('img').each((index, image) => {
             const src = $(image).attr('src');
             const srcHash = md5(src);
@@ -382,6 +406,11 @@
         message.sent = created.format('DD.M.YYYY HH:mm');
       });
       this._addMessages(data['thread-id'], data['messages']);
+    },
+    
+    _onMessageDeleted: function (event, data) {
+      const messageId = data.messageId;
+      $(`.chat-message[data-id="${messageId}"]`).remove();
     }
     
   });
