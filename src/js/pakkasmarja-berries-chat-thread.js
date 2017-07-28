@@ -25,6 +25,7 @@
       this.element.on('click', '.image-camera', $.proxy(this._onImageFromCamera, this));
       this.element.on('click', '.close-dialog', $.proxy(this._onCloseDialogClick, this));
       this.element.on('click', '.full-image-btn', $.proxy(this._onFullImageBtnClick, this));
+      this.element.on('click', '.remove-message-btn', $.proxy(this._onRemoveMessageBtnClick, this));
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
       $(document.body).on('message:message-deleted', $.proxy(this._onMessageDeleted, this));
       $(`.chat-conversation-wrapper`).scroll($.proxy(this._onWrapperScroll, this));
@@ -82,6 +83,27 @@
       }
       
       return $(document.body).pakkasmarjaBerries('activePage') === 'conversations';
+    },
+
+    _onRemoveMessageBtnClick: function(e) {
+      e.preventDefault();
+      
+      const messageId = $(e.target).closest('.chat-message').attr('data-id');
+      if (!messageId) {
+        return;
+      }
+      navigator.notification.confirm('Halutko varmasti poistaa tämän viestin. Huomaa että viesti poistuu PYSYVÄSTI!', (buttonIndex) => {
+        if (buttonIndex === 1) {
+          this._removeMessage(messageId);
+        }
+      }, 'Oletko varma?', ['Kyllä', 'Peruuta']);
+    },
+    
+    _removeMessage: function(messageId) {
+      $(document.body).pakkasmarjaBerriesClient('sendMessage', {
+        'type': 'delete-message',
+        'id': messageId
+      });
     },
     
     _onFullImageBtnClick: function(e) {

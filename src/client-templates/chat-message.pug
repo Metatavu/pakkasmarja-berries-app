@@ -1,5 +1,7 @@
 .chat-message(data-id=message.id, data-created=message.created, data-modified=message.modified)
   div(class='bubble-' + message.role)
+    if canRemove 
+      i.fa.fa-trash.remove-message-btn
     .txt
       p.name
         =message.userName
@@ -12,5 +14,3 @@
         i.fa.fa-caret-right.fa-x3(aria-hidden='true')
       else
         i.fa.fa-caret-left.fa-x3(aria-hidden='true')
-    if canRemove 
-      i.fa.fa-trash
