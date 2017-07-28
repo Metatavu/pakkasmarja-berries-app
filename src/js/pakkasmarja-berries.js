@@ -23,6 +23,7 @@
       
       this._serverUrl = serverUrl;
       this._versionChecked = false;
+      this._restoreTriggered = false;
       
       $(document.body).on('connect', $.proxy(this._onConnect, this));
       $(document.body).on('reconnect', $.proxy(this._onReconnect, this));
@@ -79,15 +80,18 @@
     },
     
     restoreMainView() {
-      $('.swiper-slide, .secondary-menu, .navbar-top').show("slide", { direction: "left", complete: () => {
-        this.updateSwiper();
-        $("body").removeClass("chat-conversation-open");
-        $("body").removeClass("question-group-open");
-        $("body").removeClass("question-group-thread-open");
-        this.element.trigger('mainViewRestore', {
-          'activePage': this.activePage()
-        });
-        
+      this._restoreTriggered = false;
+      $('.swiper-slide, .secondary-menu, .navbar-top').show("slide", { direction: "left", complete: () => {        
+        if (!this._restoreTriggered) {
+          this._restoreTriggered = true;
+          this.updateSwiper();
+          $("body").removeClass("chat-conversation-open");
+          $("body").removeClass("question-group-open");
+          $("body").removeClass("question-group-thread-open");
+          this.element.trigger('mainViewRestore', {
+            'activePage': this.activePage()
+          });
+        }
       } }, 300);
     },
     
@@ -111,7 +115,7 @@
         url: `${this._serverUrl}/version`,
         dataType: 'text',
         success: (version) => {
-          if (version != '1.2.1') {
+          if (version != '1.2.2') {
             navigator.notification.alert('Uusi versio sovelluksesta saatavilla.', () => {}, 'Uusi versio', 'OK');
           }
         }

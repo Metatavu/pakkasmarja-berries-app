@@ -86,7 +86,7 @@
     _onFullImageBtnClick: function(e) {
       e.preventDefault();
       const sourceUrl = $(e.target).closest('.full-image-btn').attr('data-source-url');
-      PhotoViewer.show(sourceUrl);
+      PhotoViewer.show(sourceUrl, '', { share:false });
       //TODO: use local image
     },
     
