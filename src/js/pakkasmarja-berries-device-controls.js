@@ -31,6 +31,7 @@
         $(document.body).pakkasmarjaBerries('restoreMainView');
         this._removeBodyClass('chat-conversation-open');
       } else if (this._checkBodyClass('question-group-open')) {
+        $(".chat-container").hide("slide", { direction: "right" }, 300);
         $(document.body).pakkasmarjaBerries('restoreMainView');
         this._removeBodyClass('question-group-open');
       } else if (this._checkBodyClass('question-group-thread-open')) {
