@@ -1,14 +1,16 @@
-.chat-message(data-id=id, data-created=created, data-modified=modified)
-  div(class='bubble-' + role)
+.chat-message(data-id=message.id, data-created=message.created, data-modified=message.modified)
+  div(class='bubble-' + message.role)
     .txt
       p.name
-        =userName
+        =message.userName
       p.message
-        !=contents
+        !=message.contents
       p.message-time
-        =sent
+        =message.sent
     .bubble-arrow
-      if role === 'manager' 
+      if message.role === 'manager' 
         i.fa.fa-caret-right.fa-x3(aria-hidden='true')
       else
         i.fa.fa-caret-left.fa-x3(aria-hidden='true')
+    if canRemove 
+      i.fa.fa-trash
