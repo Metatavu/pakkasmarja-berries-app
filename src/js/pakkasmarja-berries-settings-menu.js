@@ -57,7 +57,7 @@
     },
     
     _onManagementButtonClick: function () {
-      cordova.InAppBrowser.open('https://staging-hallinta-pakkasmarja.metatavu.io/wp-admin"', '_self', 'location=no,hardwareback=no,zoom=no');
+      cordova.InAppBrowser.open('https://staging-hallinta-pakkasmarja.metatavu.io/wp-admin', '_self', 'location=no,hardwareback=no,zoom=no');
     },
     
     _onSettingsChanged: function () {
