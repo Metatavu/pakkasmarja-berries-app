@@ -63,6 +63,14 @@
     getUserId: function (userId) {
       this.userId = userId;
     },
+
+    getAccountUrl: function (userId) {
+      if (this._keycloak) {
+        return this._keycloak.createAccountUrl();
+      }
+      
+      return null;
+    },
     
     join: function () {
       $.post(this.options.serverUrl + '/join', {
