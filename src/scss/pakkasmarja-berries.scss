@@ -433,11 +433,10 @@ html {
 
   .message-input {
     width: calc(100% - 10px);
-    margin-left: 20px;
     display: block;
     resize: none;
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
     margin-left: 5px;
     margin-right: 5px;
   }
