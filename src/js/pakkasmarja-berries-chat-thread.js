@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-/* global Camera */
+/* global Camera, autosize */
 
 (function() {
   'use strict';
@@ -29,6 +29,14 @@
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
       $(document.body).on('message:message-deleted', $.proxy(this._onMessageDeleted, this));
       $(`.chat-conversation-wrapper`).scroll($.proxy(this._onWrapperScroll, this));
+
+      autosize($('.message-input'));
+      this.element.find('.message-input').on('autosize:resized', $.proxy(this._onAutosizeResized, this));
+    },
+    
+    _onAutosizeResized: function() {
+      const inputHeight = this.element.find('.message-input').outerHeight();
+      $('.chat-footer').height(inputHeight);
     },
     
     reset: function () {

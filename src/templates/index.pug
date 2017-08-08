@@ -84,12 +84,11 @@ html
             button.btn.btn-primary.image-camera Kamerasta
         .speech-wrapper
         .chat-footer
-          .row
-            a.upload-image(href='#')
-              img(src='gfx/lisaa-kuva-icon.png')
-            .form-group
-              input.form-control.message-input(type="text")
-            i.fa.fa-paper-plane.message-send-btn(aria-hidden='true')
+          a.upload-image(href='#')
+            img(src='gfx/lisaa-kuva-icon.png')
+          .form-group
+            textarea.form-control.message-input(rows="1")
+          i.fa.fa-paper-plane.message-send-btn(aria-hidden='true')
     .news-wrapper
     .hamburger-menu
       ul.list-unstyled

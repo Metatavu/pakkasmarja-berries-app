@@ -401,32 +401,47 @@ html {
   position: fixed;
   z-index: 9999;
   bottom: 0;
-  height: 50px;
+  height: 48px;
   padding: 5px;
   background-color: #fff;
   width: 100%;
-  
-  .upload-image img {
-    height: 30px;
-    width: auto;
-    margin-left: 17px;
-    margin-top: 2px;
-    display: block;
+  padding-left: 5px + 33px + 5px; 
+  padding-right: 5px + 33px + 5px;
+    
+  .upload-image {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+          
+    img {
+      height: 30px;
+      width: auto;
+      display: block;
+    }
   }
 
   .message-send-btn {
     font-size: 28px;
     color: #ff0000;
-    margin-left: 13px;
-    margin-top: 3px;
     display: block;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    padding-top: 4px;
+    padding-right: 6px;
   }
 
   .message-input {
-    width: 68vw;
+    width: calc(100% - 10px);
     margin-left: 20px;
     display: block;
+    resize: none;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 5px;
+    margin-right: 5px;
   }
+  
 }
 
 .news-item,

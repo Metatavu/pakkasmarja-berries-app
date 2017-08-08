@@ -25,11 +25,12 @@
     "bootbox.min": "https://cdn.metatavu.io/libs/bootbox-js/4.4.0/bootbox.min.js",
     "swiper.jquery.min": "https://cdn.metatavu.io/libs/swiper/3.4.2/js/swiper.jquery.min.js",
     "bootstrap.min": "https://cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css",
-    "object-assign" : "https://raw.githubusercontent.com/rubennorte/es6-object-assign/master/dist/object-assign-auto.min.js",
+    "object-assign": "https://raw.githubusercontent.com/rubennorte/es6-object-assign/master/dist/object-assign-auto.min.js",
     "chart.js": "^2.6.0",
     "components-font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
     "async": "^2.5.0",
-    "js-md5": "md5#^0.5.0"
+    "js-md5": "md5#^0.5.0",
+    "autosize": "jackmoore/autosize#^4.0.0"
   }
 }
