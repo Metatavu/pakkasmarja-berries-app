@@ -10,18 +10,21 @@
     },
     
     _create : function() {
-      window.FirebasePlugin.onNotificationOpen(function(notification) {
-          console.log("Received push notification");
-      }, function(error) {
-          console.error(error);
-      });
+      if (window.FirebasePlugin) {
+        window.FirebasePlugin.onNotificationOpen(function(notification) {
+            console.log("Received push notification");
+        }, function(error) {
+            console.error(error);
+        });
+      }
     },
     
     subscribeTopic: function(userId) {
-      window.FirebasePlugin.subscribe(userId, function() {
-        console.log("Subscribed to " + userId);
-      });
-      
+      if (window.FirebasePlugin) {
+        window.FirebasePlugin.subscribe(userId, function() {
+          console.log("Subscribed to " + userId);
+        });
+      }
     }
     
     
