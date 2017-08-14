@@ -262,7 +262,7 @@
           if ('browser' !== device.platform) {
             this._processMessage(message)
               .then(() => { })
-              .catch((err) => { console.log(err) });
+              .catch((err) => { console.log(err); });
           }
         }
       });
