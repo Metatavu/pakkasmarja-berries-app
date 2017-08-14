@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-/* global Camera, autosize */
+/* global Camera, autosize, device */
 
 (function() {
   'use strict';
@@ -55,9 +55,11 @@
       this.activeThreadId = parseInt(threadId);
       this.loadMessages(this.page);
       
-      $(".swiper-slide, .secondary-menu").hide("slide", { direction: "left" }, 300);      
-      $(".chat-container").show("slide", { direction: "right" }, 300);
-
+      if ('browser' !== device.platform) {
+        $(".swiper-slide, .secondary-menu").hide("slide", { direction: "left" }, 300);      
+        $(".chat-container").show("slide", { direction: "right" }, 300);
+      }
+      
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'mark-item-read',
         'id': `thread-${threadId}`
@@ -66,7 +68,9 @@
       
     leaveThread: function() {
       this.activeThreadId = null;
-      $(".chat-container").hide("slide", { direction: "right" }, 300);
+      if ('browser' !== device.platform) {
+        $(".chat-container").hide("slide", { direction: "right" }, 300);
+      }
       $(document.body).pakkasmarjaBerries('restoreMainView');
     },
       
@@ -239,18 +243,27 @@
           $(`.chat-message[data-id=${message.id}]`).remove();
           
           const messageHtml = $(pugChatMessage({message:  message, canRemove: canRemove }));
+          const sessionId = $(document.body).pakkasmarjaBerriesAuth('sessionId');
           messageHtml.find('img').each((index, image) => {
             const src = $(image).attr('src');
-            const srcHash = md5(src);
-            $(image).attr('src',  'gfx/ring.gif');
-            $(image).attr('data-src',  src);
-            $(image).attr('data-src-hash',  srcHash);
+            
+            if ('browser' === device.platform) {
+              $(image).attr('src', `${src}?sessionId=${sessionId}`);
+              $(image).wrap(`<a href="${src}?sessionId=${sessionId}" target='_blank'></a>`);
+            } else {
+              const srcHash = md5(src);
+              $(image).attr('src',  'gfx/ring.gif');
+              $(image).attr('data-src',  src);
+              $(image).attr('data-src-hash',  srcHash);
+            }
           });
           
           $('.chat-container .speech-wrapper').append(messageHtml);
-          this._processMessage(message)
-            .then(() => { })
-            .catch((err) => { console.log(err) });
+          if ('browser' !== device.platform) {
+            this._processMessage(message)
+              .then(() => { })
+              .catch((err) => { console.log(err); });
+          }
         }
       });
       
@@ -368,7 +381,7 @@
         threadId: this.activeThreadId,
         sessionId: $(document.body).pakkasmarjaBerriesAuth('sessionId')
       };
-      
+
       fileTransfer.upload(fileURI, encodeURI(`${this.options.serverUrl}/images/upload/message`), $.proxy(this._onUploadSuccess, this), $.proxy(this._onUploadFailure, this), options);
     },
     

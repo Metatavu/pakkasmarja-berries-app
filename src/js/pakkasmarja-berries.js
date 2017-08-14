@@ -177,24 +177,26 @@
     
     _onConnect: function () {
       $('.connecting-modal').hide();
-      cordova.plugins.photoLibrary.requestAuthorization(
-        () => {
-          if(!this._versionChecked) {
-            this._versionChecked = true;
-            setTimeout(() => {
-              this._checkVersion();
-            }, 1000);
+      if ('browser' !== device.platform) {
+        cordova.plugins.photoLibrary.requestAuthorization(
+          () => {
+            if(!this._versionChecked) {
+              this._versionChecked = true;
+              setTimeout(() => {
+                this._checkVersion();
+              }, 1000);
+            }
+
+          },
+          (err) => {
+            navigator.app.exitApp();
+          },
+          {
+            read: true,
+            write: true
           }
-          
-        },
-        (err) => {
-          navigator.app.exitApp();
-        },
-        {
-          read: true,
-          write: true
-        }
-      );
+        );
+      }
     },
     
     _onReconnect: function () {

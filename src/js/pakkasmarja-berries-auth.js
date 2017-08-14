@@ -10,7 +10,7 @@
     },
     
     _create : function() {
-      if (cordova.InAppBrowser) {
+      if (cordova.InAppBrowser && device.platform !== 'browser') {
         window.open = (url, target, options) => {
           return cordova.InAppBrowser.open(url, target, options + ',zoom=no');
         };
@@ -24,7 +24,15 @@
     
     authenticate: function () {
       this._keycloak = this._getKeycloak();
-      this._keycloak.init({ onLoad: 'login-required' })
+      const initOptions = {
+        onLoad: 'login-required'
+      };
+      
+      if ('browser' === device.platform) {
+        initOptions.adapter = 'default';
+      }
+      
+      this._keycloak.init(initOptions)
         .success((authenticated) => {
           if (authenticated) {
             this.element.trigger("authenticated");
@@ -44,14 +52,18 @@
     },
     
     logout: function () {
-      $.ajax({
-        url: this._keycloak.createLogoutUrl(),
-        complete: () => {
-          window.FirebasePlugin.unregister();
-          this._clearToken();
-          location.reload();
-        }
-      });
+      if ('browser' === device.platform) {
+        this._keycloak.logout();
+      } else {
+        $.ajax({
+          url: this._keycloak.createLogoutUrl(),
+          complete: () => {
+            window.FirebasePlugin.unregister();
+            this._clearToken();
+            location.reload();
+          }
+        });
+      }
     },
     
     token: function () {
