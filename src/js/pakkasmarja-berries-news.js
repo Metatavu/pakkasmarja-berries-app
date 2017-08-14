@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-/* global moment */
+/* global moment, bootbox */
 
 (function() {
   'use strict';
@@ -30,21 +30,29 @@
         articleImage = 'gfx/image_placeholder.png';
       }
       
-      $(".swiper-slide, .secondary-menu, .navbar-top").hide("slide", { direction: "left" }, 300);
-      $(".news-wrapper").html(pugNewsItemOpen({
+      const newsHtml = pugNewsItemOpen({
         createdFormatted: this._formatDate(created),
         modifiedFormatted: this._formatDate(modified),
         title: title,
         contents: contents,
         image: articleImage
-      })).show("slide", { direction: "right" }, 300);
+      });
       
+      if ('browser' !== device.platform) {
+        $(".swiper-slide, .secondary-menu, .navbar-top").hide("slide", { direction: "left" }, 300);
+        $(".news-wrapper").html(newsHtml).show("slide", { direction: "right" }, 300);
+        $(".news-wrapper").addClass("news-article-open");
+      } else {
+        bootbox.dialog({ 
+          message: newsHtml,
+          size: 'large'
+        });
+      }
+
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'mark-item-read',
         'id': `news-article-${id}`
       });
-      
-      $(".news-wrapper").addClass("news-article-open");
     },
     
     closeNews: function() {

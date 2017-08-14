@@ -14,13 +14,21 @@
     
     _onHamburgerMenuClick: function () {
       if (this.isMenuOpen()) {
-        this._enableScrolling();
+        
+        if ('browser' !== device.platform) {
+          this._enableScrolling();
+        }
+
         this.closeHamburgerMenu();
       } else {
         if ($(document.body).pakkasmarjaBerriesSettingsMenu('isMenuOpen')) {
           $(document.body).pakkasmarjaBerriesSettingsMenu('closeSettingsMenu');
         }
-        this._disableScrolling();
+
+        if ('browser' !== device.platform) {
+          this._disableScrolling();
+        }
+
         this._openHamburgerMenu();
       }
     },

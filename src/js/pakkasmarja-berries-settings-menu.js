@@ -15,13 +15,21 @@
     
     _onSettingsMenuClick: function () {
       if ($(".settings-menu").hasClass('menu-open')) {
-        this._enableScrolling();
+        
+        if ('browser' !== device.platform) {
+          this._enableScrolling();
+        }
+        
         this.closeSettingsMenu();
       } else {
         if ($(document.body).pakkasmarjaBerriesMenu('isMenuOpen')) {
           $(document.body).pakkasmarjaBerriesMenu('closeHamburgerMenu');
         }
-        this._disableScrolling();
+        
+        if ('browser' !== device.platform) {
+          this._disableScrolling();
+        }
+        
         this._openSettingsMenu();
       }
     },

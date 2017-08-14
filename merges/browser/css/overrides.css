@@ -1,0 +1,77 @@
+.message img {
+  max-width: 200px !important;
+}
+.upload-image {
+  display: none !important;
+}
+html, body {
+  overflow: hidden;
+}
+
+.chat-container {
+  display: block !important;
+  width: 50% !important;
+  right: 0;
+}
+
+.chat-header {
+  display: none !important;
+}
+
+.news-wrapper {
+  width: 50% !important;
+}
+
+.swiper-container {
+  width: 50% !important;
+  position: absolute !important;
+}
+
+.news-view,
+.conversations-view,
+.questions-view {
+  max-height: calc(100vh - 116px) !important;
+  overflow-y: auto !important;
+}
+
+.navbar-top {
+  z-index: 5;
+}
+
+.bootbox.modal {
+  z-index: 1050;
+}
+.bootbox.modal img {
+  max-width: 100%;
+}
+.bootbox.modal .modal-lg {
+  max-width: 1000px;
+}
+
+
+.chat-footer {
+  z-index: 10;
+  width: 50%;
+  padding-right: 50px;
+  padding-left: 0px;
+}
+
+.news-close-btn {
+  display: none !important;
+}
+
+.top-btn-container {
+  width: 100%;
+}
+
+.hamburger-menu-button {
+  float: right;
+}
+
+.hamburger-menu-button {
+  float: right;
+}
+
+.settings-icon {
+  margin-left: 15px !important;
+}
