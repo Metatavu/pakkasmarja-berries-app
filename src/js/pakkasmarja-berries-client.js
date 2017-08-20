@@ -130,7 +130,7 @@
         this._webSocket.close(); 
       }
       
-      this._state === 'PAUSED';
+      this._state = 'PAUSED';
     },
     
     _onResume: function (event) {
