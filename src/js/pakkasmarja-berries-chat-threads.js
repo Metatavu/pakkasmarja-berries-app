@@ -20,8 +20,8 @@
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
     },
     
-    joinThread: function(threadId) {
-      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId);
+    joinThread: function(threadId, threadTitle, threadLogo) {
+      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId, threadTitle, threadLogo, 'Keskustelu');
     },
     
     _addThreads: function (threads) {
@@ -74,7 +74,12 @@
       $("body").addClass("chat-conversation-open");
       const element = $(event.target).closest('.chat-thread');
       element.removeClass('unread').addClass('read');
-      this.joinThread($(element).attr('data-id'));
+      
+      const threadId = $(element).attr('data-id');
+      const threadTitle = $(element).attr('data-thread-title');
+      const threadImage = $(element).attr('data-thread-image');
+      
+      this.joinThread(threadId, threadTitle, threadImage);
     },
     
     _loadChatThreads: function () {

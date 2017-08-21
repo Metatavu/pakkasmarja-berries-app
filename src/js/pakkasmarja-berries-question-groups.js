@@ -24,20 +24,27 @@
       $(document.body).on('message:questions-unread', $.proxy(this._onQuestionsUnread, this));
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
       $(document.body).on('message:message-deleted', $.proxy(this._onMessageDeleted, this));
+      $(document.body).on('click', '.questions-view .list-header-close-btn', $.proxy(this._onHeaderBackButtonClick, this));
     },
     
     reset: function () {
       this.selectedQuestionGroupId = null;  
+      this.selectedQuestionGroupTitle = null;
+      this.selectedQuestionGroupImageUrl = null;
     },
     
-    selectQuestionGroup: function(questionGroupId, role) {
-      $('.questions-view').addClass('loading');
+    selectQuestionGroup: function(questionGroupId, role, groupTitle, groupImageUrl) {
+      $('.questions-view').removeClass('show-list-header').addClass('loading');
       $('.questions-view ul').empty();
       
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'mark-item-read',
         'id': `question-group-${questionGroupId}`
       });
+      
+      this.selectedQuestionGroupId = questionGroupId;
+      this.selectedQuestionGroupTitle = groupTitle;
+      this.selectedQuestionGroupImageUrl = groupImageUrl;
         
       if (role === 'user') {
         $(document.body).pakkasmarjaBerriesClient('sendMessage', {
@@ -45,8 +52,10 @@
           'question-group-id': questionGroupId
         });
       } else if (role === 'manager') {
-        $('.questions-view').addClass('question-group-threads');
-        this.selectedQuestionGroupId = questionGroupId;
+        $('.questions-view').addClass('show-list-header question-group-threads');
+        $('.questions-view .list-header-name').text(groupTitle || 'Pakkasmarja');
+        $('.questions-view .list-header-logo').attr('src', groupImageUrl || 'gfx/logo_punainen.png');
+        
         $(document.body).pakkasmarjaBerriesClient('sendMessage', {
           'type': 'get-question-group-threads',
           'question-group-id': questionGroupId
@@ -105,7 +114,10 @@
         threads.forEach((thread) => {
           const threadData = Object.assign(thread, {
             imageUrl: thread.imageUrl || 'gfx/placeholder.png',
-            latestMessageFormatted: thread.latestMessage ? moment(thread.latestMessage).locale('fi').format('LLLL') : null
+            latestMessageFormatted: thread.latestMessage ? moment(thread.latestMessage).locale('fi').format('LLLL') : null,
+            groupTitle: this.selectedQuestionGroupTitle,
+            groupImageUrl: this.selectedQuestionGroupImageUrl,
+            threadTitle: thread.title
           });
 
           if ($(`.chat-question-group-thread[data-id=${thread.id}]`).length) {
@@ -152,10 +164,21 @@
       const element = $(event.target).closest('.question-group');
       element.removeClass('unread').addClass('read');
       
-      $("body").attr('question-group-id', $(element).attr('data-id'));
       $("body").addClass('question-group-open');
       
-      this.selectQuestionGroup($(element).attr('data-id'), $(element).attr('data-role'));
+      const questionGroupId = $(element).attr('data-id');
+      const questionGroupRole = $(element).attr('data-role');
+      const questionGroupTitle = $(element).attr('data-title');
+      const questionGroupImageUrl = $(element).attr('data-image-url');
+      
+      $("body").attr('data-back-state-data', JSON.stringify({
+        questionGroupId: questionGroupId,
+        questionGroupRole: questionGroupRole,
+        questionGroupTitle: questionGroupTitle,
+        questionGroupImageUrl: questionGroupImageUrl
+      }));
+      
+      this.selectQuestionGroup(questionGroupId, questionGroupRole, questionGroupTitle, questionGroupImageUrl);
     },
     
     _onChatQuestionGroupThreadClick: function(event) {
@@ -164,8 +187,14 @@
       $("body").addClass('question-group-thread-open');
       
       const element = $(event.target).closest('.chat-question-group-thread');
+      const threadId = $(element).attr('data-id');
+      const groupImageUrl = $(element).attr('data-question-group-image-url');
+      const threadTitle = $(element).attr('data-thread-title');
+      const groupTitle = $(element).attr('data-question-group-title');
+      
       element.removeClass('unread').addClass('read');
-      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', $(element).attr('data-id'));
+      
+      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId, threadTitle, groupImageUrl, `Kysymysryhmä ${groupTitle}`);
     },
     
     _onPageChange: function (event, data) {
@@ -186,6 +215,7 @@
     
     _onMainViewRestore: function (event, data) {
       if (data.activePage === 'questions') {
+        $('.questions-view').removeClass('show-list-header')
         this._loadGroups();
       }
     },
@@ -196,7 +226,7 @@
     
     _onQuestionThreadSelected: function (event, data) {
       const threadId = data['thread-id'];
-      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId);
+      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId, this.selectedQuestionGroupTitle, this.selectedQuestionGroupImageUrl, `Kysymysryhmä`);
     },
     
     _onConnect: function (event, data) {
@@ -224,6 +254,11 @@
     _onMessageDeleted: function (event, data) {
       const messageId = data.messageId;
       $(`.chat-message[data-id="${messageId}"]`).remove();
+    },
+    
+    _onHeaderBackButtonClick: function (event) {
+      event.preventDefault();
+      $(document.body).pakkasmarjaBerries('back');
     }
     
   });

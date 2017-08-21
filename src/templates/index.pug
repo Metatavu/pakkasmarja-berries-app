@@ -63,15 +63,26 @@ html
             ul.list-unstyled
         .swiper-slide
           .container-fluid.list-view.questions-view
+            .list-header
+              .row.no-gutters.list-header-back-menu
+                a.list-header-close-btn(href='#')
+                  img.arrow-back(src='gfx/punainen-nuoli_vasen.png')
+                a.list-header-close-btn(href='#')
+                  img.list-header-logo(src='gfx/logo_punainen.png')
+                h4.list-header-texts
+                  .list-header-category Kysymysryhmä
+                  .list-header-name Pakkasmarja
             ul.list-unstyled
-    .chat-container
-      .chat-header
-        .row.no-gutters.chat-back-menu
-          a.chat-close-btn(href='#')
+    .chat-container.show-list-header
+      .list-header
+        .row.no-gutters.list-header-back-menu
+          a.list-header-close-btn(href='#')
             img.arrow-back(src='gfx/punainen-nuoli_vasen.png')
-          a.chat-close-btn(href='#')
-            img.chat-logo(src='gfx/logo_punainen.png')
-          h4.chat-name Pakkasmarja
+          a.list-header-close-btn(href='#')
+            img.list-header-logo(src='gfx/logo_punainen.png')
+          h4.list-header-texts
+            .list-header-category Keskustelu
+            .list-header-name Pakkasmarja
       .chat-conversation-wrapper
         #myModal.modal
           .modal-content
