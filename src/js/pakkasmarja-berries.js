@@ -154,7 +154,7 @@
         url: `${this._serverUrl}/version`,
         dataType: 'text',
         success: (version) => {
-          if (version != '1.2.6') {
+          if (version != '1.2.7') {
             navigator.notification.alert('Uusi versio sovelluksesta saatavilla.', () => {}, 'Uusi versio', 'OK');
           }
         }

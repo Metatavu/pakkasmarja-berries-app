@@ -304,6 +304,9 @@
       $(`.chat-conversation-wrapper`).animate({
         scrollTop: $('.chat-container .speech-wrapper').height()
       }, 200);
+      
+      $('.message-input').val('').blur();
+      autosize.update($('.message-input'));
     },
     
     _sendMessage: function (content) {
@@ -414,7 +417,6 @@
         const content = input.val();
         if (content) {
           this._sendMessage(content);
-          input.val('').blur();
         }
       }
     },
@@ -424,7 +426,6 @@
       const content = input.val();
       if (content) {
         this._sendMessage(content);
-        input.val('').blur();
       }
     },
     
