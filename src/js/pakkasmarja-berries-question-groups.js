@@ -234,7 +234,7 @@
     },
     
     _onQuestionGroupThreadsAdded: function (event, data) {
-      this._addQuestionGroupThreads(data['threads'], data['question-group-id'], data['question-group-title']);
+      this._addQuestionGroupThreads(data['threads'], data['question-group-id']);
     },
     
     _onQuestionsUnread: function (event, data) {
