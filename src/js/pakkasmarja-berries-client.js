@@ -21,7 +21,10 @@
       this._onWebSocketCloseRef = $.proxy(this._onWebSocketClose, this);
       this._onWebSocketErrorRef = $.proxy(this._onWebSocketError, this);
       this._onWebSocketOpenRef = $.proxy(this._onWebSocketOpen, this);
-       
+             
+      $(document).on("pause", $.proxy(this._onPause, this));
+      $(document).on("resume", $.proxy(this._onResume, this));
+
       setInterval($.proxy(this._ping, this, 1000));
     },
     
@@ -119,6 +122,20 @@
       } else {
         this._pendingMessages.push(message);
       }
+    },
+    
+    _onPause: function (event) {
+      if (this._webSocket) {
+        this._webSocket.onclose = () => { };
+        this._webSocket.close(); 
+      }
+      
+      this._state = 'PAUSED';
+    },
+    
+    _onResume: function (event) {
+      this.element.pakkasmarjaBerriesAuth('join');
+      this._reconnect();
     },
     
     _onWebSocketOpen: function (event) {
