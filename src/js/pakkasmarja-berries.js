@@ -110,6 +110,45 @@
       this._resizeSlides();
     },
     
+    back: function () {
+      const backStateData = JSON.parse($("body").attr('data-back-state-data') || '{}');
+      
+      if ($(document.body).pakkasmarjaBerriesMenu('isMenuOpen')) {
+        $(document.body).pakkasmarjaBerriesMenu('closeHamburgerMenu');
+      } else if ($(document.body).pakkasmarjaBerriesSettingsMenu('isMenuOpen')) {
+        $(document.body).pakkasmarjaBerriesSettingsMenu('closeSettingsMenu');
+      } else if (this._checkBodyClass('chat-conversation-open')) {
+        $(".chat-container").hide("slide", { direction: "right" }, 300);
+        $(document.body).pakkasmarjaBerries('restoreMainView');
+        this._removeBodyClass('chat-conversation-open');
+      } else if (this._checkBodyClass('question-group-open')) {
+        $(".chat-container").hide("slide", { direction: "right" }, 300);
+        $(document.body).pakkasmarjaBerries('restoreMainView');
+        this._removeBodyClass('question-group-open');
+      } else if (this._checkBodyClass('question-group-thread-open')) {
+        $(".chat-container").hide("slide", { direction: "right" }, 300);
+        this._backToQuestionGroup(backStateData);
+      } else {
+        navigator.app.exitApp(); 
+      }
+    },
+    
+    _backToQuestionGroup(backStateData) {
+      $('.swiper-slide, .secondary-menu, .navbar-top').show("slide", { direction: "left", complete: () => {
+        $(document.body).pakkasmarjaBerriesQuestionGroups('selectQuestionGroup', backStateData.questionGroupId, backStateData.questionGroupRole, backStateData.questionGroupTitle, backStateData.questionGroupImageUrl);
+        this._removeBodyClass('question-group-thread-open');
+        $("body").addClass('question-group-open');
+      } }, 300);
+    },
+    
+    _checkBodyClass: function (className) {
+      return $("body").hasClass(className);
+    },
+    
+    _removeBodyClass: function(className) {
+      $("body").removeClass(className);
+    },
+    
     _checkVersion: function() {
       $.ajax({
         url: `${this._serverUrl}/version`,

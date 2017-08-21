@@ -26,6 +26,8 @@
       this.element.on('click', '.close-dialog', $.proxy(this._onCloseDialogClick, this));
       this.element.on('click', '.full-image-btn', $.proxy(this._onFullImageBtnClick, this));
       this.element.on('click', '.remove-message-btn', $.proxy(this._onRemoveMessageBtnClick, this));
+      
+      $(document.body).on('click', '.chat-container .list-header-close-btn', $.proxy(this._onHeaderBackButtonClick, this));
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
       $(document.body).on('message:message-deleted', $.proxy(this._onMessageDeleted, this));
       $(`.chat-conversation-wrapper`).scroll($.proxy(this._onWrapperScroll, this));
@@ -48,7 +50,7 @@
       this.page = 0;
     },
     
-    joinThread: function (threadId) {
+    joinThread: function (threadId, threadTitle, threadImageUrl, threadCategory) {
       this.reset();
       
       $(`.chat-container .speech-wrapper`).empty();
@@ -64,6 +66,10 @@
         'type': 'mark-item-read',
         'id': `thread-${threadId}`
       });
+      
+      $('.chat-container .list-header-name').text(threadTitle || 'Pakkasmarja');
+      $('.chat-container .list-header-logo').attr('src', threadImageUrl || 'gfx/logo_punainen.png');
+      $('.chat-container .list-header-category').text(threadCategory || '');
     },
       
     leaveThread: function() {
@@ -71,6 +77,7 @@
       if ('browser' !== device.platform) {
         $(".chat-container").hide("slide", { direction: "right" }, 300);
       }
+      
       $(document.body).pakkasmarjaBerries('restoreMainView');
     },
       
@@ -432,6 +439,11 @@
     _onMessageDeleted: function (event, data) {
       const messageId = data.messageId;
       $(`.chat-message[data-id="${messageId}"]`).remove();
+    },
+    
+    _onHeaderBackButtonClick: function (event) {
+      event.preventDefault();
+      $(document.body).pakkasmarjaBerries('back');
     }
     
   });
