@@ -28,3 +28,13 @@ body {
 .settings-menu h5 {
   font-size: 18px;
 }
+
+.questions-view.show-list-header {
+  margin-top: 60px; 
+ }   
+ 
+.questions-view.show-list-header .list-header {
+  top: 45px; 
+ }   
+ 
+ 
