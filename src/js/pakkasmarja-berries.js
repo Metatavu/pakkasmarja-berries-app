@@ -62,7 +62,13 @@
         logDebug: this.options.logDebug
       });
       
-      this.horizontalSwiper = new Swiper('.swiper-horizontal', { });
+      const swiperOptions = {};
+      
+      if ('browser' === device.platform) {
+        swiperOptions.onlyExternal = true;
+      }
+      
+      this.horizontalSwiper = new Swiper('.swiper-horizontal', swiperOptions);
       this.horizontalSwiper.on('onSlideChangeEnd', (swiper) => {this._onSlideChangeEnd(swiper); });
       this._resizeSlides();
       
@@ -118,16 +124,26 @@
       } else if ($(document.body).pakkasmarjaBerriesSettingsMenu('isMenuOpen')) {
         $(document.body).pakkasmarjaBerriesSettingsMenu('closeSettingsMenu');
       } else if (this._checkBodyClass('chat-conversation-open')) {
-        $(".chat-container").hide("slide", { direction: "right" }, 300);
+        if ('browser' !== device.platform) {
+          $(".chat-container").hide("slide", { direction: "right" }, 300);
+        }
         $(document.body).pakkasmarjaBerries('restoreMainView');
         this._removeBodyClass('chat-conversation-open');
       } else if (this._checkBodyClass('question-group-open')) {
-        $(".chat-container").hide("slide", { direction: "right" }, 300);
+        if ('browser' !== device.platform) {
+          $(".chat-container").hide("slide", { direction: "right" }, 300);
+        }
         $(document.body).pakkasmarjaBerries('restoreMainView');
         this._removeBodyClass('question-group-open');
       } else if (this._checkBodyClass('question-group-thread-open')) {
-        $(".chat-container").hide("slide", { direction: "right" }, 300);
-        this._backToQuestionGroup(backStateData);
+        if ('browser' !== device.platform) {
+          $(".chat-container").hide("slide", { direction: "right" }, 300);
+          this._backToQuestionGroup(backStateData);
+        } else {
+          $("body").addClass('question-group-open');
+          $(document.body).pakkasmarjaBerries('restoreMainView');
+        }
+        
       } else {
         navigator.app.exitApp(); 
       }

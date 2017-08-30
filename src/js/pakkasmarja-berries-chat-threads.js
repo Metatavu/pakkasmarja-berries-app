@@ -71,6 +71,11 @@
     
     _onChatThreadClick: function (event) {
       event.preventDefault();
+      if ('browser' === device.platform) {
+        $('.item-row').removeClass('active');
+        $(event.target).closest('.item-row').addClass('active');
+      }
+      
       $("body").addClass("chat-conversation-open");
       const element = $(event.target).closest('.chat-thread');
       element.removeClass('unread').addClass('read');

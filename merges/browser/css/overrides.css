@@ -75,3 +75,30 @@ html, body {
 .settings-icon {
   margin-left: 15px !important;
 }
+
+.chat-container.show-list-header .list-header {
+  display: none;
+}
+
+.show-list-header .list-header .list-header-back-menu {
+  background-color: #eee !important;
+}
+
+.item-row {
+  margin-bottom: 0 !important;
+  padding-top: 15px !important;
+}
+.item-row.active {
+  background-color: #e6f2ff;
+}
+
+.questions-view.show-list-header {
+  padding-top: 0;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {  
+  .list-header {
+    left: 0px !important;
+    width: 50% !important;
+  }
+}
