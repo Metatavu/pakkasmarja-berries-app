@@ -30,7 +30,7 @@
       $(document.body).on('click', '.chat-container .list-header-close-btn', $.proxy(this._onHeaderBackButtonClick, this));
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
       $(document.body).on('message:message-deleted', $.proxy(this._onMessageDeleted, this));
-      $(`.chat-conversation-wrapper`).scroll($.proxy(this._onWrapperScroll, this));
+      this.element.find('.chat-conversation-wrapper').on('scroll' ,$.proxy(this._onWrapperScroll, this));
 
       autosize($('.message-input'));
       this.element.find('.message-input').on('autosize:resized', $.proxy(this._onAutosizeResized, this));
@@ -100,8 +100,8 @@
       if (!this.activeThreadId) {
         return false;
       }
-      
-      return $(document.body).pakkasmarjaBerries('activePage') === 'conversations';
+
+      return $(document.body).pakkasmarjaBerries('activePage') === 'conversations' || $(document.body).pakkasmarjaBerries('activePage') === 'questions';
     },
 
     _onRemoveMessageBtnClick: function(e) {
