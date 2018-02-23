@@ -98,12 +98,22 @@ module.exports = function(grunt) {
         }]
       }
     },
+    bower: {
+      install: { }
+    },
     wiredep: {
       target: {
         src: 'www/index.html' // point to your HTML file.
       }
+    },
+    browserify: {
+      apiclient: {
+        files: {
+          'www/js/pakkasmarja-rest-client.js': ['src/api-client/main.js']
+        }
+      }
     }
   });
   
-  grunt.registerTask('default', [ 'sass', 'pug', 'compile-client-templates', 'generate-config', 'babel', 'wiredep' ]);
+  grunt.registerTask('default', [ 'sass', 'pug', 'compile-client-templates', 'generate-config', 'babel', 'bower', 'wiredep', 'browserify:apiclient']);
 };

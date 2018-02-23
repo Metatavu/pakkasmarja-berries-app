@@ -1,0 +1,1 @@
+window.PakkasmarjaRestClient = require('pakkasmarja-rest-client');
