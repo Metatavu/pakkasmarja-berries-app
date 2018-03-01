@@ -99,7 +99,7 @@ html {
   }
 }
 
-.navbar-top{
+.navbar-top {
   padding: 0;
   margin: 0;
   position: fixed;
@@ -158,20 +158,27 @@ html {
     margin-top: 15px;
   }
   
+  .close-menu-btn {
+    display: none;
+    color: #fff;
+    font-size: 34px;
+    padding-left: 5px;
+  }
+  
 }
 
 .secondary-menu {
   border-bottom: 3px solid #cccccc;
-  z-index: 5;
-  margin-top: 50px;
+  z-index: 4;
+  margin-top: 57px;
   position: fixed;
   width: 100%;
   background: #fff;
   
   .menu-item-container {
     text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 11px;
+    padding-bottom: 7px;
     font-size: 14px;
     
     .menu-item {
@@ -489,6 +496,10 @@ html {
   
 }
 
+.top-row {
+  width: 100%;
+}
+
 .news-item,
 .chat-thread,
 .chat-question-group-thread,
@@ -634,6 +645,35 @@ html {
       }
     }
   }
+}
+
+.profile-menu {
+  display: none;
+  width: 100%;
+  background-color: #fff;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  z-index: 10;
+  height: calc(100% - 50px);
+  
+  #profile-accordion {
+    margin-top: 25px;
+    
+    .btn-link {
+      color: #000;
+      text-decoration: none;
+    }
+    
+  }
+  
+  .btn-primary.btn-lg {
+    margin-top: 15px;
+    background-color: #e01e36;
+    width: 100%;
+    border: 0;
+  }
+  
 }
 
 .empty-list-message {
