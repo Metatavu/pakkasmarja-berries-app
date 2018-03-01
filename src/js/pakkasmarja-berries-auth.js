@@ -74,8 +74,8 @@
       return this._sessionId;
     },
     
-    getUserId: function (userId) {
-      this.userId = userId;
+    getUserId: function () {
+      return this.userId;
     },
 
     getAccountUrl: function (userId) {
@@ -91,6 +91,7 @@
         token: this.token()
       }, $.proxy(function (data) {
         this._sessionId = data.sessionId;
+        this.userId = data.userId;
         $(document.body).pakkasmarjaBerriesPushNotifications('subscribeTopic', data.userId);
         this.element.trigger("joined");
       }, this))

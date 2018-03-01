@@ -53,9 +53,11 @@
       this.element.pakkasmarjaBerriesPushNotifications({
         logDebug: this.options.logDebug
       });
+      this.element.pakkasmarjaBerriesRest();
       
       this.element.pakkasmarjaBerriesMenu();
       this.element.pakkasmarjaBerriesSettingsMenu();
+      this.element.pakkasmarjaBerriesProfileMenu();
       
       $(".chat-container").pakkasmarjaBerriesChatThread({
         serverUrl: serverUrl,

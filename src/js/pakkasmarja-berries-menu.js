@@ -9,7 +9,6 @@
     _create: function () {
       this.element.on('click', '.hamburger-menu-button', $.proxy(this._onHamburgerMenuClick, this));
       this.element.on('click', '.logout-button', $.proxy(this._onLogOutButtonClick, this));
-      this.element.on('click', '.profile-button', $.proxy(this._onProfileButtonClick, this));
     },
     
     _onHamburgerMenuClick: function () {
@@ -49,13 +48,6 @@
     
     _onLogOutButtonClick: function () {
       this.element.pakkasmarjaBerriesAuth('logout');
-    },
-
-    _onProfileButtonClick: function () {
-      const accountUrl = $(document.body).pakkasmarjaBerriesAuth('getAccountUrl');
-      if (accountUrl) {
-        cordova.InAppBrowser.open(accountUrl, '_self', 'location=no,hardwareback=no,zoom=no');
-      }
     },
     
     _disableScrolling: function () {

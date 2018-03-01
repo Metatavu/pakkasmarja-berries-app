@@ -11,15 +11,18 @@ html
     link(rel='stylesheet', href='css/pakkasmarja-berries.min.css')
     link(rel='stylesheet', href='css/overrides.css')
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css')
+    link(rel='stylesheet', href='bower_components/noty/lib/noty.css')
     script(src="cordova.js",type="text/javascript")
     // bower:js 
     // endbower
+    script(src='js/pakkasmarja-rest-client.js',type="text/javascript")
     script(src='https://auth.metatavu.io/auth/js/keycloak.js',type='text/javascript')
     script(src='js/config.js')
     script(src='js/pug-templates.js')
     // script(src='https://cdn.metatavu.io/libs/tools/debug/0.0.4/debug.js')
     script(src='js/pakkasmarja-berries-client.js')
     script(src='js/pakkasmarja-berries-auth.js')
+    script(src='js/pakkasmarja-berries-rest.js')
     script(src='js/pakkasmarja-berries-news.js')
     script(src='js/pakkasmarja-berries-chat-threads.js')
     script(src='js/pakkasmarja-berries-chat-thread.js')
@@ -28,6 +31,7 @@ html
     script(src='js/pakkasmarja-berries-push-notifications.js')
     script(src='js/pakkasmarja-berries-menu.js')
     script(src='js/pakkasmarja-berries-settings-menu.js')
+    script(src='js/pakkasmarja-berries-profile-menu.js')
     script(src='js/pakkasmarja-berries-device-controls.js')
     script(src='js/pakkasmarja-berries.js')
     title Pakkasmarja
@@ -36,16 +40,19 @@ html
       |Yhdistetään...
     nav.navbar.navbar-toggleable-md.navbar-light.bg-faded.navbar-top
       .container-fluid.top-btn-container
-        .row.no-gutters
-          .col-2.flex-last
+        .row.no-gutters.justify-content-between.top-row
+          .col.flex-last
             a.btn.menu-btn.hamburger-menu-button(data-toggle='collapse', href='#')
               i.fa.fa-bars
           .col-8
             a.top-logo-container(href='#')
               img.top-logo(src='gfx/top_logo.png')
-          .col-2.flex-first
+          .col.flex-first
             a.settings-btn
               img.settings-icon(src='gfx/settings.png')
+            .close-menu-btn
+              a
+                i.fa.fa-arrow-left
     .row.no-gutters.secondary-menu
       .col-4.menu-item-container.news-item-container
         a.menu-item.active(href='#', data-slide-index='0', data-page="news") Ajankohtaista
@@ -105,7 +112,10 @@ html
       ul.list-unstyled
         li.profile-button
           i.fa.fa-user(aria-hidden='true')
-          h3 Käyttäjätili
+          h3 Yhteystiedot
+        li.password-button
+          i.fa.fa-lock(aria-hidden='true')
+          h3 Vaihda salasana
         li.logout-button
           i.fa.fa-sign-out(aria-hidden='true')
           h3 Kirjaudu ulos
@@ -156,3 +166,88 @@ html
                     a(href='#') Pois päältä
                   option(value="silent")
                     a(href='#') Hiljainen
+    .profile-menu
+      .container
+        #profile-accordion
+          .card
+            .card-header
+              h5.mb-0
+                button.btn.btn-link(data-toggle='collapse', data-target='#collapseOne', aria-expanded='true', aria-controls='collapseOne')
+                  i.fa.fa-user
+                  |  Perustiedot
+            #collapseOne.collapse.show(data-parent='#profile-accordion')
+              .card-body
+                .form-group
+                  label(for='firstNameInput') Etunimi
+                  input#firstNameInput.form-control(type='text')
+                .form-group
+                  label(for='lastNameInput') Sukunimi
+                  input#lastNameInput.form-control(type='text')
+                .form-group
+                  label(for='companyNameInput') Yritys
+                  input#companyNameInput.form-control(type='text')
+                .form-group
+                  label(for='phoneNumber1Input') Puhelin 1
+                  input#phoneNumber1Input.form-control(type='text')
+                .form-group
+                  label(for='phoneNumber2Input') Puhelin 2
+                  input#phoneNumber2Input.form-control(type='text')
+                .form-group
+                  label(for='emailInput') Email
+                  input#emailInput.form-control(type='email')
+                .form-group
+                  label(for='auditInput') Auditoitu
+                  input#auditInput.form-control(type='text')
+          .card
+            .card-header
+              h5.mb-0
+                button.btn.btn-link.collapsed(data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
+                  i.fa.fa-address-book
+                  |  Osoitetiedot
+            #collapseTwo.collapse(data-parent='#profile-accordion')
+              .card-body
+                .form-group
+                  label(for='postalCode1Input') Postinro
+                  input#postalCode1Input.form-control(type='text')
+                .form-group
+                  label(for='streetAddress1Input') Postiosoite
+                  input#streetAddress1Input.form-control(type='text')
+                .form-group
+                  label(for='city1Input') Kaupunki
+                  input#city1Input.form-control(type='text')
+                .form-group
+                  label(for='postalCode2Input') Tilan postinro
+                  input#postalCode2Input.form-control(type='text')
+                .form-group
+                  label(for='streetAddress2Input') Tilan osoite
+                  input#streetAddress2Input.form-control(type='text')
+                .form-group
+                  label(for='city2Input') Tilan kaupunki
+                  input#city2Input.form-control(type='text')
+          .card
+            .card-header
+              h5.mb-0
+                button.btn.btn-link.collapsed(data-toggle='collapse', data-target='#collapseThree', aria-expanded='false', aria-controls='collapseThree')
+                  i.fa.fa-university
+                  |  Pankkitiedot
+            #collapseThree.collapse(data-parent='#profile-accordion')
+              .card-body
+                .form-group
+                  label(for='BICInput') BIC
+                  input#BICInput.form-control(type='text')
+                .form-group
+                  label(for='IBANInput') Tilinumero (IBAN)
+                  input#IBANInput.form-control(type='text')
+                .form-group
+                  label(for='vatLiableInput') ALV. velvollisuus
+                  select#vatLiableInput.form-control
+                    option(value="") Valitse...
+                    option(value="NO") Ei
+                    option(value="YES") Kyllä
+                    option(value="EU") Eu
+                .form-group
+                  label(for='taxCodeInput') ALV - tunnus
+                  input#taxCodeInput.form-control(type='text')
+        .form-group
+          button.btn.btn-primary.btn-lg.save-contact-btn Lähetä
+        

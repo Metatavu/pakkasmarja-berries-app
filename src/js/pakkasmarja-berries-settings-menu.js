@@ -8,20 +8,14 @@
     
     _create: function () {
       this.element.on('click', '.settings-btn', $.proxy(this._onSettingsMenuClick, this));
+      this.element.on('click', '.close-menu-btn', $.proxy(this._onCloseMenuClick, this));
       this.element.on('click', '.management-button', $.proxy(this._onManagementButtonClick, this));
       this.element.on('change', '.select-setting', $.proxy(this._onSettingsChanged, this));
       $(document.body).on('message:user-settings', $.proxy(this._onUserSettings, this));
     },
     
     _onSettingsMenuClick: function () {
-      if ($(".settings-menu").hasClass('menu-open')) {
-        
-        if ('browser' !== device.platform) {
-          this._enableScrolling();
-        }
-        
-        this.closeSettingsMenu();
-      } else {
+      if (!$(".settings-menu").hasClass('menu-open')) {
         if ($(document.body).pakkasmarjaBerriesMenu('isMenuOpen')) {
           $(document.body).pakkasmarjaBerriesMenu('closeHamburgerMenu');
         }
@@ -32,6 +26,17 @@
         
         this._openSettingsMenu();
       }
+    },
+    
+    _onCloseMenuClick: function () {
+      if ($(".settings-menu").hasClass('menu-open')) {
+        
+        if ('browser' !== device.platform) {
+          this._enableScrolling();
+        }
+        
+        this.closeSettingsMenu();
+      } 
     },
     
     _onUserSettings: function(event, data) {
@@ -53,11 +58,17 @@
       
       $(".settings-menu").addClass('menu-open');
       $(".settings-menu").show("slide", { direction: "right" }, 200);
+      $(".settings-btn").hide();
+      $(".hamburger-menu-button").hide();
+      $(".close-menu-btn").show();
     },
     
     closeSettingsMenu: function () {
       $(".settings-menu").removeClass('menu-open');
       $(".settings-menu").hide("slide", { direction: "right" }, 200);
+      $(".close-menu-btn").hide();
+      $(".settings-btn").show();
+      $(".hamburger-menu-button").show();
     },
     
     isMenuOpen: function() {
