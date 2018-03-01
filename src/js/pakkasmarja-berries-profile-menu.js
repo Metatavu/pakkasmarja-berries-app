@@ -115,10 +115,10 @@
         let vatLiable = "";
         switch (data.vatLiable) {
           case 'Y':
-            vatLiable = 'YES'
+            vatLiable = 'YES';
           break;
           case 'N':
-            vatLiable = 'NO'
+            vatLiable = 'NO';
           break;
           default:
             vatLiable = data.vatLiable || "";
