@@ -53,7 +53,10 @@
       this.element.pakkasmarjaBerriesPushNotifications({
         logDebug: this.options.logDebug
       });
-      this.element.pakkasmarjaBerriesRest();
+
+      this.element.pakkasmarjaBerriesRest({
+        basePath: `${serverUrl}/rest/v1`
+      });
       
       this.element.pakkasmarjaBerriesMenu();
       this.element.pakkasmarjaBerriesSettingsMenu();
