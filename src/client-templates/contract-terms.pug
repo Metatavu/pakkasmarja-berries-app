@@ -1,0 +1,27 @@
+.contract-terms-header
+  h3 Sopimus
+   | 
+   =year
+  p Satokautta #{year} koskeva sopimus:
+#contract-accordion
+  - var count = 0;
+  each text, header in terms
+    .card
+      .card-header
+        h5
+          button.btn.btn-link(data-toggle='collapse', data-target='#contract-section-'+count, aria-expanded='true', aria-controls='contract-section-'+count)
+            =header
+      .collapse.show(id='contract-section-'+count, data-parent='#contract-accordion')
+        .card-body
+          !=text
+    - count++;
+.contract-footer-section
+  .accept-terms-container
+    .form-check
+      input#acceptTerms.form-check-input(type='checkbox')
+      label.form-check-label(for='acceptTerms') Olen lukenut sopimusehdot
+  .row
+    .col
+      button.btn.btn-default.deny-btn EN HYVÄKSY
+    .col
+      button.btn.btn-default.sign-btn(data-contract-id=contract.id) HYVÄKSYN

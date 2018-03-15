@@ -61,6 +61,7 @@
       this.element.pakkasmarjaBerriesMenu();
       this.element.pakkasmarjaBerriesSettingsMenu();
       this.element.pakkasmarjaBerriesProfileMenu();
+      this.element.pakkasmarjaBerriesContracts();
       
       $(".chat-container").pakkasmarjaBerriesChatThread({
         serverUrl: serverUrl,

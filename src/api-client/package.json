@@ -9,6 +9,6 @@
   "author": "Metatavu Oy",
   "license": "AGPL-3.0",
   "dependencies": {
-    "pakkasmarja-rest-client": "0.0.4"
+    "pakkasmarja-rest-client": "0.0.7"
   }
 }

@@ -1,12 +1,12 @@
-{		
- "server": {		
+{
+ "server": {
     "host": "pakkasmarja-berries.metatavu.io",
     "port": 443,
     "secure": true
- },		
- "generic": {		
-    "defaultSrc": "'self' cdvphotolibrary: http: https: data: gap: ws: wss: https://ssl.gstatic.com *.metatavu.io 'unsafe-inline'",
+ },
+ "generic": {
+    "defaultSrc": "'self' cdvphotolibrary: http: https: data: gap: ws: wss: https://ssl.gstatic.com *.metatavu.io www.onnistuu.fi 'unsafe-inline'",
     "styleSrc": "'self' http: https: *.metatavu.io localhost:8000 'unsafe-inline'",
-    "mediaSrc": "*"		
+    "mediaSrc": "*"
  }
 }
