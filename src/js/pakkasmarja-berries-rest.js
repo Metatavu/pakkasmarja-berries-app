@@ -13,6 +13,10 @@
       PakkasmarjaRestClient.ApiClient.instance.basePath = this.options.basePath;
     },
     
+    listSignAuthenticationServices: function() {
+      return this._getSignAuthenticationServicesApi().listSignAuthenticationServices();
+    },
+    
     findUserContact: function () {
       const userId = this._getUserId();
       return this._getContactsApi().findContact(userId);
@@ -24,8 +28,8 @@
       return this._getContactsApi().updateContact(userId, payload);
     },
     
-    createContractDocumentSignRequest: function(contractId) {
-      return this._getContractsApi().createContractDocumentSignRequest(contractId, new Date().getFullYear(), {});
+    createContractDocumentSignRequest: function(contractId, ssn, authService) {
+      return this._getContractsApi().createContractDocumentSignRequest(contractId, new Date().getFullYear(), ssn, authService, {});
     },
     
     updateUserContract: function (data) {
@@ -35,6 +39,13 @@
     
     listDeliveryPlaces: function() {
       return this._getDeliveryPlacesApi().listDeliveryPlaces();
+    },
+    
+    getContractDocumentPDF: function(contractId) {
+      return this._getContractsApi().getContractDocumentWithHttpInfo(contractId, new Date().getFullYear(), 'PDF').then((dataAndResponse) => {
+        const res = dataAndResponse.response;
+        return window.URL.createObjectURL(res.body);
+      });
     },
     
     getContractDocument: function(contractId) {
@@ -79,6 +90,11 @@
     _getContactsApi: function() {
       this._setApiKey();
       return new PakkasmarjaRestClient.ContactsApi();
+    },
+    
+    _getSignAuthenticationServicesApi: function() {
+      this._setApiKey();
+      return new PakkasmarjaRestClient.SignAuthenticationServicesApi();
     },
     
     _getItemGroupsApi: function() {

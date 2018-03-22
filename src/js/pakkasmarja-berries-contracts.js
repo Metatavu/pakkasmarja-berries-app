@@ -12,12 +12,45 @@
       $(this.element).on('click', '.contract-back-btn', this._onBackBtnClick.bind(this));
       $(this.element).on('click', '.accept-btn', this._onAcceptBtnClick.bind(this));
       $(this.element).on('click', '.sign-btn', this._onSignBtnClick.bind(this));
-      
+      $(this.element).on('click', '.download-contract-btn', this._onDownloadContractBtnClick.bind(this));
+    },
+
+    _onDownloadContractBtnClick: function(e) {
+      e.preventDefault();
+      const button = $(e.target).closest('.download-contract-btn');
+      const contractId = button.attr('data-contract-id');
+      $(document.body).pakkasmarjaBerriesRest('getContractDocumentPDF', contractId).then((contractDocument) => {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = contractDocument;
+        a.download = "sopimus.pdf";
+        a.click();
+        window.URL.revokeObjectURL(contractDocument);
+      });
     },
 
     _onSignBtnClick: function(e) {
       const contractId = $(e.target).closest('.sign-btn').attr('data-contract-id');
-      $(document.body).pakkasmarjaBerriesRest('createContractDocumentSignRequest', contractId).then((contractDocumentSignRequest) => {
+      const ssn = $('#ssnInput').val();
+      if (!ssn) {
+        bootbox.alert('Syötä henkilötunnus.');
+        return;
+      }
+
+      const authService = $('#authServiceInput').val();
+      if (!authService) {
+        bootbox.alert('Valitse tunnistautumispalvelu.');
+        return;
+      }
+
+      const acceptedTerms = $('#acceptTerms').is(':checked');
+      if (!acceptedTerms) {
+        bootbox.alert('Sinun tulee hyväksyä sopimusehdot ennen allekirjoitusta.');
+        return;
+      }
+      
+      $(document.body).pakkasmarjaBerriesRest('createContractDocumentSignRequest', contractId, ssn, authService).then((contractDocumentSignRequest) => {
         if (device.platform === 'browser') {
           window.open(contractDocumentSignRequest.redirectUrl); 
         } else {
@@ -33,40 +66,42 @@
       
       $(document.body).pakkasmarjaBerriesRest('updateUserContract', contract).then((contract) => {
         $(document.body).pakkasmarjaBerriesRest('getContractDocument', contract.id).then((contractDocument) => {
-          const content = $('<div>')
-              .append(contractDocument)
-              .find('.content');
+          $(document.body).pakkasmarjaBerriesRest('listSignAuthenticationServices').then((authServices) => {
+            const content = $('<div>')
+                .append(contractDocument)
+                .find('.content');
 
-          const tempData = {};
-          let currentHeader = "Sopimus";
-          const nodes = content.children();
-          nodes.each((index, element) => {
-            if($(element).is('h1,h2,h3')) {
-              currentHeader = $(element).text();
-            } else {
-              if (typeof(tempData[currentHeader]) === 'undefined') {
-                tempData[currentHeader] = $('<div>').append($(element));
+            const tempData = {};
+            let currentHeader = "Sopimus";
+            const nodes = content.children();
+            nodes.each((index, element) => {
+              if($(element).is('h1,h2,h3')) {
+                currentHeader = $(element).text();
               } else {
-                tempData[currentHeader].append($(element));
+                if (typeof(tempData[currentHeader]) === 'undefined') {
+                  tempData[currentHeader] = $('<div>').append($(element));
+                } else {
+                  tempData[currentHeader].append($(element));
+                }
               }
-            }
-          });
-          
-          const data = {};
-          $.each(tempData, (header, element) => {
-            data[header] = $(element).html();
-          });
+            });
 
-          const detailView = $('.contract-view .contract-details-content .details-container');
-          const termsView = $('<div>')
-            .html(pugContractTerms({contract:contract, terms: data, year: new Date().getFullYear()}))
-            .addClass('contract-terms')
-            .hide()
-            .appendTo($('.contract-view .contract-details-content'));
+            const data = {};
+            $.each(tempData, (header, element) => {
+              data[header] = $(element).html();
+            });
 
-          termsView.find('.btn-link').click();
-          $(detailView).hide('slide', { direction: 'left' }, 200);
-          $(termsView).show('slide', { direction: 'right' }, 200);
+            const detailView = $('.contract-view .contract-details-content .details-container');
+            const termsView = $('<div>')
+              .html(pugContractTerms({authServices: authServices, contract:contract, terms: data, year: new Date().getFullYear()}))
+              .addClass('contract-terms')
+              .hide()
+              .appendTo($('.contract-view .contract-details-content'));
+
+            termsView.find('.btn-link').click();
+            $(detailView).hide('slide', { direction: 'left' }, 200);
+            $(termsView).show('slide', { direction: 'right' }, 200);
+          });
         });
       });
     },

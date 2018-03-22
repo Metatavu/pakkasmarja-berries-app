@@ -731,6 +731,13 @@ html {
 }
 
 .contract-view {
+  
+  h1 {
+    @media (max-width: 991.98px) { 
+      font-size: 27px;
+    }
+  }
+  
   .view-header-container {
     background: #e01e36;
     padding: 15px;
@@ -745,6 +752,10 @@ html {
       text-transform: uppercase;
       font-weight: bold;
       margin-bottom: 20px;
+
+      @media (max-width: 991.98px) { 
+        font-size: 20px;
+      }
     }
     
     select,input {
@@ -856,6 +867,10 @@ html {
       h3 {
         font-weight: bold;
         text-transform: uppercase;
+      
+        @media (max-width: 991.98px) { 
+          font-size: 22px;
+        }
       }
     }
     

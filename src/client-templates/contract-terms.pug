@@ -16,12 +16,25 @@
           !=text
     - count++;
 .contract-footer-section
+  .download-pdf-container
+    a.download-contract-btn(href='#', data-contract-id=contract.id) Lataa sopimus PDF - muodossa.
   .accept-terms-container
     .form-check
       input#acceptTerms.form-check-input(type='checkbox')
-      label.form-check-label(for='acceptTerms') Olen lukenut sopimusehdot
+      label.form-check-label(for='acceptTerms') Olen lukenut ja hyväksyn sopimusehdot
+  .auth-services-container
+    .form-group
+      label(for='authServiceInput') Tunnistautumispalvelu:
+      select#authServiceInput.form-control
+        each authService in authServices
+          option(value=authService.identifier)
+            =authService.name
+  .ssn-input-container
+    .form-group
+      label(for='ssnInput') Henkilötunnus:
+      input#ssnInput.form-control(name="ssn", type='text', placeholder='Henkilötunnus')
   .row
     .col
       button.btn.btn-default.deny-btn EN HYVÄKSY
     .col
-      button.btn.btn-default.sign-btn(data-contract-id=contract.id) HYVÄKSYN
+      button.btn.btn-default.sign-btn(data-contract-id=contract.id) ALLEKIRJOITA

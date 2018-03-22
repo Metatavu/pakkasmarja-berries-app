@@ -3,7 +3,7 @@
     span
       =contract.itemGroup.name
   .col
-    if contract.itemGroup.status == 'DRAFT'
+    if contract.status == 'DRAFT'
       span Tarkasta Ehdotus
     else
       span Sopimus käsittelyssä
