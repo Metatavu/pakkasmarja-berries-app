@@ -758,7 +758,8 @@ html {
       }
     }
     
-    select,input {
+    select,
+    input {
       border: 2px solid #e01e36;
       border-radius: 25px;
     }
@@ -832,7 +833,7 @@ html {
         .btn {
           width: 100%;
           border: 2px solid #e01e36;
-          border-radius: 0px;
+          border-radius: 0;
           text-align: center;
           font-weight: bold;
         }
@@ -842,7 +843,8 @@ html {
           background-color: #fff; 
         }
         
-        .accept-btn,.sign-btn {
+        .accept-btn,
+        .sign-btn {
           color: #fff;
           background-color: #e01e36; 
         }

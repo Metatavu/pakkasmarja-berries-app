@@ -120,7 +120,7 @@
         const reader = new FileReader();
         reader.onload = function() {
             resolve(reader.result);
-        }
+        };
         reader.readAsText(blob);
       });
     }
