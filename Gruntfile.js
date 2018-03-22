@@ -105,6 +105,16 @@ module.exports = function(grunt) {
       target: {
         src: 'www/index.html' // point to your HTML file.
       }
+    },    
+    "shell": {
+      "apiclient-install": {
+        "command": "npm install",
+        "options": {
+          "execOptions": {
+            "cwd": "src/api-client"
+          }
+        }
+      },
     },
     browserify: {
       apiclient: {
@@ -114,6 +124,6 @@ module.exports = function(grunt) {
       }
     }
   });
-  
-  grunt.registerTask('default', [ 'sass', 'pug', 'compile-client-templates', 'generate-config', 'babel', 'bower', 'wiredep', 'browserify:apiclient']);
+
+  grunt.registerTask('default', [ 'sass', 'pug', 'compile-client-templates', 'generate-config', 'babel', 'bower', 'wiredep', "shell:apiclient-install", 'browserify:apiclient']);
 };
