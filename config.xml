@@ -10,6 +10,7 @@
     <access origin="https://cdn.metatavu.io" />
     <access origin="https://www.gravatar.com" />
     <access origin="http://localhost:8000" />
+    <access origin="https://pakkasmarja-berries.metatavu.io" />
     <allow-intent href="cdvphotolibrary://*/*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
