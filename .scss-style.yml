@@ -64,8 +64,8 @@ linters:
     enabled: false
 
   FinalNewline:
-    enabled: true
-    present: true
+    enabled: false
+    present: false
 
   HexLength:
     enabled: false
@@ -110,7 +110,7 @@ linters:
 
   NestingDepth:
     enabled: true
-    max_depth: 5
+    max_depth: 10
     ignore_parent_selectors: false
 
   PlaceholderInExtend:

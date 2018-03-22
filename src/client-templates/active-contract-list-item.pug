@@ -1,0 +1,10 @@
+.row.contract-list-item(data-contract=JSON.stringify(contract))
+  .col
+    span
+      =contract.itemGroup.name
+  .col
+    span
+      =contract.contractQuantity 
+  .col
+    span
+      =contract.deliveredQuantity

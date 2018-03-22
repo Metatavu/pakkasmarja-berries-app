@@ -32,6 +32,7 @@ html
     script(src='js/pakkasmarja-berries-menu.js')
     script(src='js/pakkasmarja-berries-settings-menu.js')
     script(src='js/pakkasmarja-berries-profile-menu.js')
+    script(src='js/pakkasmarja-berries-contracts.js')
     script(src='js/pakkasmarja-berries-device-controls.js')
     script(src='js/pakkasmarja-berries.js')
     title Pakkasmarja
@@ -54,12 +55,14 @@ html
               a
                 i.fa.fa-arrow-left
     .row.no-gutters.secondary-menu
-      .col-4.menu-item-container.news-item-container
+      .col-3.menu-item-container.news-item-container
         a.menu-item.active(href='#', data-slide-index='0', data-page="news") Ajankohtaista
-      .col-4.menu-item-container.conversations-item-container
+      .col-3.menu-item-container.conversations-item-container
         a.menu-item(href='#', data-slide-index='1', data-page="conversations") Keskustelu
-      .col-4.menu-item-container.questions-item-container
+      .col-3.menu-item-container.questions-item-container
         a.menu-item(href='#', data-slide-index='2', data-page="questions") Kysymykset
+      .col-3.menu-item-container.contract-item-container
+        a.menu-item(href='#', data-slide-index='3', data-page="contracts") Sopimukset
     .swiper-container.swiper-horizontal
       .swiper-wrapper
         .swiper-slide
@@ -80,6 +83,34 @@ html
                   .list-header-category Kysymysryhmä
                   .list-header-name Pakkasmarja
             ul.list-unstyled
+        .swiper-slide
+          .container-fluid.list-view.contract-view
+            .view-header-container
+              h1 Viljely- ja ostosopimukset
+            .view-content-container
+              .contract-list-view
+                .contract-list-container
+                  .contract-list-header-container
+                    h3 Pakastemarjat
+                  .active-contract-list-container.frozen-list
+                    .row.contract-list-header
+                      .col
+                      .col
+                        span SOVITTU KG
+                      .col
+                        span TOTEUTUNUT KG
+                  .pending-contract-list-container.frozen-list
+                .contract-list-container
+                  .contract-list-header-container
+                    h3 Tuoremarjat
+                  .active-contract-list-container.fresh-list
+                    .row.contract-list-header
+                      .col
+                      .col
+                        span SOVITTU KG
+                      .col
+                        span TOTEUTUNUT KG
+                  .pending-contract-list-container.fresh-list
     .chat-container.show-list-header
       .list-header
         .row.no-gutters.list-header-back-menu
