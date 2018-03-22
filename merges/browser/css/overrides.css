@@ -102,3 +102,9 @@ html, body {
     width: 50% !important;
   }
 }
+
+.contract-view .view-content-container {
+  height: calc(100vh - 190px);
+  overflow-y: auto;
+  overflow-x: hidden; 
+}
