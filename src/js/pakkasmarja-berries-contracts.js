@@ -83,7 +83,14 @@
         if (device.platform === 'browser') {
           window.open(contractDocumentSignRequest.redirectUrl); 
         } else {
-          cordova.InAppBrowser.open(contractDocumentSignRequest.redirectUrl, '_self', 'location=no,hardwareback=no,zoom=no');
+          const ref = cordova.InAppBrowser.open(contractDocumentSignRequest.redirectUrl, '_blank', 'location=no,hardwareback=no,zoom=no');
+          ref.addEventListener('loadstop', (loadStopEvent) => {
+            if (loadStopEvent.url.indexOf('/signcallback') > 0) {
+              setTimeout(() => {
+                ref.close();
+              }, 3000);
+            }
+          });
         }
       });
     },
