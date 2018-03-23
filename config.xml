@@ -11,6 +11,8 @@
     <access origin="https://www.gravatar.com" />
     <access origin="http://localhost:8000" />
     <access origin="https://pakkasmarja-berries.metatavu.io" />
+    <access origin="https://pm.metatavu.io" />
+    <access origin="https://pma.metatavu.io" />
     <allow-intent href="cdvphotolibrary://*/*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -35,5 +37,6 @@
         <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="To choose photos" />
     </plugin>
     <plugin name="cordova-plugin-inappbrowser" spec="^2.0.2" />
+    <plugin name="cordova-plugin-file-opener2" spec="https://github.com/JuanjoPP/cordova-plugin-file-opener2" />
     <engine name="android" spec="^6.4.0" />
 </widget>
