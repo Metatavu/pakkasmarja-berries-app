@@ -10,7 +10,15 @@ html {
 .list-header {
   display: none;
 }
-  
+
+.bootbox.modal {
+  z-index: 2000;
+}
+
+.modal-backdrop {
+  z-index: 10;
+}
+
 .show-list-header {
   
   .list-header {
