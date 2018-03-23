@@ -44,7 +44,7 @@
     getContractDocumentPDF: function(contractId) {
       return this._getContractsApi().getContractDocumentWithHttpInfo(contractId, new Date().getFullYear(), 'PDF').then((dataAndResponse) => {
         const res = dataAndResponse.response;
-        return window.URL.createObjectURL(res.body);
+        return res.body;
       });
     },
     

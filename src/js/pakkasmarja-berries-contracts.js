@@ -19,14 +19,43 @@
       e.preventDefault();
       const button = $(e.target).closest('.download-contract-btn');
       const contractId = button.attr('data-contract-id');
+      const loader = $('<i>')
+        .addClass('fa fa-spinner fa-spin')
+        .appendTo(button);
       $(document.body).pakkasmarjaBerriesRest('getContractDocumentPDF', contractId).then((contractDocument) => {
-        var a = document.createElement("a");
-        document.body.appendChild(a);
-        a.style = "display: none";
-        a.href = contractDocument;
-        a.download = "sopimus.pdf";
-        a.click();
-        window.URL.revokeObjectURL(contractDocument);
+        if (device.platform === 'browser') {
+          const reader = new FileReader();
+          reader.onload = function() {
+            loader.remove();
+            const link = $('<a>')
+              .css('display', 'none')
+              .appendTo('body');
+
+            link[0].href = reader.result;
+            link[0].download = "sopimus.pdf";
+            link[0].click();
+          };
+          reader.readAsDataURL(contractDocument);
+        } else {
+          const filename = `${new Date().getTime()}.pdf`;
+          window.resolveLocalFileSystemURL(cordova.file.dataDirectory, (dir) => {
+            dir.getFile(filename, { create:true }, (file) => {
+              file.createWriter((fileWriter) => {
+                fileWriter.write(contractDocument);
+                cordova.plugins.fileOpener2.open(`${cordova.file.dataDirectory}/${filename}`, 'application/pdf', {
+                  error : (e) => { 
+                    console.log('Error status: ' + e.status + ' - Error message: ' + e.message);
+                  },
+                  success :() => {
+                    loader.remove();
+                  }
+                });
+              }, () => {
+                alert("Virhe pdf:än tallennuksessa.");
+              });
+            });
+          });
+        }
       });
     },
 
