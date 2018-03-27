@@ -13,6 +13,15 @@
       $(this.element).on('click', '.accept-btn', this._onAcceptBtnClick.bind(this));
       $(this.element).on('click', '.sign-btn', this._onSignBtnClick.bind(this));
       $(this.element).on('click', '.download-contract-btn', this._onDownloadContractBtnClick.bind(this));
+      $(this.element).on('click', '.past-prices-btn', this._onPastPricesBtnClick.bind(this));
+    },
+
+    _onPastPricesBtnClick: function(e) {
+      const pastPrices = JSON.parse($(e.target).closest('.past-prices-btn').attr('data-past-prices'));
+      bootbox.dialog({
+        size: 'large',
+        message:  pugPastPricesModal({pastPrices: pastPrices})
+      });
     },
 
     _onDownloadContractBtnClick: function(e) {
@@ -154,15 +163,27 @@
       $('.contract-view .contract-detail-container').remove();
       $(document.body).pakkasmarjaBerriesRest('listDeliveryPlaces').then((deliveryPlaces) => {
         const contract = JSON.parse($(e.target).closest('.contract-list-item').attr('data-contract'));
-        const listView = $('.contract-view .contract-list-view');
-        const detailView = $('<div>')
-          .html(pugContractDetails({contract: contract, deliveryPlaces: deliveryPlaces}))
-          .addClass('contract-detail-container')
-          .hide()
-          .appendTo($('.contract-view .view-content-container'));
+        $(document.body).pakkasmarjaBerriesRest('listContractPrices', contract.id).then((contractPrices) => {
+          const activePrices = [];
+          const pastPrices = [];
+          const currentYear = new Date().getFullYear();
+          contractPrices.forEach((contractPrice) => {
+            if (contractPrice.year === currentYear) {
+              activePrices.push(contractPrice);
+            } else if(contractPrice.year === (currentYear - 1) || contractPrice.year === (currentYear - 2)) {
+              pastPrices.push(contractPrice);
+            }
+          });
+          const listView = $('.contract-view .contract-list-view');
+          const detailView = $('<div>')
+            .html(pugContractDetails({contract: contract, deliveryPlaces: deliveryPlaces, activePrices: activePrices, pastPrices: pastPrices}))
+            .addClass('contract-detail-container')
+            .hide()
+            .appendTo($('.contract-view .view-content-container'));
 
-        $(detailView).show('slide', { direction: 'right' }, 200);
-        $(listView).hide('slide', { direction: 'left' }, 200);
+          $(detailView).show('slide', { direction: 'right' }, 200);
+          $(listView).hide('slide', { direction: 'left' }, 200);
+        });
       });
     },
     

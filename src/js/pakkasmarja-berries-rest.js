@@ -36,11 +36,15 @@
       const payload = PakkasmarjaRestClient.Contract.constructFromObject(data);
       return this._getContractsApi().updateContract(data.id, payload);
     },
-    
+
+    listContractPrices: function(contractId) {
+      return this._getContractsApi().listContractPrices(contractId, {sortBy: 'YEAR', sortDir: 'DESC'});
+    },
+
     listDeliveryPlaces: function() {
       return this._getDeliveryPlacesApi().listDeliveryPlaces();
     },
-    
+
     getContractDocumentPDF: function(contractId) {
       return this._getContractsApi().getContractDocumentWithHttpInfo(contractId, new Date().getFullYear(), 'PDF').then((dataAndResponse) => {
         const res = dataAndResponse.response;

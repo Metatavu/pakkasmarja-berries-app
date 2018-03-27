@@ -15,13 +15,29 @@ h3.contract-detail-header
           br
           span Pakkasmarja Oy
     .contract-details-section
-      h3 Takuuhinnat
-      p Takuuhinta jonka yhtiö maksaa viljelijälle
-      p
-        b BONUS:
-        | Sopimusmärään ylittävä määrä, mahdollinen bonus ja maksuehto neuvotellaan aina erikseen.
-      p Kaikki hinnat ovat vähimmäishintoja ja ALV 0%. Toimitusehto on vapaasti yhtiön osoittaman pakastevaraston laiturilla (viljelijä maksaa rahdin). Yhtiöllä on oikeus markkinatilanteen vaatiessa korottaa hintoja haluamallaan tavalla.
-      p Takuuhinta on viljely- ja ostosopimuksen mukainen.
+      if activePrices.length > 0
+        h3 Takuuhinnat
+        p Takuuhinta jonka yhtiö maksaa viljelijälle
+        each activePrice in activePrices
+          .row.prices-row
+            .col-7
+              p
+                b
+                  =activePrice.group
+            .col
+              p
+                b
+                  =activePrice.price +' €'+activePrice.unit
+        if pastPrices.length > 0
+          p
+            a.past-prices-btn(href='#', data-past-prices=JSON.stringify(pastPrices))
+              i.fa.fa-info-circle
+              | edellisten vuosien hinnat
+        p
+          b BONUS:
+          | Sopimusmärään ylittävä määrä, mahdollinen bonus ja maksuehto neuvotellaan aina erikseen.
+        p Kaikki hinnat ovat vähimmäishintoja ja ALV 0%. Toimitusehto on vapaasti yhtiön osoittaman pakastevaraston laiturilla (viljelijä maksaa rahdin). Yhtiöllä on oikeus markkinatilanteen vaatiessa korottaa hintoja haluamallaan tavalla.
+        p Takuuhinta on viljely- ja ostosopimuksen mukainen.
     .contract-details-section
       h3 Määrä
       p Pakkasmarja Oy:n ja viljelijän sopimus pakastukseen toimitettavista marjoista ja niiden hinnoista satokaudella 2018
