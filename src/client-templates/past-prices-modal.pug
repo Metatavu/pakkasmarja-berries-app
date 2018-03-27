@@ -1,0 +1,13 @@
+- var currentYear = 0
+each pastPrice in pastPrices
+  if currentYear !== pastPrice.year
+    h3 
+      =pastPrice.year
+    - currentYear = pastPrice.year
+  .row
+    .col-7
+      p
+        =pastPrice.group
+    .col
+      p
+        =pastPrice.price +' '+pastPrice.unit

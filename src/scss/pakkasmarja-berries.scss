@@ -782,6 +782,18 @@ html {
     .contract-details-content {
       padding-top: 25px;
       
+      .prices-row {
+        p {
+          font-size: 20px;  
+        }
+      }
+      
+      .past-prices-btn {
+        .fa {
+          color: #e01e36;
+        }
+      }
+      
       .contract-terms-header {
         padding: 15px;
       }
