@@ -27,7 +27,7 @@ h3.contract-detail-header
             .col
               p
                 b
-                  =activePrice.price +' €'+activePrice.unit
+                  =activePrice.price +' '+activePrice.unit
         if pastPrices.length > 0
           p
             a.past-prices-btn(href='#', data-past-prices=JSON.stringify(pastPrices))
