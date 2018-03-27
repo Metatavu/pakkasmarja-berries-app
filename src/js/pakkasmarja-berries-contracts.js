@@ -108,61 +108,69 @@
       const contract = JSON.parse($(e.target).closest('.accept-btn').attr('data-contract'));
       contract.proposedQuantity = $('#contractAmountInput').val();
       contract.deliveryPlaceId = $('#contractDeliveryPlaceInput').val();
+      if (contract.proposedQuantity != contract.contractQuantity) {
+        contract.status = 'ON_HOLD';
+      }
       
-      $(document.body).pakkasmarjaBerriesRest('updateUserContract', contract).then((contract) => {
-        $(document.body).pakkasmarjaBerriesRest('getContractDocument', contract.id).then((contractDocument) => {
-          $(document.body).pakkasmarjaBerriesRest('listSignAuthenticationServices').then((authServices) => {
-            const content = $('<div>')
-                .append(contractDocument)
-                .find('.content');
+      $(document.body).pakkasmarjaBerriesRest('updateUserContract', contract).then((updatedContract) => {
+        
+        if (updatedContract.status === 'DRAFT') {
+          $(document.body).pakkasmarjaBerriesRest('getContractDocument', updatedContract.id).then((contractDocument) => {
+            $(document.body).pakkasmarjaBerriesRest('listSignAuthenticationServices').then((authServices) => {
+              const content = $('<div>')
+                  .append(contractDocument)
+                  .find('.content');
 
-            const tempData = {};
-            let currentHeader = "Sopimus";
-            const nodes = content.children();
-            nodes.each((index, element) => {
-              if($(element).is('h1,h2,h3')) {
-                currentHeader = $(element).text();
-              } else {
-                if (typeof(tempData[currentHeader]) === 'undefined') {
-                  tempData[currentHeader] = $('<div>').append($(element));
+              const tempData = {};
+              let currentHeader = "Sopimus";
+              const nodes = content.children();
+              nodes.each((index, element) => {
+                if($(element).is('h1,h2,h3')) {
+                  currentHeader = $(element).text();
                 } else {
-                  tempData[currentHeader].append($(element));
+                  if (typeof(tempData[currentHeader]) === 'undefined') {
+                    tempData[currentHeader] = $('<div>').append($(element));
+                  } else {
+                    tempData[currentHeader].append($(element));
+                  }
                 }
-              }
+              });
+
+              const data = {};
+              $.each(tempData, (header, element) => {
+                data[header] = $(element).html();
+              });
+
+              const detailView = $('.contract-view .contract-details-content .details-container');
+              const termsView = $('<div>')
+                .html(pugContractTerms({authServices: authServices, contract:contract, terms: data, year: new Date().getFullYear()}))
+                .addClass('contract-terms')
+                .hide()
+                .appendTo($('.contract-view .contract-details-content'));
+
+              termsView.find('.btn-link').click();
+              $(detailView).hide('slide', { direction: 'left' }, 200);
+              $(termsView).show('slide', { direction: 'right' }, 200);
             });
-
-            const data = {};
-            $.each(tempData, (header, element) => {
-              data[header] = $(element).html();
-            });
-
-            const detailView = $('.contract-view .contract-details-content .details-container');
-            const termsView = $('<div>')
-              .html(pugContractTerms({authServices: authServices, contract:contract, terms: data, year: new Date().getFullYear()}))
-              .addClass('contract-terms')
-              .hide()
-              .appendTo($('.contract-view .contract-details-content'));
-
-            termsView.find('.btn-link').click();
-            $(detailView).hide('slide', { direction: 'left' }, 200);
-            $(termsView).show('slide', { direction: 'right' }, 200);
           });
-        });
+        } else {
+          this.openListView();
+        }
       });
     },
 
     _onBackBtnClick: function(e) {
-      const listView = $('.contract-view .contract-list-view');
-      const detailView = $('.contract-view .contract-detail-container');
-      
-      $(detailView).hide('slide', { direction: 'left' }, 200);
-      $(listView).show('slide', { direction: 'right' }, 200);
+      this.openListView();
     },
     
     _onContractItemClick: function(e) {
       $('.contract-view .contract-detail-container').remove();
+      const contract = JSON.parse($(e.target).closest('.contract-list-item').attr('data-contract'));
+      if (contract.status === 'ON_HOLD') {
+        bootbox.alert('Tämä sopimus odottaa, että Pakkasmarja tarkistaa annetun ehdotuksen.');
+        return;
+      }
       $(document.body).pakkasmarjaBerriesRest('listDeliveryPlaces').then((deliveryPlaces) => {
-        const contract = JSON.parse($(e.target).closest('.contract-list-item').attr('data-contract'));
         $(document.body).pakkasmarjaBerriesRest('listContractPrices', contract.id).then((contractPrices) => {
           const activePrices = [];
           const pastPrices = [];
@@ -189,7 +197,7 @@
     
     _onPageChange: function (event, data) {
       if (data.activePage === 'contracts') {
-        this._loadContracts();
+        this.reloadContracts();
       }
     },
     
@@ -221,6 +229,23 @@
           console.log(err);
         });
       });
+    },
+    
+    reloadContracts: function() {
+      $('.frozen-list.active-contract-list-container').find('.contract-list-item').remove();
+      $('.fresh-list.active-contract-list-container').find('.contract-list-item').remove();
+      $('.fresh-list.pending-contract-list-container').find('.contract-list-item').remove();
+      $('.frozen-list.pending-contract-list-container').find('.contract-list-item').remove();
+      this._loadContracts();
+    },
+    
+    openListView: function() {
+      const listView = $('.contract-view .contract-list-view');
+      const detailView = $('.contract-view .contract-detail-container');
+      this.reloadContracts();
+
+      $(detailView).hide('slide', { direction: 'left' }, 200);
+      $(listView).show('slide', { direction: 'right' }, 200);      
     }
     
   });

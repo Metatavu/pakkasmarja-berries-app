@@ -5,5 +5,7 @@
   .col
     if contract.status == 'DRAFT'
       span Tarkasta Ehdotus
+    else if contract.status == 'ON_HOLD'
+      span Pakkasmarjan tarkistettavana
     else
       span Sopimus käsittelyssä
