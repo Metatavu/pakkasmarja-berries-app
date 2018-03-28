@@ -1,40 +1,29 @@
-.contract-terms-header
-  h3 Sopimus
-   | 
-   =year
-  p Satokautta #{year} koskeva sopimus:
-#contract-accordion
-  - var count = 0;
-  each text, header in terms
-    .card
-      .card-header
-        h5
-          button.btn.btn-link(data-toggle='collapse', data-target='#contract-section-'+count, aria-expanded='true', aria-controls='contract-section-'+count)
-            =header
-      .collapse.show(id='contract-section-'+count, data-parent='#contract-accordion')
-        .card-body
-          !=text
-    - count++;
-.contract-footer-section
-  .download-pdf-container
-    a.download-contract-btn(href='#', data-contract-id=contract.id) Lataa sopimus PDF - muodossa.
-  .accept-terms-container
-    .form-check
-      input#acceptTerms.form-check-input(type='checkbox')
-      label.form-check-label(for='acceptTerms') Olen lukenut ja hyväksyn sopimusehdot
-  .auth-services-container
-    .form-group
-      label(for='authServiceInput') Tunnistautumispalvelu:
-      select#authServiceInput.form-control
-        each authService in authServices
-          option(value=authService.identifier)
-            =authService.name
-  .ssn-input-container
-    .form-group
-      label(for='ssnInput') Henkilötunnus:
-      input#ssnInput.form-control(name="ssn", type='text', placeholder='Henkilötunnus')
-  .row
-    .col
-      button.btn.btn-default.deny-btn EN HYVÄKSY
-    .col
-      button.btn.btn-default.sign-btn(data-contract-id=contract.id) ALLEKIRJOITA
+.contract-terms-view
+  .contract-terms-header
+    h3 Sopimus
+     | 
+     =year
+    p Satokautta #{year} koskeva sopimus
+  .contract-footer-section
+    .download-pdf-container
+      a.download-contract-btn(href='#', data-contract-id=contract.id) Lataa sopimus PDF - muodossa.
+    .accept-terms-container
+      .form-check
+        input#acceptTerms.form-check-input(type='checkbox')
+        label.form-check-label(for='acceptTerms') Olen lukenut ja hyväksyn sopimusehdot
+    .auth-services-container
+      .form-group
+        label(for='authServiceInput') Tunnistautumispalvelu:
+        select#authServiceInput.form-control
+          each authService in authServices
+            option(value=authService.identifier)
+              =authService.name
+    .ssn-input-container
+      .form-group
+        label(for='ssnInput') Henkilötunnus:
+        input#ssnInput.form-control(name="ssn", type='text', placeholder='Henkilötunnus')
+    .row
+      .col
+        button.btn.btn-default.sign-back-btn TAKAISIN
+      .col
+        button.btn.btn-default.sign-btn(data-contract-id=contract.id) ALLEKIRJOITA

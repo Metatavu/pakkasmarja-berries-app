@@ -775,12 +775,11 @@ html {
     .contract-detail-header {
       color: #e01e36;
       padding: 15px;
-      padding-bottom: 25px;
       text-transform: none;
+      margin-bottom: 0;
     }
     
     .contract-details-content {
-      padding-top: 25px;
       
       .prices-row {
         p {
@@ -791,6 +790,12 @@ html {
       .past-prices-btn {
         .fa {
           color: #e01e36;
+        }
+      }
+      
+      #contract-accordion {
+        h3 {
+          padding-left: 15px;
         }
       }
       
@@ -863,7 +868,9 @@ html {
           background-color: #fff; 
         }
         
+        sign-back-btn,
         .accept-btn,
+        .contract-back-btn,
         .sign-btn {
           color: #fff;
           background-color: #e01e36; 
