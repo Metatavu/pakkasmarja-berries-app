@@ -29,7 +29,7 @@
     },
     
     createContractDocumentSignRequest: function(contractId, ssn, authService) {
-      return this._getContractsApi().createContractDocumentSignRequest(contractId, new Date().getFullYear(), ssn, authService, {});
+      return this._getContractsApi().createContractDocumentSignRequest(contractId, (new Date()).getFullYear(), ssn, authService, {});
     },
     
     updateUserContract: function (data) {
@@ -46,14 +46,14 @@
     },
 
     getContractDocumentPDF: function(contractId) {
-      return this._getContractsApi().getContractDocumentWithHttpInfo(contractId, new Date().getFullYear(), 'PDF').then((dataAndResponse) => {
+      return this._getContractsApi().getContractDocumentWithHttpInfo(contractId, (new Date()).getFullYear(), 'PDF').then((dataAndResponse) => {
         const res = dataAndResponse.response;
         return res.body;
       });
     },
     
     getContractDocument: function(contractId) {
-      return this._getContractsApi().getContractDocumentWithHttpInfo(contractId, new Date().getFullYear(), 'HTML').then((dataAndResponse) => {
+      return this._getContractsApi().getContractDocumentWithHttpInfo(contractId, (new Date()).getFullYear(), 'HTML').then((dataAndResponse) => {
         const res = dataAndResponse.response;
         return this._blobToString(res.body);
       });

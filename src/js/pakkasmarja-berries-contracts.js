@@ -132,7 +132,7 @@
           $(document.body).pakkasmarjaBerriesRest('listSignAuthenticationServices').then((authServices) => {
             const detailView = $('.contract-view .contract-details-content .details-container');
             const termsView = $('<div>')
-              .html(pugContractTerms({authServices: authServices, contract:contract, year: new Date().getFullYear()}))
+              .html(pugContractTerms({authServices: authServices, contract:contract, year: (new Date()).getFullYear()}))
               .addClass('contract-terms')
               .hide()
               .appendTo($('.contract-view .contract-details-content'));
@@ -190,7 +190,7 @@
           
             const activePrices = [];
             const pastPrices = [];
-            const currentYear = new Date().getFullYear();
+            const currentYear = (new Date()).getFullYear();
             contractPrices.forEach((contractPrice) => {
               if (contractPrice.year === currentYear) {
                 activePrices.push(contractPrice);
