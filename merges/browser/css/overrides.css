@@ -103,8 +103,8 @@ html, body {
   }
 }
 
-.contract-view .view-content-container {
-  height: calc(100vh - 190px);
+.contract-view .view-content-container .contract-details-content {
+  height: calc(100vh - 260px);
   overflow-y: auto;
-  overflow-x: hidden; 
+  overflow-x: hidden;
 }
