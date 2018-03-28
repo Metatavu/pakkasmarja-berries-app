@@ -27,7 +27,6 @@
     },
     
     _onContractQuantityChange: function(e) {
-      console.log("huurduuur");
       const currentQuantity = $(e.target).val();
       const contractQuantity = $(e.target).attr('data-contract-quantity');
       
