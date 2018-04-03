@@ -16,7 +16,8 @@
       $(this.element).on('click', '.download-contract-btn', this._onDownloadContractBtnClick.bind(this));
       $(this.element).on('click', '.past-prices-btn', this._onPastPricesBtnClick.bind(this));
       $(this.element).on('click', '.deny-btn', this._onDenyBtnClick.bind(this));
-      $(this.element).on('keyup', '#contractAmountInput', this._onContractQuantityChange.bind(this));
+      $(this.element).on('keyup', '#contractAmountInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
+      $(this.element).on('change', '#contractDeliveryPlaceInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
     },
 
     _onDenyBtnClick: function(e) {
@@ -53,12 +54,14 @@
         message:  pugPastPricesModal({pastPrices: pastPrices})
       });
     },
-    
-    _onContractQuantityChange: function(e) {
-      const currentQuantity = $(e.target).val();
-      const contractQuantity = $(e.target).attr('data-contract-quantity');
+
+    _onContractQuantityOrDeliveryPlaceChange: function(e) {
+      const currentQuantity = $("#contractAmountInput").val();
+      const contractQuantity = $("#contractAmountInput").attr('data-contract-quantity');
+      const currentDeliveryPlaceId = $("#contractDeliveryPlaceInput").val();
+      const contractDeliveryPlaceId = $("#contractDeliveryPlaceInput").attr('data-contract-delivery-place-id');
       
-      if (currentQuantity != contractQuantity) {
+      if (currentQuantity != contractQuantity || currentDeliveryPlaceId != contractDeliveryPlaceId) {
         $('.accept-btn').text('EHDOTA MUUTOSTA');
       } else {
         $('.accept-btn').text('HYVÄKSYN');
@@ -149,10 +152,10 @@
     _onAcceptBtnClick: function(e) {
       const contract = JSON.parse($(e.target).closest('.accept-btn').attr('data-contract'));
       contract.proposedQuantity = $('#contractAmountInput').val();
-      contract.deliveryPlaceId = $('#contractDeliveryPlaceInput').val();
+      contract.proposedDeliveryPlaceId = $('#contractDeliveryPlaceInput').val();
       contract.quantityComment = $('#contractQuantityCommentInput').val();
       contract.deliveryPlaceComment = $('#contractDeliveryPlaceCommentInput').val();
-      if (contract.proposedQuantity != contract.contractQuantity) {
+      if (contract.proposedQuantity != contract.contractQuantity || contract.proposedDeliveryPlaceId != contract.deliveryPlaceId) {
         contract.status = 'ON_HOLD';
       }
       

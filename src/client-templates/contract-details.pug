@@ -40,10 +40,10 @@ h3.contract-detail-header
         p Takuuhinta on viljely- ja ostosopimuksen mukainen.
     .contract-details-section
       h3 Määrä
-      p Pakkasmarja Oy:n ja viljelijän sopimus pakastukseen toimitettavista marjoista ja niiden hinnoista satokaudella 2018
+      p Pakkasmarja Oy:n ja viljelijän sopimus pakastukseen toimitettavista marjoista ja niiden hinnoista satokaudella #{(new Date()).getFullYear()}
       .form-group
         label(for='contractAmountInput') Määrä
-        input#contractAmountInput.form-control(type='number', value=contract.proposedQuantity, data-contract-quantity=contract.proposedQuantity)
+        input#contractAmountInput.form-control(type='number', value=contract.proposedQuantity, data-contract-quantity=contract.contractQuantity)
       .form-group
         p 
           |Pakkasmarjan ehdotus: 
@@ -54,10 +54,18 @@ h3.contract-detail-header
         textarea#contractQuantityCommentInput.form-control(value=contract.quantityComment, rows='3')
     .contract-details-section
       h3 Toimituspaikka
-      select#contractDeliveryPlaceInput.form-control
+      select#contractDeliveryPlaceInput.form-control(data-contract-delivery-place-id=contract.deliveryPlaceId)
         each deliveryPlace in deliveryPlaces
           option(value=deliveryPlace.id, selected=contract.deliveryPlaceId===deliveryPlace.id)
             =deliveryPlace.name
+      .form-group
+        br
+        p 
+          |Pakkasmarjan ehdotus: 
+          each deliveryPlace in deliveryPlaces
+            if deliveryPlace.id===contract.proposedDeliveryPlaceId
+              b
+                =deliveryPlace.name
       .form-group
         label(for='contractDeliveryPlaceCommentInput') Kommentti
         textarea#contractDeliveryPlaceCommentInput.form-control(value=contract.deliveryPlaceComment, rows='3')
