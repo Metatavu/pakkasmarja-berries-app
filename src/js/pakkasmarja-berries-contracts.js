@@ -15,7 +15,35 @@
       $(this.element).on('click', '.sign-btn', this._onSignBtnClick.bind(this));
       $(this.element).on('click', '.download-contract-btn', this._onDownloadContractBtnClick.bind(this));
       $(this.element).on('click', '.past-prices-btn', this._onPastPricesBtnClick.bind(this));
+      $(this.element).on('click', '.deny-btn', this._onDenyBtnClick.bind(this));
       $(this.element).on('keyup', '#contractAmountInput', this._onContractQuantityChange.bind(this));
+    },
+
+    _onDenyBtnClick: function(e) {
+      bootbox.prompt({
+        title: "Haluatko varmasti hylätä sopimuksen? Kirjoita perustelu alle.",
+        inputType: 'textarea',
+        buttons: {
+            confirm: {
+                label: 'Hylkää sopimus',
+                className: 'btn-danger'
+            },
+            cancel: {
+                label: 'Peruuta',
+                className: 'btn-info'
+            }
+        },
+        callback: (result) => {
+          if (result) {
+            const contract = JSON.parse($(e.target).closest('.deny-btn').attr('data-contract'));
+            contract.status = 'REJECTED';
+            contract.rejectComment = result;
+            $(document.body).pakkasmarjaBerriesRest('updateUserContract', contract).then((updatedContract) => {
+              this.openListView();
+            });
+          }
+        }
+      });
     },
 
     _onPastPricesBtnClick: function(e) {
@@ -163,6 +191,10 @@
         bootbox.alert('Tämä sopimus odottaa, että Pakkasmarja tarkistaa annetun ehdotuksen.');
         return;
       }
+      if (contract.status === 'REJECTED') {
+        bootbox.alert('Olet hylännyt tämän sopimuksen. Jos näin ei pitäisi olla, ota yhteyttä Pakkasmarjaan.');
+        return;
+      }
       $(document.body).pakkasmarjaBerriesRest('listDeliveryPlaces').then((deliveryPlaces) => {
         $(document.body).pakkasmarjaBerriesRest('listContractPrices', contract.id).then((contractPrices) => {
           $(document.body).pakkasmarjaBerriesRest('getContractDocument', contract.id).then((contractDocument) => {
@@ -226,7 +258,7 @@
         
         $(document.body).pakkasmarjaBerriesRest('listUserContracts').then((contracts) => {
           const activeContracts = contracts.filter(contract => contract.status === 'APPROVED');
-          const pendingContracts = contracts.filter(contract => contract.status === 'DRAFT' || contract.status === 'ON_HOLD' );
+          const pendingContracts = contracts.filter(contract => contract.status === 'DRAFT' || contract.status === 'ON_HOLD' || contract.status === 'REJECTED' );
           
           activeContracts.forEach((activeContract) => {
             activeContract.contact = contact;
