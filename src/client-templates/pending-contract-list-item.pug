@@ -7,5 +7,7 @@
       span Tarkasta Ehdotus
     else if contract.status == 'ON_HOLD'
       span Pakkasmarjan tarkistettavana
+    else if contract.status == 'REJECTED'
+      span Hylätty
     else
       span Sopimus käsittelyssä

@@ -79,7 +79,7 @@ h3.contract-detail-header
         .col
           button.btn.btn-default.contract-back-btn TAKAISIN
         .col
-          button.btn.btn-default.deny-btn EN HYVÄKSY
+          button.btn.btn-default.deny-btn(data-contract=JSON.stringify(contract)) EN HYVÄKSY
         .col
           button.btn.btn-default.accept-btn(data-contract=JSON.stringify(contract)) HYVÄKSYN
       
