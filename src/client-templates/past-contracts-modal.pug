@@ -1,0 +1,15 @@
+table.table
+  thead
+    tr
+      th Vuosi
+      th Sovittu määrä (kg)
+      th Toteutunut määrä (kg)
+  tbody
+    each pastContract in pastContracts
+      tr
+        td
+          =pastContract.year
+        td
+          =pastContract.contractQuantity
+        td
+          =pastContract.deliveredQuantity
