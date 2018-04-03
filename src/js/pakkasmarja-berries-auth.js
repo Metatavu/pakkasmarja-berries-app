@@ -6,7 +6,8 @@
   $.widget("custom.pakkasmarjaBerriesAuth", {
     
     options: {
-      serverUrl: 'http://localhost:8000'
+      serverUrl: 'http://localhost:8000',
+      minTokenValidity: 5
     },
     
     _create : function() {
@@ -67,7 +68,13 @@
     },
     
     token: function () {
-      return this._keycloak.token;
+      return new Promise((resolve, reject) => {
+        this._keycloak.updateToken(this.options.minTokenValidity).success(() => {
+          resolve(this._keycloak.token);
+        }).error(() => {
+          reject();
+        });
+      });
     },
     
     sessionId: function () {
@@ -87,17 +94,19 @@
     },
     
     join: function () {
-      $.post(this.options.serverUrl + '/join', {
-        token: this.token()
-      }, $.proxy(function (data) {
-        this._sessionId = data.sessionId;
-        this.userId = data.userId;
-        $(document.body).pakkasmarjaBerriesPushNotifications('subscribeTopic', data.userId);
-        this.element.trigger("joined");
-      }, this))
-      .fail( $.proxy(function () {
-        this.element.trigger("join-error");
-      }, this));
+      this.token().then((accessToken) => {
+        $.post(this.options.serverUrl + '/join', {
+          token: accessToken
+        }, $.proxy(function (data) {
+          this._sessionId = data.sessionId;
+          this.userId = data.userId;
+          $(document.body).pakkasmarjaBerriesPushNotifications('subscribeTopic', data.userId);
+          this.element.trigger("joined");
+        }, this))
+        .fail( $.proxy(function () {
+          this.element.trigger("join-error");
+        }, this));
+      });
     },
     
     isAppManager: function() {
