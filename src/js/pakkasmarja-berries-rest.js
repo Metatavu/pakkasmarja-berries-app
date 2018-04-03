@@ -14,9 +14,11 @@
     },
     
     listSignAuthenticationServices: function() {
-      return this._prepareRequest(this._getSignAuthenticationServicesApi()).then((api) => {
-        return api.listSignAuthenticationServices();
-      });
+      return this._prepareRequest(this._getSignAuthenticationServicesApi())
+        .then((api) => {
+          return api.listSignAuthenticationServices();
+        })
+       .catch(this._handleError);
     },
     
     findUserContact: function () {
@@ -24,7 +26,8 @@
       return this._prepareRequest(this._getContactsApi())
         .then((api) => {
           return api.findContact(userId);
-        });
+        })
+        .catch(this._handleError);
     },
     
     updateUserContact: function (data) {
@@ -33,14 +36,16 @@
       return this._prepareRequest(this._getContactsApi())
         .then((api) => {
           return api.updateContact(userId, payload);
-        });
+        })
+        .catch(this._handleError);
     },
     
     createContractDocumentSignRequest: function(contractId, ssn, authService) {
       return this._prepareRequest(this._getContractsApi())
         .then((api) => {
           return api.createContractDocumentSignRequest(contractId, (new Date()).getFullYear(), ssn, authService, {});
-        });
+        })
+        .catch(this._handleError);
     },
     
     updateUserContract: function (data) {
@@ -48,21 +53,24 @@
       return this._prepareRequest(this._getContractsApi())
         .then((api) => {
           return api.updateContract(data.id, payload);
-        });
+        })
+        .catch(this._handleError);
     },
 
     listContractPrices: function(contractId) {
       return this._prepareRequest(this._getContractsApi())
         .then((api) => {
           return api.listContractPrices(contractId, {sortBy: 'YEAR', sortDir: 'DESC'});
-        });
+        })
+        .catch(this._handleError);
     },
 
     listDeliveryPlaces: function() {
       return this._prepareRequest(this._getDeliveryPlacesApi())
         .then((api) => {
           return api.listDeliveryPlaces();
-        });
+        })
+        .catch(this._handleError);
     },
 
     getContractDocumentPDF: function(contractId) {
@@ -72,7 +80,8 @@
             const res = dataAndResponse.response;
             return res.body;
           });
-        });
+        })
+        .catch(this._handleError);
     },
     
     getContractDocument: function(contractId) {
@@ -82,7 +91,8 @@
             const res = dataAndResponse.response;
             return this._blobToString(res.body);
           });
-        });
+        })
+        .catch(this._handleError);
     },
     
     listUserContracts: function (data) {
@@ -103,7 +113,8 @@
                 return contracts;
               });
             });
-        });
+        })
+        .catch(this._handleError);
     },
     
     findItemGroup: function(id) {
@@ -162,7 +173,16 @@
         };
         reader.readAsText(blob);
       });
-    }
+    },
+    
+    _handleError: function(err) {
+      console.error('Error communicating with rest api', err);
+      new Noty({
+        timeout: 5000,
+        text: 'Virhe yhteydessä palvelimeen. Tarkista että tiedot on syötetty oikein ja yritä myöhemmin uudelleen.',
+        type: 'error'
+      }).show();
+    } 
     
   });
   

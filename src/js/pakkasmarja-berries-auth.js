@@ -72,6 +72,7 @@
         this._keycloak.updateToken(this.options.minTokenValidity).success(() => {
           resolve(this._keycloak.token);
         }).error(() => {
+          this.logout();
           reject();
         });
       });
