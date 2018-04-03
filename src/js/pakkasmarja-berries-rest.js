@@ -137,12 +137,12 @@
       return $(document.body).pakkasmarjaBerriesAuth('getUserId');
     },
     
-    _prepareRequest: function(apiGetter) {
+    _prepareRequest: function(api) {
       return new Promise((resolve, reject) => {
         this._getAccessToken()
           .then((accessToken) => {
             PakkasmarjaRestClient.ApiClient.instance.authentications.bearer.apiKey = accessToken;
-            resolve(apiGetter);
+            resolve(api);
         });
       });
     },
