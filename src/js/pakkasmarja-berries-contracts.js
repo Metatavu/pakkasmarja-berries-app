@@ -122,6 +122,8 @@
       const contract = JSON.parse($(e.target).closest('.accept-btn').attr('data-contract'));
       contract.proposedQuantity = $('#contractAmountInput').val();
       contract.deliveryPlaceId = $('#contractDeliveryPlaceInput').val();
+      contract.quantityComment = $('#contractQuantityCommentInput').val();
+      contract.deliveryPlaceComment = $('#contractDeliveryPlaceCommentInput').val();
       if (contract.proposedQuantity != contract.contractQuantity) {
         contract.status = 'ON_HOLD';
       }

@@ -43,13 +43,24 @@ h3.contract-detail-header
       p Pakkasmarja Oy:n ja viljelijän sopimus pakastukseen toimitettavista marjoista ja niiden hinnoista satokaudella 2018
       .form-group
         label(for='contractAmountInput') Määrä
-        input#contractAmountInput.form-control(type='number', value=contract.contractQuantity, data-contract-quantity=contract.contractQuantity)
+        input#contractAmountInput.form-control(type='number', value=contract.proposedQuantity, data-contract-quantity=contract.proposedQuantity)
+      .form-group
+        p 
+          |Pakkasmarjan ehdotus: 
+          b 
+            =contract.contractQuantity + ' kg'
+      .form-group
+        label(for='contractQuantityCommentInput') Kommentti
+        textarea#contractQuantityCommentInput.form-control(value=contract.quantityComment, rows='3')
     .contract-details-section
       h3 Toimituspaikka
       select#contractDeliveryPlaceInput.form-control
         each deliveryPlace in deliveryPlaces
           option(value=deliveryPlace.id, selected=contract.deliveryPlaceId===deliveryPlace.id)
             =deliveryPlace.name
+      .form-group
+        label(for='contractDeliveryPlaceCommentInput') Kommentti
+        textarea#contractDeliveryPlaceCommentInput.form-control(value=contract.deliveryPlaceComment, rows='3')
     #contract-accordion
       h3 Sopimus
       - var count = 0;
