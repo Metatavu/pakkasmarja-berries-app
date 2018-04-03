@@ -51,7 +51,8 @@ h3.contract-detail-header
             =contract.contractQuantity + ' kg'
       .form-group
         label(for='contractQuantityCommentInput') Kommentti
-        textarea#contractQuantityCommentInput.form-control(value=contract.quantityComment, rows='3')
+        textarea#contractQuantityCommentInput.form-control(rows='3')
+          =contract.quantityComment
     .contract-details-section
       h3 Toimituspaikka
       select#contractDeliveryPlaceInput.form-control(data-contract-delivery-place-id=contract.deliveryPlaceId)
@@ -63,12 +64,13 @@ h3.contract-detail-header
         p 
           |Pakkasmarjan ehdotus: 
           each deliveryPlace in deliveryPlaces
-            if deliveryPlace.id===contract.deliveryPlace
+            if deliveryPlace.id===contract.deliveryPlaceId
               b
                 =deliveryPlace.name
       .form-group
         label(for='contractDeliveryPlaceCommentInput') Kommentti
-        textarea#contractDeliveryPlaceCommentInput.form-control(value=contract.deliveryPlaceComment, rows='3')
+        textarea#contractDeliveryPlaceCommentInput.form-control(rows='3')
+          =contract.deliveryPlaceComment
     #contract-accordion
       h3 Sopimus
       - var count = 0;
