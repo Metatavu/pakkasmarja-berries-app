@@ -99,7 +99,7 @@
       const userId = this._getUserId();
       return this._prepareRequest(this._getContractsApi())
         .then((api) => {
-          return api.listContracts()
+          return api.listContracts({maxResults: 100})
             .then((contracts) => {
               const itemGroupPromises = [];
               contracts.forEach((contract) => {
