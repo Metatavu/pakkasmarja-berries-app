@@ -56,14 +56,14 @@ h3.contract-detail-header
       h3 Toimituspaikka
       select#contractDeliveryPlaceInput.form-control(data-contract-delivery-place-id=contract.deliveryPlaceId)
         each deliveryPlace in deliveryPlaces
-          option(value=deliveryPlace.id, selected=contract.deliveryPlaceId===deliveryPlace.id)
+          option(value=deliveryPlace.id, selected=contract.proposedDeliveryPlaceId===deliveryPlace.id)
             =deliveryPlace.name
       .form-group
         br
         p 
           |Pakkasmarjan ehdotus: 
           each deliveryPlace in deliveryPlaces
-            if deliveryPlace.id===contract.proposedDeliveryPlaceId
+            if deliveryPlace.id===contract.deliveryPlace
               b
                 =deliveryPlace.name
       .form-group
