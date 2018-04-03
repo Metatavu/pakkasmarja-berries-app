@@ -171,7 +171,9 @@
               .appendTo($('.contract-view .contract-details-content'));
 
             $(detailView).hide('slide', { direction: 'left' }, 200);
-            $(termsView).show('slide', { direction: 'right' }, 200);
+            $(termsView).show('slide', { direction: 'right' }, 200, () => {
+              this._updateProgressIndicator(2);
+            });
           });
         } else {
           this.openListView();
@@ -184,6 +186,7 @@
     },
     
     _onBackToDetailsClick: function(e) {
+      this._updateProgressIndicator(1);
       this.openContractDetailsView();
     },
     
@@ -243,7 +246,10 @@
               .appendTo($('.contract-view .view-content-container'));
 
             detailView.find('.btn-link').click();
-            $(detailView).show('slide', { direction: 'right' }, 200);
+            $(detailView).show('slide', { direction: 'right' }, 200, () => {
+              this._showProgressIndicator();
+              this._updateProgressIndicator(1);
+            });
             $(listView).hide('slide', { direction: 'left' }, 200);
           });
         });
@@ -254,6 +260,21 @@
       if (data.activePage === 'contracts') {
         this.reloadContracts();
       }
+    },
+    
+    _showProgressIndicator: function() {
+      $('.contract-view-header-text').hide();
+      $('.contract-progress-indicator').show();
+    },
+    
+    _hideProgressIndicator: function() {
+      $('.contract-progress-indicator').hide();
+      $('.contract-view-header-text').show();
+    },
+    
+    _updateProgressIndicator: function(phase) {
+      $('.contract-progress-indicator').find('.fa').removeClass('active');
+      $('.contract-progress-indicator').find(`.fa[data-phase="${phase}"]`).addClass('active');
     },
     
     _loadContracts: function () {
@@ -295,6 +316,7 @@
     },
     
     openListView: function() {
+      this._hideProgressIndicator();
       const listView = $('.contract-view .contract-list-view');
       const detailView = $('.contract-view .contract-detail-container');
       this.reloadContracts();

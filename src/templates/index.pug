@@ -86,7 +86,13 @@ html
         .swiper-slide
           .container-fluid.list-view.contract-view
             .view-header-container
-              h1 Viljely- ja ostosopimukset
+              h1.contract-view-header-text Viljely- ja ostosopimukset
+              h1.contract-progress-indicator
+                i.fa.fa-list-alt(data-phase='1')
+                i.fa.fa-arrow-right
+                i.fa.fa-pencil(data-phase='2')
+                i.fa.fa-arrow-right
+                i.fa.fa-check
             .view-content-container
               .contract-list-view
                 .contract-list-container
