@@ -49,6 +49,11 @@ h3.contract-detail-header
           |Pakkasmarjan ehdotus: 
           b 
             =contract.contractQuantity + ' kg'
+      if pastContracts.length > 0
+        p
+          a.past-contracts-btn(href='#', data-past-contracts=JSON.stringify(pastContracts))
+            i.fa.fa-info-circle
+            | edellisten vuosien määrät
       .form-group
         label(for='contractQuantityCommentInput') Kommentti
         textarea#contractQuantityCommentInput.form-control(rows='3')

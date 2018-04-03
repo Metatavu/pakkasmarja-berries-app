@@ -15,6 +15,7 @@
       $(this.element).on('click', '.sign-btn', this._onSignBtnClick.bind(this));
       $(this.element).on('click', '.download-contract-btn', this._onDownloadContractBtnClick.bind(this));
       $(this.element).on('click', '.past-prices-btn', this._onPastPricesBtnClick.bind(this));
+      $(this.element).on('click', '.past-contracts-btn', this._onPastContractsBtnClick.bind(this));
       $(this.element).on('click', '.deny-btn', this._onDenyBtnClick.bind(this));
       $(this.element).on('keyup', '#contractAmountInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
       $(this.element).on('change', '#contractDeliveryPlaceInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
@@ -52,6 +53,14 @@
       bootbox.dialog({
         size: 'large',
         message:  pugPastPricesModal({pastPrices: pastPrices})
+      });
+    },
+
+    _onPastContractsBtnClick: function(e) {
+      const pastContracts = JSON.parse($(e.target).closest('.past-contracts-btn').attr('data-past-contracts'));
+      bootbox.dialog({
+        size: 'large',
+        message:  pugPastContractsModal({pastContracts: pastContracts})
       });
     },
 
@@ -204,53 +213,59 @@
       $(document.body).pakkasmarjaBerriesRest('listDeliveryPlaces').then((deliveryPlaces) => {
         $(document.body).pakkasmarjaBerriesRest('listContractPrices', contract.id).then((contractPrices) => {
           $(document.body).pakkasmarjaBerriesRest('getContractDocument', contract.id).then((contractDocument) => {
-            const content = $('<div>')
-                .append(contractDocument)
-                .find('.content');
+            $(document.body).pakkasmarjaBerriesRest('listPastUserContractsByItemGroupId', contract.itemGroup.id).then((pastContracts) => {
+              pastContracts.sort((c1, c2) => {
+                return c2.year - c1.year;
+              });
+              const recentPastContracts = pastContracts.slice(0, 2);
+              const content = $('<div>')
+                  .append(contractDocument)
+                  .find('.content');
 
-            const tempData = {};
-            let currentHeader = "Sopimus";
-            const nodes = content.children();
-            nodes.each((index, element) => {
-              if($(element).is('h1,h2,h3')) {
-                currentHeader = $(element).text();
-              } else {
-                if (typeof(tempData[currentHeader]) === 'undefined') {
-                  tempData[currentHeader] = $('<div>').append($(element));
+              const tempData = {};
+              let currentHeader = "Sopimus";
+              const nodes = content.children();
+              nodes.each((index, element) => {
+                if($(element).is('h1,h2,h3')) {
+                  currentHeader = $(element).text();
                 } else {
-                  tempData[currentHeader].append($(element));
+                  if (typeof(tempData[currentHeader]) === 'undefined') {
+                    tempData[currentHeader] = $('<div>').append($(element));
+                  } else {
+                    tempData[currentHeader].append($(element));
+                  }
                 }
-              }
-            });
+              });
 
-            const data = {};
-            $.each(tempData, (header, element) => {
-              data[header] = $(element).html();
-            });
-          
-            const activePrices = [];
-            const pastPrices = [];
-            const currentYear = (new Date()).getFullYear();
-            contractPrices.forEach((contractPrice) => {
-              if (contractPrice.year === currentYear) {
-                activePrices.push(contractPrice);
-              } else if(contractPrice.year === (currentYear - 1) || contractPrice.year === (currentYear - 2)) {
-                pastPrices.push(contractPrice);
-              }
-            });
-            const listView = $('.contract-view .contract-list-view');
-            const detailView = $('<div>')
-              .html(pugContractDetails({contract: contract, deliveryPlaces: deliveryPlaces, activePrices: activePrices, terms: data, pastPrices: pastPrices}))
-              .addClass('contract-detail-container')
-              .hide()
-              .appendTo($('.contract-view .view-content-container'));
+              const data = {};
+              $.each(tempData, (header, element) => {
+                data[header] = $(element).html();
+              });
 
-            detailView.find('.btn-link').click();
-            $(detailView).show('slide', { direction: 'right' }, 200, () => {
-              this._showProgressIndicator();
-              this._updateProgressIndicator(1);
+              const activePrices = [];
+              const pastPrices = [];
+              const currentYear = (new Date()).getFullYear();
+              contractPrices.forEach((contractPrice) => {
+                if (contractPrice.year === currentYear) {
+                  activePrices.push(contractPrice);
+                } else if(contractPrice.year === (currentYear - 1) || contractPrice.year === (currentYear - 2)) {
+                  pastPrices.push(contractPrice);
+                }
+              });
+              const listView = $('.contract-view .contract-list-view');
+              const detailView = $('<div>')
+                .html(pugContractDetails({contract: contract, deliveryPlaces: deliveryPlaces, activePrices: activePrices, terms: data, pastPrices: pastPrices, pastContracts: recentPastContracts}))
+                .addClass('contract-detail-container')
+                .hide()
+                .appendTo($('.contract-view .view-content-container'));
+
+              detailView.find('.btn-link').click();
+              $(detailView).show('slide', { direction: 'right' }, 200, () => {
+                this._showProgressIndicator();
+                this._updateProgressIndicator(1);
+              });
+              $(listView).hide('slide', { direction: 'left' }, 200);
             });
-            $(listView).hide('slide', { direction: 'left' }, 200);
           });
         });
       });

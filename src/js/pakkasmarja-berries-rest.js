@@ -116,6 +116,14 @@
         })
         .catch(this._handleError);
     },
+
+    listPastUserContractsByItemGroupId: function (itemGroupId) {
+      return this._prepareRequest(this._getContractsApi())
+        .then((api) => {
+          return api.listContracts({status: 'TERMINATED', itemGroupId: itemGroupId, maxResults: 10});
+        })
+        .catch(this._handleError);
+    },
     
     findItemGroup: function(id) {
       return this._prepareRequest(this._getItemGroupsApi())
