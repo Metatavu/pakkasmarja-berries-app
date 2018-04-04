@@ -771,6 +771,11 @@ html {
           border: 1px solid #fff;
           border-radius: 50%;
         }
+
+        @media (max-width: 991.98px) {
+          font-size: 27px;
+        }
+        
       }
 
       .fa-arrow-right {
@@ -779,9 +784,12 @@ html {
         font-size: 25px;
         vertical-align: middle;
         color: rgba(255, 255, 255, 0.3);
+
+        @media (max-width: 991.98px) { 
+          font-size: 20px;
+        }
       }
     }
-    
   }
   
   .contract-detail-container {
@@ -899,12 +907,18 @@ html {
           background-color: #fff; 
         }
         
-        sign-back-btn,
+        .sign-back-btn,
         .accept-btn,
         .contract-back-btn,
         .sign-btn {
           color: #fff;
           background-color: #e01e36; 
+        }
+        
+        .accept-btn {
+          @media (max-width: 767.98px) { 
+            margin-top: 15px;
+          }
         }
       }
       

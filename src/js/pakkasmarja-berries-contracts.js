@@ -8,7 +8,7 @@
     
     _create: function () {
       $(document.body).on('pageChange', $.proxy(this._onPageChange, this));
-      $(this.element).on('click', '.contract-list-item', this._onContractItemClick.bind(this));                                                                                                                                                                                                                                                                                                                                                                                  
+      $(this.element).on('click', '.pending-contract-list-item', this._onContractItemClick.bind(this));                                                                                                                                                                                                                                                                                                                                                                                  
       $(this.element).on('click', '.contract-back-btn', this._onBackBtnClick.bind(this));
       $(this.element).on('click', '.sign-back-btn', this._onBackToDetailsClick.bind(this));
       $(this.element).on('click', '.accept-btn', this._onAcceptBtnClick.bind(this));

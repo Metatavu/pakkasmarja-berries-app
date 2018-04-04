@@ -108,3 +108,9 @@ html, body {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.contract-view .view-content-container .contract-list-view {
+  height: calc(100vh - 175px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
