@@ -210,6 +210,11 @@
         bootbox.alert('Olet hylännyt tämän sopimuksen. Jos näin ei pitäisi olla, ota yhteyttä Pakkasmarjaan.');
         return;
       }
+
+      $('<i>')
+        .addClass('fa fa-spinner fa-spin')
+        .appendTo($(e.target).closest('.contract-list-item'));
+
       $(document.body).pakkasmarjaBerriesRest('listDeliveryPlaces').then((deliveryPlaces) => {
         $(document.body).pakkasmarjaBerriesRest('listContractPrices', contract.id).then((contractPrices) => {
           $(document.body).pakkasmarjaBerriesRest('getContractDocument', contract.id).then((contractDocument) => {
@@ -296,6 +301,7 @@
       $(document.body).pakkasmarjaBerriesRest('findUserContact').then((contact) => {
         
         $(document.body).pakkasmarjaBerriesRest('listUserContracts').then((contracts) => {
+          this._removeContractLoaders();
           const activeContracts = contracts.filter(contract => contract.status === 'APPROVED');
           const pendingContracts = contracts.filter(contract => contract.status === 'DRAFT' || contract.status === 'ON_HOLD' || contract.status === 'REJECTED' );
           
@@ -322,11 +328,28 @@
       });
     },
     
+    _emptyContractList: function(list) {
+       $(list)
+        .find('.contract-list-item')
+        .remove();
+        
+       $('<i>')
+        .addClass('contract-list-loader fa fa-spinner fa-spin')
+        .appendTo($(list));
+    },
+    
+    _removeContractLoaders: function() {
+      $('.frozen-list.active-contract-list-container').find('.contract-list-loader').remove();
+      $('.fresh-list.active-contract-list-container').find('.contract-list-loader').remove();
+      $('.fresh-list.pending-contract-list-container').find('.contract-list-loader').remove();
+      $('.frozen-list.pending-contract-list-container').find('.contract-list-loader').remove();
+    },
+    
     reloadContracts: function() {
-      $('.frozen-list.active-contract-list-container').find('.contract-list-item').remove();
-      $('.fresh-list.active-contract-list-container').find('.contract-list-item').remove();
-      $('.fresh-list.pending-contract-list-container').find('.contract-list-item').remove();
-      $('.frozen-list.pending-contract-list-container').find('.contract-list-item').remove();
+      this._emptyContractList($('.frozen-list.active-contract-list-container'));
+      this._emptyContractList($('.fresh-list.active-contract-list-container'));
+      this._emptyContractList($('.fresh-list.pending-contract-list-container'));
+      this._emptyContractList($('.frozen-list.pending-contract-list-container'));
       this._loadContracts();
     },
     

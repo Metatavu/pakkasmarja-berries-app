@@ -746,6 +746,13 @@ html {
     }
   }
   
+  .contract-list-loader {
+    text-align: center;
+    display: block;
+    font-size: 35px;
+    padding: 35px;
+  }
+  
   .view-header-container {
     background: #e01e36;
     padding: 15px;
@@ -954,6 +961,13 @@ html {
         font-weight: bold;
         padding: 15px;
         font-size: 15px;
+        
+        .fa-spinner {
+          position: absolute;
+          right: 20px;
+          margin-top: 1px;
+          font-size: 22px;
+        }
       }
     }
     
