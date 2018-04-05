@@ -30,6 +30,10 @@
       this.element.on('authenticated', $.proxy(this._onAuthenticated, this));
       this.element.on('joined', $.proxy(this._onJoined, this));
       
+      this.element.pakkasmarjaBerriesAppConfig({
+        serverUrl: serverUrl
+      });
+      
       this.element.pakkasmarjaBerriesClient({
         wsUrl: wsUrl,
         serverUrl: serverUrl,

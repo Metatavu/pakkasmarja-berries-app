@@ -747,6 +747,11 @@ html {
     }
   }
   
+  .contract-info-text {
+    padding: 15px;
+    margin-top: 20px;
+  }
+  
   .contract-list-loader {
     text-align: center;
     display: block;
@@ -818,6 +823,10 @@ html {
       border-radius: 25px;
     }
     
+    .hectare-table {
+      width: 100%;
+    }
+    
     .contract-detail-header {
       color: #e01e36;
       padding: 15px;
@@ -882,6 +891,9 @@ html {
           font-weight: bold;
           padding-left: 0;
           text-decoration: none;
+          white-space: normal;
+          text-align: left;
+          width: 100%;
         }
       }
       
@@ -894,14 +906,27 @@ html {
         padding: 15px;
       }
       
+      .add-hectare-row-btn {
+        margin-top: 20px;
+        margin-left: 20px;
+        width: 100%;
+        border: 2px solid #e01e36;
+        border-radius: 0;
+        text-align: center;
+        font-weight: bold;
+        color: #fff;
+        background-color: #e01e36; 
+      }
+      
       .contract-footer-section {
         padding: 15px;
-        
+
+
         .accept-terms-container {
           padding-top: 20px;
           padding-bottom: 20px;
         }
-        
+
         .btn {
           width: 100%;
           border: 2px solid #e01e36;
@@ -909,12 +934,12 @@ html {
           text-align: center;
           font-weight: bold;
         }
-        
+
         .deny-btn {
           color: #e01e36;
           background-color: #fff; 
         }
-        
+
         .sign-back-btn,
         .accept-btn,
         .contract-back-btn,
@@ -922,7 +947,7 @@ html {
           color: #fff;
           background-color: #e01e36; 
         }
-        
+
         .accept-btn {
           @media (max-width: 767.98px) { 
             margin-top: 15px;
@@ -968,6 +993,10 @@ html {
           right: 20px;
           margin-top: 1px;
           font-size: 22px;
+        }
+        
+        .fa-envelope {
+          color: #e01e36;
         }
       }
     }
