@@ -242,6 +242,7 @@
     _onQuestionThreadSelected: function (event, data) {
       const threadId = data['thread-id'];
       $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId, this.selectedQuestionGroupTitle, this.selectedQuestionGroupImageUrl, `Kysymysryhmä`);
+      this.element.trigger('question-thread-selected', {threadId: threadId});
     },
     
     _onConnect: function (event, data) {

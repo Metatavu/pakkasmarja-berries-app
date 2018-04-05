@@ -131,6 +131,13 @@
           return api.findItemGroup(id);
         });
     },
+    
+    listItemGroups: function() {
+      return this._prepareRequest(this._getItemGroupsApi())
+        .then((api) => {
+          return api.listItemGroups();
+        });
+    },
 
     _getDeliveryPlacesApi: function() {
       return new PakkasmarjaRestClient.DeliveryPlacesApi();

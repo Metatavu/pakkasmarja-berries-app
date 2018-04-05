@@ -18,8 +18,86 @@
       $(this.element).on('click', '.past-contracts-btn', this._onPastContractsBtnClick.bind(this));
       $(this.element).on('click', '.deny-btn', this._onDenyBtnClick.bind(this));
       $(this.element).on('click', '.add-hectare-row-btn', this._onAddHectareButtonRowClick.bind(this));
+      $(this.element).on('click', '.suggest-berry-btn', this._onSuggestBerryButtonClick.bind(this));
       $(this.element).on('keyup', '#contractAmountInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
       $(this.element).on('change', '#contractDeliveryPlaceInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
+    },
+
+    _onSuggestBerryButtonClick: function() {
+      const suggestBerryDialog = bootbox.dialog({
+        title: 'Ehdota sopimusta jostain muusta marjasta.',
+        closeButton: false,
+        message: '<p><i class="fa fa-spin fa-spinner"></i> Ladataan...</p>',
+        buttons: {
+          cancel: {
+            label: 'Peruuta',
+            className: "btn-default",
+            callback: function() {
+            }
+          },
+          suggestBerry: {
+            label: 'Lähetä',
+            className: "btn-primary",
+            callback: function() {
+              const newBerry = suggestBerryDialog.find('#newBerryItemGroupSelect').val();
+              const newBerrySize = suggestBerryDialog.find('#newBerryItemGroupSizeInput').val();
+              const newBerryInfo = suggestBerryDialog.find('#newBerryAdditionalInfoInput').val();
+              suggestBerryDialog.find('.bootbox-body').html('<p><i class="fa fa-spin fa-spinner"></i> Ladataan...</p>');
+              const contractsQuestionGroupId = $(document.body).pakkasmarjaBerriesAppConfig('get', 'contracts-question-group');
+
+              let message = `Hei, haluaisin ehdottaa uutta sopimusta marjasta: ${newBerry}.`;
+              if (newBerrySize) {
+                message += ` Määräarvio on ${newBerrySize} kg.`;
+              }
+              if (newBerryInfo) {
+                message += ` Lisätietoa: ${newBerryInfo}`;
+              }
+              
+              let suggestMessageTimeout = null;
+
+              const observer = new MutationObserver((mutationsList) => {
+                mutationsList.forEach((mutation) => {
+                  if (mutation.type === 'childList') {
+                    const addedNodes = mutation.addedNodes;
+                    addedNodes.forEach((addedNode) => {
+                      if ($(addedNode).hasClass('question-group') && $(addedNode).attr('data-id') == contractsQuestionGroupId) {
+                        $(addedNode).click();
+                        observer.disconnect();
+                        $(document.body).one('question-thread-selected', () => {
+                          $(".chat-container").pakkasmarjaBerriesChatThread('sendMessage', message);
+                          suggestBerryDialog.modal('hide');
+                          clearTimeout(suggestMessageTimeout);
+                        });
+                      }
+                    });
+                  }
+                });
+              });
+              
+              suggestMessageTimeout = setTimeout(() => {
+                observer.disconnect();
+                suggestBerryDialog.modal('hide');
+                new Noty({
+                  timeout: 5000,
+                  text: 'Virhe lähetettäessä viestiä. Yritä myöhemmin uudelleen.',
+                  type: 'error'
+                }).show();
+              }, 20000);
+              
+              $(document.body).pakkasmarjaBerriesQuestionGroups('reset');
+              observer.observe($('.questions-view ul')[0], { attributes: false, childList: true });
+              $('.menu-item[data-page="questions"]').click();
+
+              return false;
+            }
+          }
+        }
+      });
+      suggestBerryDialog.init(() => {
+        $(document.body).pakkasmarjaBerriesRest('listItemGroups').then((itemGroups) => {
+          suggestBerryDialog.find('.bootbox-body').html(pugSuggestBerryDialog({itemGroups: itemGroups}));
+        });
+      });
     },
 
     _onAddHectareButtonRowClick: function() {
