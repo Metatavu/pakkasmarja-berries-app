@@ -10,7 +10,7 @@
       this.element.on('click', '.profile-button', $.proxy(this._onProfileMenuClick, this));
       this.element.on('click', '.close-menu-btn', $.proxy(this._onCloseMenuClick, this));
       this.element.on('click', '.save-contact-btn', $.proxy(this._onSaveContactClick, this));
-      
+      this.element.on('click', '.password-button', $.proxy(this._onChangePasswordClick, this));
     },
 
     closeProfileMenu: function () {
@@ -23,6 +23,67 @@
     
     isMenuOpen: function() {
       return $(".profile-menu").hasClass('menu-open');
+    },
+    
+    _onChangePasswordClick: function() {
+      const changePasswordDialog = bootbox.dialog({
+        title: 'Vaihda salasana.',
+        closeButton: false,
+        message: pugChangePasswordDialog(),
+        buttons: {
+          cancel: {
+            label: 'Peruuta',
+            className: "btn-default",
+            callback: function() {
+            }
+          },
+          suggestBerry: {
+            label: 'Lähetä',
+            className: "btn-primary",
+            callback: function() {
+              const newPassword = changePasswordDialog.find('#newPasswordInput').val();
+              const newPassword2 = changePasswordDialog.find('#newPasswordInput2').val();
+              if (!newPassword) {
+                new Noty({
+                  timeout: 5000,
+                  text: 'Salasana ei voi olla tyhjä.',
+                  type: 'error'
+                }).show();
+                return false;
+              }
+              
+              if (newPassword !== newPassword2) {
+                new Noty({
+                  timeout: 5000,
+                  text: 'Salasanat eivät täsmää.',
+                  type: 'error'
+                }).show();
+                return false;
+              }
+              
+              changePasswordDialog.find('.bootbox-body').html('<p><i class="fa fa-spin fa-spinner"></i> Ladataan...</p>');
+              $(document.body).pakkasmarjaBerriesRest('updateUserCredentials', newPassword).then(() => {
+                new Noty({
+                  timeout: 5000,
+                  text: 'Salasanan vaihto onnistui.',
+                  type: 'success'
+                }).show();
+                changePasswordDialog.modal('hide');
+              })
+              .catch(() => {
+                new Noty({
+                  timeout: 5000,
+                  text: 'Virhe salasanan vaihdoissa. Yritä myöhemmin uudelleen.',
+                  type: 'error'
+                }).show();
+                changePasswordDialog.modal('hide');
+              });
+              
+              return false;
+            }
+          }
+        }
+      });
     },
     
     _onProfileMenuClick: function () {
