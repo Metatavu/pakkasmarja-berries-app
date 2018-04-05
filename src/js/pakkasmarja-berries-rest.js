@@ -29,6 +29,16 @@
         })
         .catch(this._handleError);
     },
+
+    updateUserCredentials: function (password) {
+      const userId = this._getUserId();
+      const payload = PakkasmarjaRestClient.Credentials.constructFromObject({password: password});
+      return this._prepareRequest(this._getContactsApi())
+        .then((api) => {
+          return api.updateContactCredentials(userId, payload);
+        })
+        .catch(this._handleError);
+    },
     
     updateUserContact: function (data) {
       const userId = this._getUserId();
