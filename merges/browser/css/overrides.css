@@ -8,7 +8,7 @@ html, body {
   overflow: hidden;
 }
 
-.chat-container {
+.chat-container.chat-container-visible {
   display: block !important;
   width: 50% !important;
   right: 0;
@@ -111,6 +111,12 @@ html, body {
 
 .contract-view .view-content-container .contract-list-view {
   height: calc(100vh - 175px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.contract-view-details-container .contract-details-content {
+  height: calc(100vh - 260px);
   overflow-y: auto;
   overflow-x: hidden;
 }

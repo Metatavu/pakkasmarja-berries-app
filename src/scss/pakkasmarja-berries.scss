@@ -738,6 +738,7 @@ html {
   align-content: center;
 }
 
+.contract-view-details-container,
 .contract-view {
   
   h1 {
@@ -990,3 +991,77 @@ html {
     }
   }
 }
+
+.contract-view-details-container {
+  width: 50%;
+  right: 0;
+  position: absolute;
+  background: #fff;
+  height: 100%;
+  padding-top: 116px;
+  border-left: 1px solid #aaa;
+  
+  .view-header-container {
+    border-left: 1px solid #e01e36;
+    margin-left: -1px;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    
+    .contract-view-header-text {
+      padding-top: 10px;
+    }
+    
+    .contract-progress-indicator {
+      display: none;
+    
+      .fa {
+        font-size: 36px;
+        margin-left: 5px;
+        margin-right: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        color: rgba(255,255,255,0.6);
+
+        &.active {
+          color: #fff;
+          border: 1px solid #fff;
+          border-radius: 50%;
+        }
+
+        @media (max-width: 991.98px) {
+          font-size: 20px;
+        }
+        
+      }
+
+      .fa-arrow-right {
+        margin-left: 20px;
+        margin-right: 20px;
+        font-size: 25px;
+        vertical-align: middle;
+        color: rgba(255, 255, 255, 0.3);
+
+        @media (max-width: 991.98px) { 
+          font-size: 16px;
+        }
+      }
+    }
+  }
+  
+  .contract-back-btn-container {
+    display: none;
+  }
+  
+  .contract-details-placeholder {
+    text-align: center;
+    margin-top: 110px;
+    
+    h1 {
+      font-size: 45px;
+      color: #e01e36;
+    }
+  }
+}
+

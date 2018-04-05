@@ -172,12 +172,12 @@
         
         if (updatedContract.status === 'DRAFT') {
           $(document.body).pakkasmarjaBerriesRest('listSignAuthenticationServices').then((authServices) => {
-            const detailView = $('.contract-view .contract-details-content .details-container');
+            const detailView = device.platform === 'browser' ? $('.contract-view-details-container .contract-details-content .details-container') : $('.contract-view .contract-details-content .details-container');
             const termsView = $('<div>')
               .html(pugContractTerms({authServices: authServices, contract:contract, year: (new Date()).getFullYear()}))
               .addClass('contract-terms')
               .hide()
-              .appendTo($('.contract-view .contract-details-content'));
+              .appendTo(device.platform === 'browser' ? $('.contract-view-details-container .contract-details-content') : $('.contract-view .contract-details-content'));
 
             $(detailView).hide('slide', { direction: 'left' }, 200);
             $(termsView).show('slide', { direction: 'right' }, 200, () => {
@@ -211,6 +211,7 @@
         return;
       }
 
+      $('.contract-view-details-container .contract-view-details-content').empty();
       $('<i>')
         .addClass('fa fa-spinner fa-spin')
         .appendTo($(e.target).closest('.contract-list-item'));
@@ -257,19 +258,25 @@
                   pastPrices.push(contractPrice);
                 }
               });
+
+              $(e.target).closest('.contract-list-item').find('.fa-spinner').remove();
+              $('.contract-view-details-container .contract-view-details-content').empty();
               const listView = $('.contract-view .contract-list-view');
               const detailView = $('<div>')
                 .html(pugContractDetails({contract: contract, deliveryPlaces: deliveryPlaces, activePrices: activePrices, terms: data, pastPrices: pastPrices, pastContracts: recentPastContracts}))
                 .addClass('contract-detail-container')
                 .hide()
-                .appendTo($('.contract-view .view-content-container'));
+                .appendTo(device.platform === 'browser' ? $('.contract-view-details-container .contract-view-details-content') : $('.contract-view .view-content-container'));
 
               detailView.find('.btn-link').click();
               $(detailView).show('slide', { direction: 'right' }, 200, () => {
                 this._showProgressIndicator();
                 this._updateProgressIndicator(1);
               });
-              $(listView).hide('slide', { direction: 'left' }, 200);
+
+              if (device.platform !== 'browser') {
+                $(listView).hide('slide', { direction: 'left' }, 200);
+              }
             });
           });
         });
@@ -279,17 +286,56 @@
     _onPageChange: function (event, data) {
       if (data.activePage === 'contracts') {
         this.reloadContracts();
+        this._showDetailsPlaceholder();
+      } else {
+        this._hideDetailsPlaceholder();
+      }
+    },
+    
+    _resetDetailsPlaceHolder: function() {
+      $('.contract-view-details-container').remove();
+      this._showDetailsPlaceholder();
+    },
+    
+    _showDetailsPlaceholder: function() {
+      if (device.platform === 'browser') {
+        $('.chat-container')
+          .removeClass('chat-container-visible')
+          .hide();
+        $('<div>')
+          .addClass('contract-view-details-container')
+          .html(pugContractDetailsPlaceholder())
+          .insertAfter('.chat-container');
+      }
+    },
+    
+    _hideDetailsPlaceholder: function() {
+      if (device.platform === 'browser') {
+        $('.contract-view-details-container').remove();
+        $('.chat-container')
+          .addClass('chat-container-visible')
+          .show();
       }
     },
     
     _showProgressIndicator: function() {
-      $('.contract-view-header-text').hide();
-      $('.contract-progress-indicator').show();
+      if (device.platform === 'browser') {
+        $('.contract-view-details-container .contract-view-header-text').hide();
+        $('.contract-view-details-container .contract-progress-indicator').show();
+      } else {
+        $('.contract-view-header-text').hide();
+        $('.contract-progress-indicator').show();
+      }
     },
     
     _hideProgressIndicator: function() {
-      $('.contract-progress-indicator').hide();
-      $('.contract-view-header-text').show();
+      if (device.platform === 'browser') {
+        $('.contract-view-details-container .contract-view-header-text').hide();
+        $('.contract-view-details-container .contract-progress-indicator').show();
+      } else {
+        $('.contract-progress-indicator').hide();
+        $('.contract-view-header-text').show();
+      }
     },
     
     _updateProgressIndicator: function(phase) {
@@ -356,16 +402,21 @@
     openListView: function() {
       this._hideProgressIndicator();
       const listView = $('.contract-view .contract-list-view');
-      const detailView = $('.contract-view .contract-detail-container');
+      const detailView = device.platform === 'browser' ? $('.contract-view-details-container .contract-view-details-content') :  $('.contract-view .contract-detail-container');
       this.reloadContracts();
 
-      $(detailView).hide('slide', { direction: 'right' }, 200);
-      $(listView).show('slide', { direction: 'left' }, 200);      
+      $(detailView).hide('slide', { direction: 'right' }, 200, () => {
+        this._resetDetailsPlaceHolder();
+      });
+      
+      if (device.platform !== 'browser') {
+        $(listView).show('slide', { direction: 'left' }, 200);
+      }
     },
     
     openContractDetailsView: function() {
-       const detailView = $('.contract-view .contract-details-content .details-container');
-       const termsView = $('.contract-view .contract-details-content .contract-terms-view');
+      const detailView = device.platform === 'browser' ? $('.contract-view-details-container .contract-details-content .details-container') : $('.contract-view .contract-details-content .details-container');
+      const termsView = device.platform === 'browser' ? $('.contract-view-details-container .contract-details-content .contract-terms-view') : $('.contract-view .contract-details-content .contract-terms-view');
        
       $(termsView).hide('slide', { direction: 'right' }, 200);
       $(detailView).show('slide', { direction: 'left' }, 200);      
