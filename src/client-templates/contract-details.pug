@@ -43,7 +43,7 @@ h3.contract-detail-header
       p Pakkasmarja Oy:n ja viljelijän sopimus pakastukseen toimitettavista marjoista ja niiden hinnoista satokaudella #{(new Date()).getFullYear()}
       .form-group
         label(for='contractAmountInput') Määrä
-        input#contractAmountInput.form-control(type='number', value=contract.proposedQuantity, data-contract-quantity=contract.contractQuantity)
+        input#contractAmountInput.form-control(readonly=activeContract, disabled=activeContract, type='number', value=contract.proposedQuantity, data-contract-quantity=contract.contractQuantity)
       .form-group
         p 
           |Pakkasmarjan ehdotus: 
@@ -54,13 +54,63 @@ h3.contract-detail-header
           a.past-contracts-btn(href='#', data-past-contracts=JSON.stringify(pastContracts))
             i.fa.fa-info-circle
             | edellisten vuosien määrät
+      if contract.allowDeliveryAll
+        .form-check
+          input#deliverAllCheckBox.form-check-input(readonly=activeContract, disabled=activeContract, type='checkbox', checked=contract.deliverAll)
+          label.form-check-label(for='deliverAllCheckBox') Haluan toimittaa kaiken tilallani vieljeltävän sadon tästä marjasta Pakkasmarjalle pakastettavaksi ja tuorekauppaan.
       .form-group
         label(for='contractQuantityCommentInput') Kommentti
-        textarea#contractQuantityCommentInput.form-control(rows='3')
+        textarea#contractQuantityCommentInput.form-control(readonly=activeContract, disabled=activeContract, rows='3')
           =contract.quantityComment
     .contract-details-section
+      h3 Tuotannossa olevat hehtaarit
+      .row
+        .col
+          - var minimumProfit = contract.itemGroup.minimumProfitEstimation ? contract.itemGroup.minimumProfitEstimation : null;
+          table.hectare-table(data-minimum-profit=minimumProfit)
+            thead
+              tr
+                th Lohko
+                th Pinta-ala (ha)
+                th Lajike/Lajikkeet
+                th Tuottoarvio (kg / ha)
+            tobdy
+              if contract.areaDetails.length > 0
+                each areaDetail in contract.areaDetails
+                  tr
+                    td
+                      input.form-control(readonly=activeContract, disabled=activeContract, type='text', name='name', value=areaDetail.name)
+                    td
+                      input.form-control(readonly=activeContract, disabled=activeContract, type='number', name='size', step='0.1', min='0', value=areaDetail.size)
+                    td
+                      input.form-control(readonly=activeContract, disabled=activeContract, type='text', name='species', value=areaDetail.species)
+                    td
+                      if contract.itemGroup.minimumProfitEstimation
+                        input.form-control(readonly='readonly', disabled='disabled', type='number', name='profitEstimation', value=areaDetail.profitEstimation, min=contract.itemGroup.minimumProfitEstimation)
+                      else
+                        input.form-control(readonly=activeContract, disabled=activeContract, type='number', name='profitEstimation', min='0', value=areaDetail.profitEstimation)
+              else if !activeContract
+                tr
+                  td
+                    input.form-control(type='text', name='name')
+                  td
+                    input.form-control(type='number', name='size', step='0.1', min='0')
+                  td
+                    input.form-control(type='text', name='species')
+                  td
+                    if contract.itemGroup.minimumProfitEstimation
+                      input.form-control(readonly='readonly', disabled='disabled', type='number', name='profitEstimation', value=contract.itemGroup.minimumProfitEstimation, min=contract.itemGroup.minimumProfitEstimation)
+                    else
+                      input.form-control(type='number', name='profitEstimation', min='0')
+      .row
+        .col
+          if !activeContract
+            button.btn.btn-default.add-hectare-row-btn LISÄÄ RIVI
+        .col
+        .col
+    .contract-details-section
       h3 Toimituspaikka
-      select#contractDeliveryPlaceInput.form-control(data-contract-delivery-place-id=contract.deliveryPlaceId)
+      select#contractDeliveryPlaceInput.form-control(readonly=activeContract, disabled=activeContract, data-contract-delivery-place-id=contract.deliveryPlaceId)
         each deliveryPlace in deliveryPlaces
           option(value=deliveryPlace.id, selected=contract.proposedDeliveryPlaceId===deliveryPlace.id)
             =deliveryPlace.name
@@ -74,7 +124,7 @@ h3.contract-detail-header
                 =deliveryPlace.name
       .form-group
         label(for='contractDeliveryPlaceCommentInput') Kommentti
-        textarea#contractDeliveryPlaceCommentInput.form-control(rows='3')
+        textarea#contractDeliveryPlaceCommentInput.form-control(readonly=activeContract, disabled=activeContract, rows='3')
           =contract.deliveryPlaceComment
     #contract-accordion
       h3 Sopimus
@@ -90,11 +140,15 @@ h3.contract-detail-header
               !=text
         - count++;
     .contract-footer-section
+      if activeContract
+        .download-pdf-container
+          a.download-contract-btn(href='#', data-contract-id=contract.id) Lataa sopimus PDF - muodossa.
       .row
         .col.contract-back-btn-container
           button.btn.btn-default.contract-back-btn TAKAISIN
-        .col
-          button.btn.btn-default.deny-btn(data-contract=JSON.stringify(contract)) EN HYVÄKSY
-        .col
-          button.btn.btn-default.accept-btn(data-contract=JSON.stringify(contract)) HYVÄKSYN
+        if !activeContract
+          .col
+            button.btn.btn-default.deny-btn(data-contract=JSON.stringify(contract)) EN HYVÄKSY
+          .col
+            button.btn.btn-default.accept-btn(data-contract=JSON.stringify(contract)) HYVÄKSYN
       

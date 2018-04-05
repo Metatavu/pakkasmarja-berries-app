@@ -20,6 +20,7 @@ html
     script(src='js/config.js')
     script(src='js/pug-templates.js')
     // script(src='https://cdn.metatavu.io/libs/tools/debug/0.0.4/debug.js')
+    script(src='js/pakkasmarja-berries-app-config.js')
     script(src='js/pakkasmarja-berries-client.js')
     script(src='js/pakkasmarja-berries-auth.js')
     script(src='js/pakkasmarja-berries-rest.js')
@@ -58,7 +59,7 @@ html
       .col-3.menu-item-container.news-item-container
         a.menu-item.active(href='#', data-slide-index='0', data-page="news") Ajankohtaista
       .col-3.menu-item-container.conversations-item-container
-        a.menu-item(href='#', data-slide-index='1', data-page="conversations") Keskustelu
+        a.menu-item(href='#', data-slide-index='1', data-page="conversations") Ryhmäkeskustelu
       .col-3.menu-item-container.questions-item-container
         a.menu-item(href='#', data-slide-index='2', data-page="questions") Kysymykset
       .col-3.menu-item-container.contract-item-container
@@ -113,10 +114,11 @@ html
                     .row.contract-list-header
                       .col
                       .col
-                        span SOVITTU KG
+                        span MÄÄRÄARVIO KG
                       .col
                         span TOTEUTUNUT KG
                   .pending-contract-list-container.fresh-list
+                p.contract-info-text Toteutuneet kilot päivitetään kerran yössä.
     .chat-container.show-list-header.chat-container-visible
       .list-header
         .row.no-gutters.list-header-back-menu

@@ -1,13 +1,26 @@
-.row.contract-list-item.pending-contract-list-item(data-contract=JSON.stringify(contract))
+- var missingPrerequisiteId = contract.missingPrerequisite ? contract.itemGroup.prerequisiteContractItemGroupId : null
+.row.contract-list-item.pending-contract-list-item(data-missing-prerequisite-id=missingPrerequisiteId, data-contract=JSON.stringify(contract))
   .col
     span
       =contract.itemGroup.displayName || contract.itemGroup.name
   .col
-    if contract.status == 'DRAFT'
-      span Tarkasta Ehdotus
+    if contract.missingPrerequisite
+      span
+        i.fa.fa-hourglass
+        |&nbsp;&nbsp;Vaatii pakastesopimuksen
+    else if contract.status == 'DRAFT'
+      span 
+        i.fa.fa-envelope
+        |&nbsp;&nbsp;Tarkasta Ehdotus
     else if contract.status == 'ON_HOLD'
-      span Pakkasmarjan tarkistettavana
+      span
+        i.fa.fa-hourglass
+        |&nbsp;&nbsp;Pakkasmarjan tarkistettavana
     else if contract.status == 'REJECTED'
-      span Hylätty
+      span
+        i.fa.fa-times
+        |&nbsp;&nbsp;Hylätty
     else
-      span Sopimus käsittelyssä
+      span
+        i.fa.fa-hourglass
+        |&nbsp;&nbsp;Sopimus käsittelyssä
