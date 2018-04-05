@@ -1,0 +1,14 @@
+.form-group
+  label(for='newBerryItemGroupSelect') Marja
+  select#newBerryItemGroupSelect.form-control
+    each itemGroup in itemGroups
+      option(value=itemGroup.displayName || itemGroup.name)
+        =itemGroup.displayName || itemGroup.name
+.form-group
+  label(for='newBerryItemGroupSizeInput') Määräarvio
+  input#newBerryItemGroupSizeInput.form-control(type='number')
+.form-group
+  label(for='newBerryAdditionalInfoInput') Lisätiedot
+  textarea#newBerryAdditionalInfoInput.form-control(rows='3')
+
+

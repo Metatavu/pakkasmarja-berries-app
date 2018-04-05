@@ -309,9 +309,9 @@
       autosize.update($('.message-input'));
     },
     
-    _sendMessage: function (content) {
+    sendMessage: function (content) {
       this._prepareSendMessage();
-      
+
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
         'type': 'send-message',
         'threadId': this.activeThreadId,
@@ -416,7 +416,7 @@
         const input = $(event.target);
         const content = input.val();
         if (content) {
-          this._sendMessage(content);
+          this.sendMessage(content);
         }
       }
     },
@@ -425,7 +425,7 @@
       const input = $('.message-input');
       const content = input.val();
       if (content) {
-        this._sendMessage(content);
+        this.sendMessage(content);
       }
     },
     
