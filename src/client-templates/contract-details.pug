@@ -73,8 +73,9 @@ h3.contract-detail-header
                 th Lohko
                 th Pinta-ala (ha)
                 th Lajike/Lajikkeet
-                th Tuottoarvio (kg / ha)
-            tobdy
+                if !contract.itemGroup.minimumProfitEstimation
+                  th Tuottoarvio (kg / ha)
+            tbody
               if contract.areaDetails.length > 0
                 each areaDetail in contract.areaDetails
                   tr
@@ -84,11 +85,11 @@ h3.contract-detail-header
                       input.form-control(readonly=activeContract, disabled=activeContract, type='number', name='size', step='0.1', min='0', value=areaDetail.size)
                     td
                       input.form-control(readonly=activeContract, disabled=activeContract, type='text', name='species', value=areaDetail.species)
-                    td
                       if contract.itemGroup.minimumProfitEstimation
-                        input.form-control(readonly='readonly', disabled='disabled', type='number', name='profitEstimation', value=areaDetail.profitEstimation, min=contract.itemGroup.minimumProfitEstimation)
-                      else
-                        input.form-control(readonly=activeContract, disabled=activeContract, type='number', name='profitEstimation', min='0', value=areaDetail.profitEstimation)
+                        input(type='hidden', name='profitEstimation', value=areaDetail.profitEstimation)
+                    if !contract.itemGroup.minimumProfitEstimation
+                      td
+                        input.form-control(readonly=activeContract, disabled=activeContract, type='number', name='profitEstimation', min='0', value=areaDetail.profitEstimation)  
               else if !activeContract
                 tr
                   td
@@ -97,10 +98,10 @@ h3.contract-detail-header
                     input.form-control(type='number', name='size', step='0.1', min='0')
                   td
                     input.form-control(type='text', name='species')
-                  td
                     if contract.itemGroup.minimumProfitEstimation
-                      input.form-control(readonly='readonly', disabled='disabled', type='number', name='profitEstimation', value=contract.itemGroup.minimumProfitEstimation, min=contract.itemGroup.minimumProfitEstimation)
-                    else
+                      input(type='hidden', name='profitEstimation', value=contract.itemGroup.minimumProfitEstimation)
+                  if !contract.itemGroup.minimumProfitEstimation
+                    td
                       input.form-control(type='number', name='profitEstimation', min='0')
       .row
         .col
@@ -108,6 +109,9 @@ h3.contract-detail-header
             button.btn.btn-default.add-hectare-row-btn LISÄÄ RIVI
         .col
         .col
+      .row
+        .col
+          p.hectare-table-information
     .contract-details-section
       h3 Toimituspaikka
       select#contractDeliveryPlaceInput.form-control(readonly=activeContract, disabled=activeContract, data-contract-delivery-place-id=contract.deliveryPlaceId)

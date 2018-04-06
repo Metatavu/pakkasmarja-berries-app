@@ -21,9 +21,14 @@
       $(this.element).on('click', '.suggest-berry-btn', this._onSuggestBerryButtonClick.bind(this));
       $(this.element).on('keyup', '#contractAmountInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
       $(this.element).on('change', '#contractDeliveryPlaceInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
+      $(this.element).on('change', '.hectare-table input', this._onHectareTableInputChange.bind(this));
     },
 
-    _onSuggestBerryButtonClick: function() {
+    _onHectareTableInputChange: function() {
+      this._updateHectareTableInformation();
+    },
+
+    _onSuggestBerryButtonClick: function(e) {
       const suggestBerryDialog = bootbox.dialog({
         title: 'Ehdota sopimusta jostain muusta marjasta.',
         closeButton: false,
@@ -93,9 +98,16 @@
           }
         }
       });
+
       suggestBerryDialog.init(() => {
+        const category = $(e.target).closest('.suggest-berry-btn').attr('data-category');
         $(document.body).pakkasmarjaBerriesRest('listItemGroups').then((itemGroups) => {
-          suggestBerryDialog.find('.bootbox-body').html(pugSuggestBerryDialog({itemGroups: itemGroups}));
+          $(document.body).pakkasmarjaBerriesRest('listContractsByCategoryAndYear',category, (new Date()).getFullYear()).then((contracts) => {
+            const contractItemGroupIds = contracts.map((contract) => {return contract.itemGroupId; });
+            const itemGroupsInCategory = itemGroups.filter(itemGroup => itemGroup.category === category);
+            const itemGroupsWithoutContract = itemGroupsInCategory.filter(itemGroupInCategory => contractItemGroupIds.indexOf(itemGroupInCategory.id) === -1);
+            suggestBerryDialog.find('.bootbox-body').html(pugSuggestBerryDialog({itemGroups: itemGroupsWithoutContract}));
+          });
         });
       });
     },
@@ -103,13 +115,19 @@
     _onAddHectareButtonRowClick: function() {
       if ($('.hectare-table').length > 0) {
         const minimumProfit = $('.hectare-table').attr('data-minimum-profit');
-        const profitRow = minimumProfit ? `<input class="form-control" readonly="readonly" disabled="disabled" type="number" name="profitEstimation" min="${minimumProfit}" value="${minimumProfit}" />` : '<input class="form-control" type="number" name="profitEstimation" min="0" value="" />'; 
-        $('.hectare-table').dataTable().api().row.add([
+        const newRow = [
           '<input class="form-control" type="text" name="name" value="" />',
-          '<input class="form-control" type="number" name="size" step="0." min="0" value="" />',
-          '<input class="form-control" type="text" name="species" value="" />',
-          profitRow
-        ]).draw(false);
+          '<input class="form-control" type="number" name="size" step="0." min="0" value="" />'
+        ];
+
+        if (minimumProfit) {
+          newRow.push(`<input class="form-control" type="text" name="species" value="" /><input type="hidden" name="profitEstimation" value="${minimumProfit}" />`);
+        } else {
+          newRow.push('<input class="form-control" type="text" name="species" value="" />');
+          newRow.push('<input class="form-control" type="number" name="profitEstimation" min="0" value="" />');
+        }
+        
+        $('.hectare-table').dataTable().api().row.add(newRow).draw(false);
       }
     },
     
@@ -121,13 +139,45 @@
         $(rowElement).find('input').each((inputIndex, inputElement) => {
           const key = $(inputElement).attr('name');
           const value = $(inputElement).val();
-          row[key] = value;
+          if (key && value) {
+            row[key] = value;
+          }
         });
-
-        result.push(row);
+        
+        if (!_.isEmpty(row)) {
+          result.push(row);
+        }
       });
       
       return result;
+    },
+    
+    _updateHectareTableInformation: function() {
+      const minimumProfit = $('.hectare-table').attr('data-minimum-profit');
+      const data = this._getHectareTableData();
+      const blocks = data.length;
+      const totalProfit = this._getTotalHectareAmount(data);
+      const proposedAmount = parseInt($('#contractAmountInput').val());
+      let totalHectares = 0;
+      data.forEach((row) => {
+        totalHectares += parseInt(row.size || 0, 10);
+      });
+      
+      let text = '';
+      
+      if (minimumProfit) {
+        text = `<span>Lohkoja yhteensä ${blocks} kpl. Pinta-alaa yhteensä ${totalHectares} ha.</span><br/>`;
+        if (totalProfit > proposedAmount) {
+          text += `<span class="hectare-table-error"><i class="fa fa-exclamation"/> Minimisopimusmäärä on ${totalProfit} kg perustuen Pakkasmarjan arvioimaan 500 kg / ha.</span>`;
+        } else {
+          text += `<span>Minimisopimusmäärä on ${totalProfit} kg perustuen Pakkasmarjan arvioimaan 500 kg / ha.</span>`;
+        }
+      } else {
+        text = `<span>Lohkoja yhteensä ${blocks} kpl. Pinta-alaa yhteensä ${totalHectares} ha. Tuotantoarvio yhteensä ${totalProfit} kg</span>`;
+      }
+      
+      $('.hectare-table-information').html(text);
+
     },
     
     _getTotalHectareAmount(data) {
@@ -278,6 +328,7 @@
     },
 
     _onAcceptBtnClick: function(e) {
+      const itemGroupConfig = $(document.body).pakkasmarjaBerriesAppConfig('get', 'item-groups');
       const contract = JSON.parse($(e.target).closest('.accept-btn').attr('data-contract'));
       contract.proposedQuantity = parseInt($('#contractAmountInput').val());
       contract.proposedDeliveryPlaceId = $('#contractDeliveryPlaceInput').val();
@@ -286,6 +337,12 @@
       contract.areaDetails = this._getHectareTableData();
       contract.deliverAll = $('#deliverAllCheckBox').is(':checked') ? true : false;
       const totalHectareAmount = this._getTotalHectareAmount(contract.areaDetails);
+      
+      if (itemGroupConfig[contract.itemGroupId] && itemGroupConfig[contract.itemGroupId]['require-area-details'] && contract.areaDetails.length < 1) {
+        bootbox.alert('Täytä hehtaaritaulukko.');
+        return;
+      }
+      
       if (contract.itemGroup.minimumProfitEstimation && totalHectareAmount > contract.proposedQuantity) {
         bootbox.alert(`Sopimusmäärä oltava vähintään ${contract.itemGroup.minimumProfitEstimation} kg/ha`);
         return;
@@ -335,7 +392,7 @@
         });
         missingPrequisiteDialog.init(() => {
           $(document.body).pakkasmarjaBerriesRest('findItemGroup', missingPrequisiteId).then((missingItemGroup) => {
-            missingPrequisiteDialog.find('.bootbox-body').html(`<p>Vaatii ensiksi sopimuksen marjasta: <b>${missingItemGroup.displayName || missingItemGroup.name}</b></p>`);
+            missingPrequisiteDialog.find('.bootbox-body').html(`<p>Tarkasta, muuta tarvittaessa ja hyväksy ensin sopimus marjasta: <b>${missingItemGroup.displayName || missingItemGroup.name}</b></p>`);
           });
         });
         return;
@@ -423,6 +480,8 @@
               if (device.platform !== 'browser') {
                 $(listView).hide('slide', { direction: 'left' }, 200);
               }
+
+              this._updateHectareTableInformation();
             });
           });
         });
@@ -498,10 +557,12 @@
           this._removeContractLoaders();
           const activeContracts = contracts.filter(contract => contract.status === 'APPROVED');
           const pendingContracts = contracts.filter(contract => contract.status === 'DRAFT' || contract.status === 'ON_HOLD' || contract.status === 'REJECTED' );
-          const activeItemGroupIds = [];
+          const onHoldOrApprovedContracts = contracts.filter(contract => contract.status === 'APPROVED' || contract.status === 'ON_HOLD'); 
+          const activeItemGroupIds = onHoldOrApprovedContracts.map((onHoldOrApprovedContract) => {
+            return onHoldOrApprovedContract.itemGroup.id;
+          });
 
           activeContracts.forEach((activeContract) => {
-            activeItemGroupIds.push(activeContract.itemGroup.id);
             activeContract.contact = contact;
             if (activeContract.itemGroup.category === 'FROZEN') {
               $('.frozen-list.active-contract-list-container').append(pugActiveContractListItem({contract: activeContract}));
@@ -513,7 +574,8 @@
             if (itemGroupConfig[pendingContract.itemGroup.id] && itemGroupConfig[pendingContract.itemGroup.id]['allow-delivery-all']) {
               pendingContract.allowDeliveryAll = true;
             }
-            if (pendingContract.itemGroup.prerequisiteContractItemGroupId && activeItemGroupIds.indexOf(pendingContract.prerequisiteContractItemGroupId) < 0) {
+
+            if (pendingContract.itemGroup.prerequisiteContractItemGroupId && activeItemGroupIds.indexOf(pendingContract.itemGroup.prerequisiteContractItemGroupId) < 0) {
               pendingContract.missingPrerequisite = true;
             } else {
               pendingContract.missingPrerequisite = false;
