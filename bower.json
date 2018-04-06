@@ -32,6 +32,8 @@
     "async": "^2.5.0",
     "js-md5": "md5#^0.5.0",
     "autosize": "jackmoore/autosize#^4.0.0",
-    "noty": "^3.1.4"
+    "noty": "^3.1.4",
+    "datatables.net-bs4-css": "https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.css",
+    "datatables.net-bs4-js": "https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js"
   }
 }
