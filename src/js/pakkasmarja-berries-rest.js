@@ -105,6 +105,15 @@
         .catch(this._handleError);
     },
     
+    listContractsByCategoryAndYear: function(category, year) {
+      const userId = this._getUserId();
+      return this._prepareRequest(this._getContractsApi())
+        .then((api) => {
+          return api.listContracts(Object.assign({itemGroupCategory: category, year: year}));
+        })
+        .catch(this._handleError);
+    },
+    
     listUserContracts: function (data) {
       const userId = this._getUserId();
       return this._prepareRequest(this._getContractsApi())
