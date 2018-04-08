@@ -70,7 +70,7 @@
     listContractPrices: function(contractId) {
       return this._prepareRequest(this._getContractsApi())
         .then((api) => {
-          return api.listContractPrices(contractId, {sortBy: 'YEAR', sortDir: 'DESC'});
+          return api.listContractPrices(contractId, {sortBy: 'YEAR', sortDir: 'DESC', maxResults: 100});
         })
         .catch(this._handleError);
     },

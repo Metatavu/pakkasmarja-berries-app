@@ -450,7 +450,7 @@
               contractPrices.forEach((contractPrice) => {
                 if (contractPrice.year === currentYear) {
                   activePrices.push(contractPrice);
-                } else if(contractPrice.year === (currentYear - 1) || contractPrice.year === (currentYear - 2)) {
+                } else {
                   pastPrices.push(contractPrice);
                 }
               });
