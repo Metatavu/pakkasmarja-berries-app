@@ -168,7 +168,7 @@
       if (minimumProfit) {
         text = `<span>Lohkoja yhteensä ${blocks} kpl. Pinta-alaa yhteensä ${totalHectares} ha.</span><br/>`;
         if (totalProfit > proposedAmount) {
-          text += `<span class="hectare-table-error"><i class="fa fa-exclamation"/> Minimisopimusmäärä on ${totalProfit} kg perustuen Pakkasmarjan arvioimaan 500 kg / ha.</span>`;
+          text += `<span class="hectare-table-error"><i class="fa fa-exclamation"/> Minimisopimusmäärä on ${totalProfit} kg, perustuen hehtaarikohtaiseen toimitusmääräminimiin 500 kg / ha.</span>`;
         } else {
           text += `<span>Minimisopimusmäärä on ${totalProfit} kg, perustuen hehtaarikohtaiseen toimitusmääräminimiin 500 kg / ha.</span>`;
         }
