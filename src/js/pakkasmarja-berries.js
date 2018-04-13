@@ -26,7 +26,7 @@
       this._restoreTriggered = false;
       
       $(document.body).on('connect', $.proxy(this._onConnect, this));
-      $(document.body).on('reconnect', $.proxy(this._onReconnect, this));
+      $(document.body).on('disconnect', $.proxy(this._onDisconnect, this));
       this.element.on('authenticated', $.proxy(this._onAuthenticated, this));
       this.element.on('joined', $.proxy(this._onJoined, this));
       
@@ -264,7 +264,7 @@
       }
     },
     
-    _onReconnect: function () {
+    _onDisconnect: function () {
       $('.connecting-modal').show();
     }
     
