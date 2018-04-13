@@ -21,10 +21,22 @@
       this.element.on('join-error', $.proxy(this._onJoinError, this));
       this.element.on('authentication-error', $.proxy(this._onAuthenticationError, this));
       this.element.on('authentication-failure', $.proxy(this._onAuthenticationError, this));
+      this.authenticating = false;
     },
     
     authenticate: function () {
+      if (this.authenticating) {
+        return;
+      }
+
+      this.authenticating = true;
       this._keycloak = this._getKeycloak();
+      if (!this._keycloak) {
+        this.authenticating = false;
+        setTimeout(() => { window.location.reload(); }, 1000);
+        return;
+      }
+      
       const initOptions = {
         onLoad: 'login-required'
       };
@@ -35,6 +47,7 @@
       
       this._keycloak.init(initOptions)
         .success((authenticated) => {
+          this.authenticating = false;
           if (authenticated) {
             this.element.trigger("authenticated");
           } else {
@@ -43,13 +56,14 @@
         })
         .error((err) => {
           console.error("Authentication failed", err);
+          this.authenticating = false;
           this.element.trigger("authentication-error");
         });
     },
     
     _onAuthenticationError: function() {
       this._clearToken();
-      this.authenticate();
+      setTimeout(() => { this.authenticate(); }, 300);
     },
     
     logout: function () {
@@ -99,6 +113,11 @@
         $.post(this.options.serverUrl + '/join', {
           token: accessToken
         }, $.proxy(function (data) {
+          if (!data.sessionId) {
+            this.element.trigger("join-error");
+            return;
+          }
+          
           this._sessionId = data.sessionId;
           this.userId = data.userId;
           $(document.body).pakkasmarjaBerriesPushNotifications('subscribeTopic', data.userId);
@@ -119,7 +138,11 @@
     },
     
     _getKeycloak: function () {
-      return Keycloak(this.options.serverUrl + '/keycloak.json');
+      if (!window.Keycloak) {
+        return null;
+      } else {
+        return Keycloak(this.options.serverUrl + '/keycloak.json');
+      }
     },
     
     _clearToken: function () {
@@ -130,7 +153,7 @@
     
     _onJoinError: function () {
       this._clearToken();
-      this.authenticate();
+      setTimeout(() => { this.authenticate(); }, 300);
     }
     
   });

@@ -69,43 +69,30 @@
         
         if (this._pong && (this._pong < (new Date().getTime() - this.options.pingThreshold))) {
           try {
-            this._webSocket.close(); 
+            this._reAuthenticate();
           } catch (e) { }
         }
       }
     },
     
-    _reconnect: function (reason) {
-      this.element.trigger("reconnect", { });
+    _reAuthenticate: function (reason) {
+      this._closeWebSocket();
       this._pong = null;
       this._state = 'RECONNECTING';
 
       if (this.options.logDebug) {
         console.log(`Reconnecting... (${reason})`);
       }
-          
-      if (this._reconnectTimeout) {
-        clearTimeout(this._reconnectTimeout);
-      }
       
-      if (!this._webSocket || this._webSocket.readyState !== this._webSocket.CONNECTING) {
-        this.connect($(document.body).pakkasmarjaBerriesAuth('sessionId'));
-      }
-      
-      this._reconnectTimeout = setTimeout($.proxy(function () {
-        if (this.options.logDebug) {
-          console.log("timeout socket state: " + this._webSocket.readyState);
-        }
-        
-        this.element.pakkasmarjaBerriesAuth('join');
-        
-        if (this._webSocket.readyState === this._webSocket.CLOSED) {
-          this._reconnect(`Reconnect timeout`);
-        }
-      }, this), this.options.reconnectTimeout);
+      this.element.pakkasmarjaBerriesAuth('authenticate');
     },
 
     _createWebSocket: function (sessionId) {
+      if (!sessionId) {
+        this._reAuthenticate();
+        return;
+      }
+      
       const url = this.options.wsUrl + '/' + sessionId;
       if ((typeof window.WebSocket) !== 'undefined') {
         return new WebSocket(url);
@@ -117,7 +104,7 @@
     _sendMessage: function (data) {
       const message = JSON.stringify(data);
       
-      if (this._state === 'CONNECTED') {
+      if (this._state === 'CONNECTED' && this._webSocket && this._webSocket.readyState === this._webSocket.OPEN) {
         this._webSocket.send(message);
       } else {
         this._pendingMessages.push(message);
@@ -125,17 +112,12 @@
     },
     
     _onPause: function (event) {
-      if (this._webSocket) {
-        this._webSocket.onclose = () => { };
-        this._webSocket.close(); 
-      }
-      
+      this._closeWebSocket();
       this._state = 'PAUSED';
     },
     
     _onResume: function (event) {
-      this.element.pakkasmarjaBerriesAuth('join');
-      this._reconnect();
+      this._reAuthenticate();
     },
     
     _onWebSocketOpen: function (event) {
@@ -161,11 +143,23 @@
     },
     
     _onWebSocketClose: function (event) {
-      this._reconnect("Socket closed");
+      this._reAuthenticate("Socket closed");
     },
     
     _onWebSocketError: function (event) {
-      this._reconnect("Socket error");
+      this._reAuthenticate("Socket error");
+    },
+    
+    _closeWebSocket: function() {
+      if (this._webSocket) {
+        this._webSocket.onclose = () => { };
+        if (this._webSocket.readyState === this._webSocket.OPEN) {
+          this._webSocket.close(); 
+        }
+      }
+      
+      this._webSocket = null;
+      this.element.trigger("disconnect", { });
     }
     
   });
