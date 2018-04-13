@@ -6,7 +6,7 @@
   
   $.widget("custom.pakkasmarjaBerriesNews", {
     options: {
-      pageSize: 10
+      pageSize: 1000
     },
     
     _create: function() {
