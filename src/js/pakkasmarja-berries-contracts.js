@@ -490,9 +490,11 @@
     
     _onPageChange: function (event, data) {
       if (data.activePage === 'contracts') {
+        $('.contract-list-view').show();
         this.reloadContracts();
         this._showDetailsPlaceholder();
       } else {
+        $('.contract-list-view').hide();
         this._hideDetailsPlaceholder();
       }
     },
