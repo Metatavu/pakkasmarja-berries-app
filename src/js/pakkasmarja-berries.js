@@ -89,6 +89,13 @@
       $(window).scroll($.proxy(this._onWindowScroll, this));
       
       this.element.pakkasmarjaBerriesDeviceControls();
+      
+      const contractsConfig = $(document.body).pakkasmarjaBerriesAppConfig('get', 'contracts');
+      if (!contractsConfig || !contractsConfig.visible) {
+        $('.menu-item-container').removeClass('col-3').addClass('col-4');
+        $('.contract-item-container').hide();
+        $('.contracts-slide').hide();
+      }
     },
     
     sessionId: function () {
@@ -241,6 +248,14 @@
     },
     
     _onConnect: function () {
+      const contractsConfig = $(document.body).pakkasmarjaBerriesAppConfig('get', 'contracts');
+      const userId = $(document.body).pakkasmarjaBerriesAuth('getUserId');
+      if (contractsConfig && !contractsConfig.visible && contractsConfig.except && contractsConfig.except.indexOf(userId) > -1 ) {
+        $('.menu-item-container').removeClass('col-4').addClass('col-3');
+        $('.contract-item-container').show();
+        $('.contracts-slide').show();
+      }
+
       $('.connecting-modal').hide();
       if ('browser' !== device.platform) {
         cordova.plugins.photoLibrary.requestAuthorization(
