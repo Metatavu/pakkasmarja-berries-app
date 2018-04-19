@@ -27,9 +27,9 @@
       if (image && image.length) {
         articleImage = image;
       } else {
-        articleImage = 'gfx/image_placeholder.png';
+        articleImage = 'gfx/image_placeholder.jpg';
       }
-      
+
       const newsHtml = pugNewsItemOpen({
         createdFormatted: this._formatDate(created),
         modifiedFormatted: this._formatDate(modified),
@@ -146,7 +146,7 @@
       const sessionId = $(document.body).pakkasmarjaBerriesAuth('sessionId');
       
       item.removeClass('unread').addClass('read');      
-      this.openNews(id, title, contents, created, modified, `${image}?sessionId=${sessionId}`);
+      this.openNews(id, title, contents, created, modified, image ? `${image}?sessionId=${sessionId}` : null);
     },
     
     _onNewsCloseElementClick: function(event) {

@@ -78,7 +78,7 @@ html {
 }
 
 .connecting-modal {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
@@ -551,9 +551,25 @@ html {
       max-width: 100%;
     }
     
+    .news-content-container {
+      padding-bottom: 100px;
+    }
+    
     .news-close-btn {
-      height: 30px;
-      width: auto;
+      text-align: center;
+      position: fixed;
+      bottom: 15px;
+      left: 15px;
+      background-color: #e01e36;
+      color: #fff;
+      font-size: 52px;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      
+      i {
+        margin-left: -4px;
+      }
     }
   }
 }

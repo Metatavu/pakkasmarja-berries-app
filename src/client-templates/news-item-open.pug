@@ -1,9 +1,11 @@
-img.news-image(src=image alt="..")
+if image
+  img.news-image(src=image alt="..")
 .news-text-content
   p.small.news.date
     =dateFormatted
   h2
     =title
-  !=contents
+  .news-content-container
+    !=contents
   a.news-close-btn(href='#')
-    img.arrow-back(src='gfx/suljenappi.png')
+    i.fa.fa-angle-left
