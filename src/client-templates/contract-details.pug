@@ -9,11 +9,18 @@ h3.contract-detail-header
           b Viljelijä
           br
           span
-            =contract.contact.companyName
+            if contract.contact.businessCode
+              =contract.contact.companyName 
+              br
+              ='( ' +contract.contact.businessCode+ ' ) '
+            else
+              =contract.contact.companyName
         .col
           b Yhtiö
           br
-          span Pakkasmarja Oy
+          span Pakkasmarja Oy 
+            br
+            |( 0434204-0 )
     .contract-details-section
       if activePrices.length > 0
         h3 Takuuhinnat

@@ -89,14 +89,6 @@
       $(window).scroll($.proxy(this._onWindowScroll, this));
       
       this.element.pakkasmarjaBerriesDeviceControls();
-      
-      const contractsConfig = $(document.body).pakkasmarjaBerriesAppConfig('get', 'contracts');
-      if (!contractsConfig || !contractsConfig.visible) {
-        $('.menu-item-container').removeClass('col-3').addClass('col-4');
-        $('.contract-item-container').remove();
-        $('.contracts-slide').remove();
-        this.updateSwiper();
-      }
     },
     
     sessionId: function () {
@@ -262,24 +254,26 @@
 
       $('.connecting-modal').hide();
       if ('browser' !== device.platform) {
-        cordova.plugins.photoLibrary.requestAuthorization(
-          () => {
-            if(!this._versionChecked) {
-              this._versionChecked = true;
-              setTimeout(() => {
-                this._checkVersion();
-              }, 1000);
-            }
+        setTimeout(() => {
+          cordova.plugins.photoLibrary.requestAuthorization(
+            () => {
+              if(!this._versionChecked) {
+                this._versionChecked = true;
+                setTimeout(() => {
+                  this._checkVersion();
+                }, 1000);
+              }
 
-          },
-          (err) => {
-            navigator.app.exitApp();
-          },
-          {
-            read: true,
-            write: true
-          }
-        );
+            },
+            (err) => {
+              navigator.app.exitApp();
+            },
+            {
+              read: true,
+              write: true
+            }
+          );
+        }, 1500);
       }
     },
     

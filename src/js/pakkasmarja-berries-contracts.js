@@ -550,6 +550,17 @@
       $('.contract-progress-indicator').find(`.fa[data-phase="${phase}"]`).addClass('active');
     },
     
+    _getBusinessCode: function(federalTaxId) {
+        if (federalTaxId && federalTaxId.toUpperCase().indexOf("FI") === 0) {
+          let result = federalTaxId.substring(2);
+          if (result.length === 8) {
+            return `${result.substring(0, 7)}-${result.substring(7)}`;
+          }
+        }
+
+      return "";
+    },
+    
     _loadContracts: function () {
       const itemGroupConfig = $(document.body).pakkasmarjaBerriesAppConfig('get', 'item-groups');
       
@@ -584,6 +595,7 @@
             }
 
             pendingContract.contact = contact;
+            pendingContract.contact.businessCode = this._getBusinessCode(contact.taxCode);
             if (pendingContract.itemGroup.category === 'FROZEN') {
               $('.frozen-list.pending-contract-list-container').append(pugPendingContractListItem({contract: pendingContract}));
             } else {
