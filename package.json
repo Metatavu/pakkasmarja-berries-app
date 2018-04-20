@@ -52,12 +52,12 @@
             "cordova-plugin-camera": {},
             "cordova-plugin-inappbrowser": {},
             "cordova-plugin-file-opener2": {},
-            "cordova-plugin-photo-library": {
-                "PHOTO_LIBRARY_USAGE_DESCRIPTION": "To choose photos"
-            },
             "cordova-plugin-file-transfer": {},
             "cordova-plugin-file": {},
-            "com-sarriaroman-photoviewer": {}
+            "com-sarriaroman-photoviewer": {},
+            "cordova-plugin-photo-library": {
+                "PHOTO_LIBRARY_USAGE_DESCRIPTION": "To choose photos"
+            }
         }
     }
 }

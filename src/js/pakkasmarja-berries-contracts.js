@@ -310,6 +310,12 @@
         return;
       }
       
+      const viableTosign = $('#viableToSign').is(':checked');
+      if (!viableTosign) {
+        bootbox.alert('Sinun tulee olla viljelijän puolesta edustuskelpoinen.');
+        return;
+      }
+      
       $(document.body).pakkasmarjaBerriesRest('createContractDocumentSignRequest', contractId, ssn, authService).then((contractDocumentSignRequest) => {
         if (device.platform === 'browser') {
           window.open(contractDocumentSignRequest.redirectUrl); 

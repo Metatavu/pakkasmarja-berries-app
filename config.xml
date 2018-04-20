@@ -33,11 +33,11 @@
     <plugin name="cordova-plugin-camera" spec="^4.0.2" />
     <plugin name="cordova-plugin-inappbrowser" spec="^2.0.2" />
     <plugin name="cordova-plugin-file-opener2" spec="https://github.com/JuanjoPP/cordova-plugin-file-opener2" />
-    <plugin name="cordova-plugin-photo-library" spec="^2.1.1">
-        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="To choose photos" />
-    </plugin>
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-file" spec="^5.0.0" />
     <plugin name="com-sarriaroman-photoviewer" spec="^1.1.16" />
+    <plugin name="cordova-plugin-photo-library" spec="^2.1.1">
+        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="To choose photos" />
+    </plugin>
     <engine name="android" spec="^6.4.0" />
 </widget>
