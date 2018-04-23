@@ -445,6 +445,14 @@
                 }
               });
 
+              //TODO: remove and add itemgroupcategory to delivery place
+              let deliveryPlacesForCurrentItemGroup = [];
+              if (contract.itemGroup.category === 'FROZEN') {
+                deliveryPlacesForCurrentItemGroup = deliveryPlaces.filter(deliveryPlace => deliveryPlace.name !== 'Muu');
+              } else {
+                deliveryPlacesForCurrentItemGroup = deliveryPlaces.filter(deliveryPlace => deliveryPlace.name === 'Muu' || deliveryPlace.name === 'Suonenjoki');
+              }
+
               const data = {};
               $.each(tempData, (header, element) => {
                 data[header] = $(element).html();
@@ -465,7 +473,7 @@
               $('.contract-view-details-container .contract-view-details-content').empty();
               const listView = $('.contract-view .contract-list-view');
               const detailView = $('<div>')
-                .html(pugContractDetails({activeContract: activeContract, contract: contract, deliveryPlaces: deliveryPlaces, activePrices: activePrices, terms: data, pastPrices: pastPrices, pastContracts: recentPastContracts}))
+                .html(pugContractDetails({activeContract: activeContract, contract: contract, deliveryPlaces: deliveryPlacesForCurrentItemGroup, activePrices: activePrices, terms: data, pastPrices: pastPrices, pastContracts: recentPastContracts}))
                 .addClass('contract-detail-container')
                 .hide()
                 .appendTo(device.platform === 'browser' ? $('.contract-view-details-container .contract-view-details-content') : $('.contract-view .view-content-container'));
