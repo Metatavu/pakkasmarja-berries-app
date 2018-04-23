@@ -22,29 +22,38 @@ h3.contract-detail-header
             br
             |( 0434204-0 )
     .contract-details-section
-      if activePrices.length > 0
-        h3 Takuuhinnat
-        p Takuuhinta jonka yhtiö maksaa viljelijälle
-        each activePrice in activePrices
-          .row.prices-row
-            .col-7
-              p
-                b
-                  =activePrice.group
-            .col
-              p
-                b
-                  =activePrice.price +' '+activePrice.unit
-        if pastPrices.length > 0
+      if contract.itemGroup.category === 'FROZEN'
+        if activePrices.length > 0
+          h3 Takuuhinnat
+          p Takuuhinta jonka yhtiö maksaa viljelijälle
+          each activePrice in activePrices
+            .row.prices-row
+              .col-7
+                p
+                  b
+                    =activePrice.group
+              .col
+                p
+                  b
+                    =activePrice.price +' '+activePrice.unit
+          if pastPrices.length > 0
+            p
+              a.past-prices-btn(href='#', data-past-prices=JSON.stringify(pastPrices))
+                i.fa.fa-info-circle
+                | edellisten vuosien hinnat
           p
-            a.past-prices-btn(href='#', data-past-prices=JSON.stringify(pastPrices))
-              i.fa.fa-info-circle
-              | edellisten vuosien hinnat
-        p
-          b BONUS:
-          | Sopimusmärään ylittävä määrä, mahdollinen bonus ja maksuehto neuvotellaan aina erikseen.
-        p Kaikki hinnat ovat vähimmäishintoja ja ALV 0%. Toimitusehto on vapaasti yhtiön osoittaman pakastevaraston laiturilla (viljelijä maksaa rahdin). Yhtiöllä on oikeus markkinatilanteen vaatiessa korottaa hintoja haluamallaan tavalla.
-        p Takuuhinta on viljely- ja ostosopimuksen mukainen.
+            b BONUS:
+            | Sopimusmärään ylittävä määrä, mahdollinen bonus ja maksuehto neuvotellaan aina erikseen.
+          p Kaikki hinnat ovat vähimmäishintoja ja ALV 0%. Toimitusehto on vapaasti yhtiön osoittaman pakastevaraston laiturilla (viljelijä maksaa rahdin). Yhtiöllä on oikeus markkinatilanteen vaatiessa korottaa hintoja haluamallaan tavalla.
+          p Takuuhinta on viljely- ja ostosopimuksen mukainen.
+      else
+        h3 Tuoremarjojen hinnoittelu
+        ul
+          li Vähimmäislaatuvaatimukset täyttävästä tuoremarjasta yhtiö maksaa päivän hinnan.
+          li Yhtiö voi huomioida max. 0,20 eur Alv 0%/ kg -suuruisella bonuksella BONUS-laatuiset marjat.
+          li Tunneli-/ kasvihuonetuotannosta ostettavalle marjalle pyritään maksamaan korkeampi päivän hinta.
+          li Jos marjaerä ei täytä yhtiön vähimmäislaatuvaatimuksia neuvotellaan erän hinnasta aina erikseen viljelijän kanssa.
+          li Yhtiö voi myös maksaa kyseisellä viikolla toimittaneille viljelijöille lisäbonuksen hyvin onnistuneen sopimusyhteistyön johdosta.
     .contract-details-section
       h3 Määrä
       p Pakkasmarja Oy:n ja viljelijän sopimus pakastukseen toimitettavista marjoista ja niiden hinnoista satokaudella #{(new Date()).getFullYear()}
@@ -69,47 +78,48 @@ h3.contract-detail-header
         label(for='contractQuantityCommentInput') Kommentti
         textarea#contractQuantityCommentInput.form-control(readonly=activeContract, disabled=activeContract, rows='3')
           =contract.quantityComment
-    .contract-details-section
-      h3 Tuotannossa olevat hehtaarit
-      .row
-        .col
-          - var minimumProfit = contract.itemGroup.minimumProfitEstimation ? contract.itemGroup.minimumProfitEstimation : null;
-          table.hectare-table(data-minimum-profit=minimumProfit)
-            thead
-              tr
-                th Lohko
-                th Pinta-ala (ha)
-                th Lajike/Lajikkeet
-                if !contract.itemGroup.minimumProfitEstimation
-                  th Tuottoarvio (kg / ha)
-            tbody
-              if contract.areaDetails.length > 0
-                each areaDetail in contract.areaDetails
+    if contract.itemGroup.category === 'FROZEN'
+      .contract-details-section
+        h3 Tuotannossa olevat hehtaarit
+        .row
+          .col
+            - var minimumProfit = contract.itemGroup.minimumProfitEstimation ? contract.itemGroup.minimumProfitEstimation : null;
+            table.hectare-table(data-minimum-profit=minimumProfit)
+              thead
+                tr
+                  th Lohko
+                  th Pinta-ala (ha)
+                  th Lajike/Lajikkeet
+                  if !contract.itemGroup.minimumProfitEstimation
+                    th Tuottoarvio (kg / ha)
+              tbody
+                if contract.areaDetails.length > 0
+                  each areaDetail in contract.areaDetails
+                    tr
+                      td
+                        input.form-control(readonly=activeContract, disabled=activeContract, type='text', name='name', value=areaDetail.name)
+                      td
+                        input.form-control(readonly=activeContract, disabled=activeContract, type='number', name='size', step='0.1', min='0', value=areaDetail.size)
+                      td
+                        input.form-control(readonly=activeContract, disabled=activeContract, type='text', name='species', value=areaDetail.species)
+                        if contract.itemGroup.minimumProfitEstimation
+                          input(type='hidden', name='profitEstimation', value=areaDetail.profitEstimation)
+                      if !contract.itemGroup.minimumProfitEstimation
+                        td
+                          input.form-control(readonly=activeContract, disabled=activeContract, type='number', name='profitEstimation', min='0', value=areaDetail.profitEstimation)  
+                else if !activeContract
                   tr
                     td
-                      input.form-control(readonly=activeContract, disabled=activeContract, type='text', name='name', value=areaDetail.name)
+                      input.form-control(type='text', name='name')
                     td
-                      input.form-control(readonly=activeContract, disabled=activeContract, type='number', name='size', step='0.1', min='0', value=areaDetail.size)
+                      input.form-control(type='number', name='size', step='0.1', min='0')
                     td
-                      input.form-control(readonly=activeContract, disabled=activeContract, type='text', name='species', value=areaDetail.species)
+                      input.form-control(type='text', name='species')
                       if contract.itemGroup.minimumProfitEstimation
-                        input(type='hidden', name='profitEstimation', value=areaDetail.profitEstimation)
+                        input(type='hidden', name='profitEstimation', value=contract.itemGroup.minimumProfitEstimation)
                     if !contract.itemGroup.minimumProfitEstimation
                       td
-                        input.form-control(readonly=activeContract, disabled=activeContract, type='number', name='profitEstimation', min='0', value=areaDetail.profitEstimation)  
-              else if !activeContract
-                tr
-                  td
-                    input.form-control(type='text', name='name')
-                  td
-                    input.form-control(type='number', name='size', step='0.1', min='0')
-                  td
-                    input.form-control(type='text', name='species')
-                    if contract.itemGroup.minimumProfitEstimation
-                      input(type='hidden', name='profitEstimation', value=contract.itemGroup.minimumProfitEstimation)
-                  if !contract.itemGroup.minimumProfitEstimation
-                    td
-                      input.form-control(type='number', name='profitEstimation', min='0')
+                        input.form-control(type='number', name='profitEstimation', min='0')
       .row
         .col
           if !activeContract
