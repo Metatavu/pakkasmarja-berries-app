@@ -291,7 +291,8 @@
     },
 
     _onSignBtnClick: function(e) {
-      const contractId = $(e.target).closest('.sign-btn').attr('data-contract-id');
+      const signBtn = $(e.target).closest('.sign-btn');
+      const contractId = signBtn.attr('data-contract-id');
       const ssn = $('#ssnInput').val();
       if (!ssn) {
         bootbox.alert('Syötä henkilötunnus.');
@@ -316,7 +317,12 @@
         return;
       }
       
+      $('<i>')
+        .addClass('fa fa-spinner fa-spin')
+        .appendTo(signBtn);
+      
       $(document.body).pakkasmarjaBerriesRest('createContractDocumentSignRequest', contractId, ssn, authService).then((contractDocumentSignRequest) => {
+        signBtn.find('.fa-spinner').remove();
         if (device.platform === 'browser') {
           window.open(contractDocumentSignRequest.redirectUrl); 
         } else {
