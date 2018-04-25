@@ -274,6 +274,15 @@
             }
           );
         }, 1500);
+      } else {
+        if(window.location.hash) {
+          const hash = window.location.hash.substring(1);
+          const redirectTab = $(`.menu-item[data-page="${hash}"]`);
+          if (redirectTab.length > 0) {
+            const tabIndex = redirectTab.attr('data-slide-index');
+            this.horizontalSwiper.slideTo(tabIndex);
+          }
+        }
       }
     },
     

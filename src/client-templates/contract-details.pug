@@ -2,6 +2,13 @@ h3.contract-detail-header
   =contract.itemGroup.displayName || contract.itemGroup.name
 .contract-details-content
   .details-container
+    .contract-details-section
+      if contract.itemGroup.category === 'FROZEN'
+        p
+          b Pakkasmarja Oy:n ja viljelijän sopimus pakastukseen toimitettavista marjoista ja niiden hinnoista satokaudella #{(new Date()).getFullYear()}.
+      else
+        p 
+          b Pakkasmarja Oy:n ja viljelijän sopimus tuoremarjakauppaan toimitettavista marjoista.
     .contract-details-parties
       h3 Osapuolet
       .row
@@ -56,7 +63,6 @@ h3.contract-detail-header
           li Yhtiö voi myös maksaa kyseisellä viikolla toimittaneille viljelijöille lisäbonuksen hyvin onnistuneen sopimusyhteistyön johdosta.
     .contract-details-section
       h3 Määrä
-      p Pakkasmarja Oy:n ja viljelijän sopimus pakastukseen toimitettavista marjoista ja niiden hinnoista satokaudella #{(new Date()).getFullYear()}
       .form-group
         label(for='contractAmountInput') Määrä
         input#contractAmountInput.form-control(readonly=activeContract, disabled=activeContract, type='number', value=contract.proposedQuantity, data-contract-quantity=contract.contractQuantity)
@@ -73,7 +79,7 @@ h3.contract-detail-header
       if contract.allowDeliveryAll
         .form-check
           input#deliverAllCheckBox.form-check-input(readonly=activeContract, disabled=activeContract, type='checkbox', checked=contract.deliverAll)
-          label.form-check-label(for='deliverAllCheckBox') Haluan toimittaa kaiken tilallani vieljeltävän sadon tästä marjasta Pakkasmarjalle pakastettavaksi ja tuorekauppaan.
+          label.form-check-label(for='deliverAllCheckBox') Haluan toimittaa kaiken tilallani viljeltävän sadon tästä marjasta Pakkasmarjalle pakastettavaksi ja tuorekauppaan (lisätietoja sopimuksen kohdasta 100 % toimittajuus).
       .form-group
         label(for='contractQuantityCommentInput') Kommentti
         textarea#contractQuantityCommentInput.form-control(readonly=activeContract, disabled=activeContract, rows='3')

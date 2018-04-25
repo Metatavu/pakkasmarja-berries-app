@@ -4,6 +4,7 @@
     each itemGroup in itemGroups
       option(value=itemGroup.displayName || itemGroup.name)
         =itemGroup.displayName || itemGroup.name
+    option(value="Muu") Muu
 .form-group
   label(for='newBerryItemGroupSizeInput') Määräarvio
   input#newBerryItemGroupSizeInput.form-control(type='number')
