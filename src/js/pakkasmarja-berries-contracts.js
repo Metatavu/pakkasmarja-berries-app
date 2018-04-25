@@ -19,9 +19,19 @@
       $(this.element).on('click', '.deny-btn', this._onDenyBtnClick.bind(this));
       $(this.element).on('click', '.add-hectare-row-btn', this._onAddHectareButtonRowClick.bind(this));
       $(this.element).on('click', '.suggest-berry-btn', this._onSuggestBerryButtonClick.bind(this));
+      $(this.element).on('click', '.table-popup-link', this._onTablePopupLinkClick.bind(this));
       $(this.element).on('keyup', '#contractAmountInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
       $(this.element).on('change', '#contractDeliveryPlaceInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
       $(this.element).on('change', '.hectare-table input', this._onHectareTableInputChange.bind(this));
+    },
+
+    _onTablePopupLinkClick: function(e) {
+      const data = $(e.target).closest(".table-popup-link").attr("data-table");
+      bootbox.dialog({
+        closeButton: true,
+        message: `<div style="overflow-x:auto;">${data}</div><small>Jos taulukko ei näy kokonaan, voit vierittää sitä sivusuunnassa.</small>`,
+        size: "large"
+      });
     },
 
     _onHectareTableInputChange: function() {
@@ -435,6 +445,19 @@
               const content = $('<div>')
                   .append(contractDocument)
                   .find('.content');
+          
+              if (device.platform !== 'browser') {
+                content.find('table').each((index, table) => {
+                  const data = table.outerHTML;
+                  const link = $("<a>")
+                    .attr("href", "#")
+                    .attr("data-table", data)
+                    .addClass("table-popup-link")
+                    .text('Näytä taulukko');
+
+                  $(table).replaceWith(link);
+                });
+              }
 
               const tempData = {};
               let currentHeader = "Sopimus";
