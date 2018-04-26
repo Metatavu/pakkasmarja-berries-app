@@ -334,7 +334,7 @@
       $(document.body).pakkasmarjaBerriesRest('createContractDocumentSignRequest', contractId, ssn, authService).then((contractDocumentSignRequest) => {
         signBtn.find('.fa-spinner').remove();
         if (device.platform === 'browser') {
-          bootbox.dialog({ message: `Sopimus on nyt valmis allerkirjoitettavaksi.<br><br><a href="${contractDocumentSignRequest.redirectUrl}">Siirry allekirjoituspalveluun klikkaamalla tästä.</a>` });
+          bootbox.dialog({ message: `Sopimus on nyt valmis allerkirjoitettavaksi.<br><br><a class="link-out" href="${contractDocumentSignRequest.redirectUrl}">Siirry allekirjoituspalveluun klikkaamalla tästä.</a>` });
         } else {
           const ref = cordova.InAppBrowser.open(contractDocumentSignRequest.redirectUrl, '_blank', 'location=no,hardwareback=no,zoom=no');
           ref.addEventListener('loadstop', (loadStopEvent) => {

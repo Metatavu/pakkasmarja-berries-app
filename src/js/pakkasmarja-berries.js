@@ -25,6 +25,7 @@
       this._versionChecked = false;
       this._restoreTriggered = false;
       
+      $(document.body).on("click", ".link-out", $.proxy(this._onLinkOutClick, this));
       $(document.body).on('connect', $.proxy(this._onConnect, this));
       $(document.body).on('disconnect', $.proxy(this._onDisconnect, this));
       this.element.on('authenticated', $.proxy(this._onAuthenticated, this));
@@ -238,6 +239,10 @@
     
     _onJoined: function () {
       this.element.pakkasmarjaBerriesClient('connect', this.sessionId());
+    },
+
+    _onLinkOutClick: function () {
+      this.element.pakkasmarjaBerriesClient('pause');
     },
     
     _onConnect: function () {

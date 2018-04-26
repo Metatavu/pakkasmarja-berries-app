@@ -60,6 +60,11 @@
     sendMessage: function (data) {
       this._sendMessage(data);
     },
+
+    pause: function () {
+      this._closeWebSocket();
+      this._state = 'PAUSED';
+    },
     
     _ping: function () {
       if (this._state === 'CONNECTED') {
@@ -112,8 +117,7 @@
     },
     
     _onPause: function (event) {
-      this._closeWebSocket();
-      this._state = 'PAUSED';
+      this.pause();
     },
     
     _onResume: function (event) {
