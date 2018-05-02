@@ -446,6 +446,8 @@
                   .append(contractDocument)
                   .find('.content');
           
+              content.find('.hide-contract-accordion').remove();
+          
               if (device.platform !== 'browser') {
                 content.find('table').each((index, table) => {
                   const data = table.outerHTML;
