@@ -34,7 +34,10 @@ h3.contract-detail-header
       if contract.itemGroup.category === 'FROZEN'
         if activePrices.length > 0
           h3 Takuuhinnat
-          p Takuuhinta jonka yhtiö maksaa viljelijälle
+          if contract.itemGroup.name === '304100/Mansikka' || contract.itemGroup.name === '309100/Luomu mansikk'
+            p Pakastukseen ostettavien mansikoiden takuuhinnat satokaudella #{(new Date()).getFullYear()}.
+          else
+            p Takuuhinta jonka yhtiö maksaa viljelijälle
           each activePrice in activePrices
             .row.prices-row
               .col-7
@@ -50,9 +53,11 @@ h3.contract-detail-header
               a.past-prices-btn(href='#', data-past-prices=JSON.stringify(pastPrices))
                 i.fa.fa-info-circle
                 | edellisten vuosien takuuhinnat
+          if contract.itemGroup.name === '304100/Mansikka' || contract.itemGroup.name === '309100/Luomu mansikk'
+            p Takuuhinnan lisäksi yhtiö maksaa viljelijälle bonusta sopimuksen täyttöasteen mukaisesti. Lisätietoja sopimuksen kohdasta Sopimuksen mukaiset toimitusmäärät, takuuhinnat ja bonus satokaudella 2018.
           p Sopimusmärään ylittävä määrä, mahdollinen bonus ja maksuehto neuvotellaan aina erikseen.
           p Kaikki hinnat ovat vähimmäishintoja ja ALV 0%. Toimitusehto on vapaasti yhtiön osoittaman pakastevaraston laiturilla (viljelijä maksaa rahdin). Yhtiöllä on oikeus markkinatilanteen vaatiessa korottaa hintoja haluamallaan tavalla.
-          if contract.itemGroup.name === '304100/Mansikka' || contract.itemGroup.name === '309100/Luomu mansikk' 
+          if contract.itemGroup.name === '304100/Mansikka' || contract.itemGroup.name === '309100/Luomu mansikk'
             p Takuuhinnan maksuehto on viljely- ja ostosopimuksen mukainen. Bonukset tarkistetaan satokauden jälkeen, yhtiö tekee niistä ostolaskut bonukseen oikeutetuille viljelijöille ja ne pyritään maksamaan satovuoden joulukuussa. Bonusta ei makseta, jos sopimus on tehty 31.5. jälkeen.
           else
             p Takuuhinnan maksuehto on viljely- ja ostosopimuksen mukainen.
@@ -78,11 +83,11 @@ h3.contract-detail-header
         p
           a.past-contracts-btn(href='#', data-past-contracts=JSON.stringify(pastContracts))
             i.fa.fa-info-circle
-            | edellisten vuosien määrät
+            | edellisten vuosien sopimusmäärät ja toimitusmäärät
       if contract.allowDeliveryAll
         .form-check
           input#deliverAllCheckBox.form-check-input(readonly=activeContract, disabled=activeContract, type='checkbox', checked=contract.deliverAll)
-          label.form-check-label(for='deliverAllCheckBox') Haluan toimittaa kaiken tilallani viljeltävän sadon tästä marjasta Pakkasmarjalle pakastettavaksi ja tuorekauppaan (lisätietoja sopimuksen kohdasta 100 % toimittajuus).
+          label.form-check-label(for='deliverAllCheckBox') Haluaisin toimittaa kaiken tilallani viljeltävän sadon tästä marjasta Pakkasmarjalle pakastettavaksi ja tuorekauppaan (lisätietoja sopimuksen kohdasta 100 % toimittajuus).
       .form-group
         label(for='contractQuantityCommentInput') Kommentti
         textarea#contractQuantityCommentInput.form-control(readonly=activeContract, disabled=activeContract, rows='3')

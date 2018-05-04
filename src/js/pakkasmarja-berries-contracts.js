@@ -178,9 +178,9 @@
       if (minimumProfit) {
         text = `<span>Lohkoja yhteensä ${blocks} kpl. Pinta-alaa yhteensä ${totalHectares} ha.</span><br/>`;
         if (totalProfit > proposedAmount) {
-          text += `<span class="hectare-table-error"><i class="fa fa-exclamation"/> Minimisopimusmäärä on ${totalProfit} kg, perustuen hehtaarikohtaiseen toimitusmääräminimiin 500 kg / ha.</span>`;
+          text += `<span class="hectare-table-error"><i class="fa fa-exclamation"/> Minimisopimusmäärä on ${totalProfit} kg, perustuen hehtaarikohtaiseen toimitusmääräminimiin 500 kg / ha. Lisätietoja sopimuksen kohdasta Sopimuksen mukaiset toimitusmäärät, takuuhinnat ja bonus satokaudella ${(new Date()).getFullYear()}</span>`;
         } else {
-          text += `<span>Minimisopimusmäärä on ${totalProfit} kg, perustuen hehtaarikohtaiseen toimitusmääräminimiin 500 kg / ha.</span>`;
+          text += `<span>Minimisopimusmäärä on ${totalProfit} kg, perustuen hehtaarikohtaiseen toimitusmääräminimiin 500 kg / ha. Lisätietoja sopimuksen kohdasta Sopimuksen mukaiset toimitusmäärät, takuuhinnat ja bonus satokaudella ${(new Date()).getFullYear()}</span>`;
         }
       } else {
         text = `<span>Lohkoja yhteensä ${blocks} kpl. Pinta-alaa yhteensä ${totalHectares} ha. Tuotantoarvio yhteensä ${totalProfit} kg</span>`;
@@ -303,25 +303,25 @@
     _onSignBtnClick: function(e) {
       const signBtn = $(e.target).closest('.sign-btn');
       const contractId = signBtn.attr('data-contract-id');
-      const ssn = $('#ssnInput').val();
+      const ssn = signBtn.closest('#ssnInput').val();
       if (!ssn) {
         bootbox.alert('Syötä henkilötunnus.');
         return;
       }
 
-      const authService = $('#authServiceInput').val();
+      const authService = signBtn.closest('#authServiceInput').val();
       if (!authService) {
         bootbox.alert('Valitse tunnistautumispalvelu.');
         return;
       }
 
-      const acceptedTerms = $('#acceptTerms').is(':checked');
+      const acceptedTerms = signBtn.closest('#acceptTerms').is(':checked');
       if (!acceptedTerms) {
         bootbox.alert('Sinun tulee hyväksyä sopimusehdot ennen allekirjoitusta.');
         return;
       }
       
-      const viableTosign = $('#viableToSign').is(':checked');
+      const viableTosign = signBtn.closest('#viableToSign').is(':checked');
       if (!viableTosign) {
         bootbox.alert('Sinun tulee olla viljelijän puolesta edustuskelpoinen.');
         return;
