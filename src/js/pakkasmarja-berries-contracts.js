@@ -303,25 +303,25 @@
     _onSignBtnClick: function(e) {
       const signBtn = $(e.target).closest('.sign-btn');
       const contractId = signBtn.attr('data-contract-id');
-      const ssn = signBtn.closest('#ssnInput').val();
+      const ssn = signBtn.closest('.contract-footer-section').find('#ssnInput').val();
       if (!ssn) {
         bootbox.alert('Syötä henkilötunnus.');
         return;
       }
 
-      const authService = signBtn.closest('#authServiceInput').val();
+      const authService = signBtn.closest('.contract-footer-section').find('#authServiceInput').val();
       if (!authService) {
         bootbox.alert('Valitse tunnistautumispalvelu.');
         return;
       }
 
-      const acceptedTerms = signBtn.closest('#acceptTerms').is(':checked');
+      const acceptedTerms = signBtn.closest('.contract-footer-section').find('#acceptTerms').is(':checked');
       if (!acceptedTerms) {
         bootbox.alert('Sinun tulee hyväksyä sopimusehdot ennen allekirjoitusta.');
         return;
       }
       
-      const viableTosign = signBtn.closest('#viableToSign').is(':checked');
+      const viableTosign = signBtn.closest('.contract-footer-section').find('#viableToSign').is(':checked');
       if (!viableTosign) {
         bootbox.alert('Sinun tulee olla viljelijän puolesta edustuskelpoinen.');
         return;
