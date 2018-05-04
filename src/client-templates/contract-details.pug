@@ -52,7 +52,10 @@ h3.contract-detail-header
                 | edellisten vuosien takuuhinnat
           p Sopimusmärään ylittävä määrä, mahdollinen bonus ja maksuehto neuvotellaan aina erikseen.
           p Kaikki hinnat ovat vähimmäishintoja ja ALV 0%. Toimitusehto on vapaasti yhtiön osoittaman pakastevaraston laiturilla (viljelijä maksaa rahdin). Yhtiöllä on oikeus markkinatilanteen vaatiessa korottaa hintoja haluamallaan tavalla.
-          p Takuuhinnan maksuehto on viljely- ja ostosopimuksen mukainen. Bonukset tarkistetaan satokauden jälkeen, yhtiö tekee niistä ostolaskut bonukseen oikeutetuille viljelijöille ja ne pyritään maksamaan satovuoden joulukuussa. Bonusta ei makseta, jos sopimus on tehty 31.5. jälkeen.
+          if contract.itemGroup.name === '304100/Mansikka' || contract.itemGroup.name === '309100/Luomu mansikk' 
+            p Takuuhinnan maksuehto on viljely- ja ostosopimuksen mukainen. Bonukset tarkistetaan satokauden jälkeen, yhtiö tekee niistä ostolaskut bonukseen oikeutetuille viljelijöille ja ne pyritään maksamaan satovuoden joulukuussa. Bonusta ei makseta, jos sopimus on tehty 31.5. jälkeen.
+          else
+            p Takuuhinnan maksuehto on viljely- ja ostosopimuksen mukainen.
       else
         h3 Tuoremarjojen hinnoittelu
         ul
