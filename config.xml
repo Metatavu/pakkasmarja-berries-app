@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="fi.metatavu.pakkasmarjaBerriesApp" version="2.0.6" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="fi.metatavu.pakkasmarjaBerriesApp" version="2.0.7" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Pakkasmarja</name>
     <description>Application to make communicating with berry farmers easier</description>
     <author email="info@metatavu.fi" href="https://metatavu.fi">Metatavu Oy</author>
@@ -36,8 +36,8 @@
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-file" spec="^5.0.0" />
     <plugin name="com-sarriaroman-photoviewer" spec="^1.1.16" />
+    <engine name="android" spec="^6.4.0" />
     <plugin name="cordova-plugin-photo-library" spec="^2.1.1">
         <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="To choose photos" />
     </plugin>
-    <engine name="android" spec="^6.4.0" />
 </widget>
