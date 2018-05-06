@@ -15,15 +15,13 @@ h3.contract-detail-header
         .col
           b Viljelijä
           br
-          span 
-            =contract.contact.firstName + ' ' + contract.contact.lastName
-            br
+          span
             if contract.contact.businessCode
-              =contract.contact.companyName 
+              =contract.contact.companyName || contract.contact.firstName + ' ' + contract.contact.lastName
               br
               ='( ' +contract.contact.businessCode+ ' ) '
             else
-              =contract.contact.companyName
+              =contract.contact.companyName || contract.contact.firstName + ' ' + contract.contact.lastName
         .col
           b Yhtiö
           br
