@@ -622,6 +622,7 @@
 
           activeContracts.forEach((activeContract) => {
             activeContract.contact = contact;
+            activeContract.contact.businessCode = this._getBusinessCode(contact.taxCode);
             if (activeContract.itemGroup.category === 'FROZEN') {
               $('.frozen-list.active-contract-list-container').append(pugActiveContractListItem({contract: activeContract}));
             } else {
