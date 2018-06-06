@@ -27,6 +27,10 @@ html, body {
   position: absolute !important;
 }
 
+.swiper-slide {
+  padding-top: 116px !important;
+}
+
 .news-view,
 .conversations-view,
 .questions-view {
@@ -82,6 +86,10 @@ html, body {
 
 .show-list-header .list-header .list-header-back-menu {
   background-color: #eee !important;
+}
+
+.questions-view.show-list-header .list-header {
+  top: 40px !important;
 }
 
 .item-row {

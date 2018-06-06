@@ -57,9 +57,9 @@ html
                 i.fa.fa-arrow-left
     .row.no-gutters.secondary-menu
       .col-3.menu-item-container.news-item-container
-        a.menu-item.active(href='#', data-slide-index='0', data-page="news") Ajankohtaista
+        a.menu-item.active(href='#', data-slide-index='0', data-page="news") Ajan&shy;kohtaista
       .col-3.menu-item-container.conversations-item-container
-        a.menu-item(href='#', data-slide-index='1', data-page="conversations") Ryhmäkeskustelu
+        a.menu-item(href='#', data-slide-index='1', data-page="conversations") Ryhmä&shy;keskustelu
       .col-3.menu-item-container.questions-item-container
         a.menu-item(href='#', data-slide-index='2', data-page="questions") Kysymykset
       .col-3.menu-item-container.contract-item-container
@@ -251,6 +251,9 @@ html
                 .form-group
                   label(for='auditInput') Auditoitu
                   input#auditInput.form-control(type='text')
+                .form-group
+                  label(for='auditInput') SapId
+                  input#sapIdInput.form-control.disabled(type='text', disabled='disabled', readonly='readonly')
           .card
             .card-header
               h5.mb-0

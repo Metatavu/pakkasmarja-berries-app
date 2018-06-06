@@ -187,7 +187,8 @@
         }
         const address1 = data.addresses[0] || {};
         const address2 = data.addresses[1] || {};
-
+        console.log(data);
+        $(".profile-menu").find("#sapIdInput").val(data.sapId || "");
         $(".profile-menu").find("#auditInput").val(data.audit || "");
         $(".profile-menu").find("#vatLiableInput").val(vatLiable);
         $(".profile-menu").find("#firstNameInput").val(data.firstName || "");

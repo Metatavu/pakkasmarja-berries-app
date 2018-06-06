@@ -219,9 +219,7 @@
         });
       } else {
         $("body").removeClass("question-group-open");
-        if ('browser' === device.platform) {
-          $('.questions-view').removeClass('show-list-header')
-        }
+        $('.questions-view').removeClass('show-list-header');
         if (this.selectedQuestionGroupId) {
           this._loadGroups();
         }
