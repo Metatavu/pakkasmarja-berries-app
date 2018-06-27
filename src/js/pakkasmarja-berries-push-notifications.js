@@ -11,6 +11,8 @@
     
     _create : function() {
       if (window.FirebasePlugin) {
+        window.FirebasePlugin.grantPermission();
+
         window.FirebasePlugin.onNotificationOpen(function(notification) {
             console.log("Received push notification");
         }, function(error) {
