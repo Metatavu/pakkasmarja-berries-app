@@ -57,7 +57,7 @@
       this.predefinedTexts = [];
     },
     
-    joinThread: function (threadId, threadTitle, threadDescription, threadImageUrl, threadCategory, answerType, predefinedTexts, allowOtherAnswer) {
+    joinThread: function (threadId, threadTitle, threadDescription, threadImageUrl, threadCategory, answerType, predefinedTexts, allowOtherAnswer, expiresAt) {
       this.reset();
       
       this.activeThreadId = parseInt(threadId);
@@ -80,6 +80,15 @@
         $(".chat-conversation-poll")
           .html(threadDescription)
           .show();
+
+          if (expiresAt) {
+            const expiresFormatted = moment(expiresAt).locale('fi').format('LL');
+            const expireElement = $("<p>")
+              .addClass("chat-conversation-poll-expires")
+              .text(`Viimeinen vastauspäivä ${expiresFormatted}`);
+            $(".chat-conversation-poll").prepend(expireElement);
+          }
+  
         $(".chat-conversation-wrapper").hide();
 
         const optionsContainer = $("<ul>")
