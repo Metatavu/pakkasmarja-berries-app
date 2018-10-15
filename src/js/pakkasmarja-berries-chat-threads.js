@@ -20,8 +20,8 @@
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
     },
     
-    joinThread: function(threadId, threadTitle, threadLogo) {
-      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId, threadTitle, threadLogo, 'Keskustelu');
+    joinThread: function(threadId, threadTitle, threadDescription, threadLogo, answerType, predefinedTexts, allowOtherAnswer) {
+      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId, threadTitle, threadDescription, threadLogo, 'Keskustelu', answerType, predefinedTexts, allowOtherAnswer);
     },
     
     _addThreads: function (threads) {
@@ -82,9 +82,13 @@
       
       const threadId = $(element).attr('data-id');
       const threadTitle = $(element).attr('data-thread-title');
+      const threadDescription = $(element).attr('data-thread-description');
       const threadImage = $(element).attr('data-thread-image');
-      
-      this.joinThread(threadId, threadTitle, threadImage);
+      const answerType = $(element).attr('data-answer-type');
+      const predefinedTexts = JSON.parse($(element).attr('data-predefined-texts') || "[]");
+      const allowOtherAnswer = "true" === $(element).attr('data-allow-other-answer');
+
+      this.joinThread(threadId, threadTitle, threadDescription, threadImage, answerType, predefinedTexts, allowOtherAnswer);
     },
     
     _loadChatThreads: function () {

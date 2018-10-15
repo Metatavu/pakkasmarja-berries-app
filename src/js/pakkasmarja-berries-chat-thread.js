@@ -26,7 +26,10 @@
       this.element.on('click', '.close-dialog', $.proxy(this._onCloseDialogClick, this));
       this.element.on('click', '.full-image-btn', $.proxy(this._onFullImageBtnClick, this));
       this.element.on('click', '.remove-message-btn', $.proxy(this._onRemoveMessageBtnClick, this));
-      
+      this.element.on('click', '.chat-conversation-poll li', $.proxy(this._onChatConversationPollClick, this));
+      this.element.on('change', '.poll-item-other input', $.proxy(this._onChatConversationPollOtherChange, this));
+
+
       $(document.body).on('click', '.chat-container .list-header-close-btn', $.proxy(this._onHeaderBackButtonClick, this));
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
       $(document.body).on('message:message-deleted', $.proxy(this._onMessageDeleted, this));
@@ -37,26 +40,32 @@
     },
     
     _onAutosizeResized: function() {
-      const inputHeight = this.element.find('.message-input').outerHeight();
-      $('.chat-footer').height(inputHeight);
+      if (this.answerType !== "POLL") {
+        const inputHeight = this.element.find('.message-input').outerHeight();
+        $('.chat-footer').height(inputHeight);
+      }
     },
     
     reset: function () {
+      this.answerType = "TEXT";
       this.activeThreadId = null;
       this.morePages = true;
       this.loading = false;
       this.sending = false;
       this.initialLoad = true;
       this.page = 0;
+      this.predefinedTexts = [];
     },
     
-    joinThread: function (threadId, threadTitle, threadImageUrl, threadCategory) {
+    joinThread: function (threadId, threadTitle, threadDescription, threadImageUrl, threadCategory, answerType, predefinedTexts, allowOtherAnswer) {
       this.reset();
       
-      $(`.chat-container .speech-wrapper`).empty();
       this.activeThreadId = parseInt(threadId);
-      this.loadMessages(this.page);
-      
+      this.answerType = answerType;
+      this.predefinedTexts = predefinedTexts;
+      this.element.find('.message-input').val('');
+
+      $(`.chat-container .speech-wrapper`).empty();
       if ('browser' !== device.platform) {
         $(".swiper-slide, .secondary-menu").hide("slide", { direction: "left" }, 300);      
         $(".chat-container").show("slide", { direction: "right" }, 300);
@@ -67,11 +76,43 @@
         'id': `thread-${threadId}`
       });
       
-      $('.chat-container .list-header-name').text(threadTitle || 'Pakkasmarja');
-      $('.chat-container .list-header-logo').attr('src', threadImageUrl || 'gfx/logo_punainen.png');
-      $('.chat-container .list-header-category').text(threadCategory || '');
+      if (answerType === "POLL") {
+        $(".chat-conversation-poll")
+          .html(threadDescription)
+          .show();
+        $(".chat-conversation-wrapper").hide();
+
+        const optionsContainer = $("<ul>")
+          .appendTo($(".chat-conversation-poll"));
+
+        for (let i = 0; i < this.predefinedTexts.length; i++) {
+          this._appendTextPollItem(optionsContainer, this.predefinedTexts[i]);
+        }
+
+        if (allowOtherAnswer) {
+          this._appendOtherPollItem(optionsContainer);
+        }
+
+        $('.chat-footer')
+          .removeClass('chat-footer-text')
+          .addClass('chat-footer-poll');
+
+      } else {
+        $(".chat-conversation-poll").hide();
+        $(".chat-conversation-wrapper").show();
+
+        this.loadMessages(this.page);
+        
+        $('.chat-container .list-header-name').text(threadTitle || 'Pakkasmarja');
+        $('.chat-container .list-header-logo').attr('src', threadImageUrl || 'gfx/logo_punainen.png');
+        $('.chat-container .list-header-category').text(threadCategory || '');
+
+        $('.chat-footer')
+          .addClass('chat-footer-text')
+          .removeClass('chat-footer-poll');
+      }
     },
-      
+
     leaveThread: function() {
       this.activeThreadId = null;
       if ('browser' !== device.platform) {
@@ -85,7 +126,7 @@
       if (!this.morePages) {
         return;  
       }
-      
+
       this.loading = true;
       $(`.chat-container .speech-wrapper`).addClass('loading');
       $(document.body).pakkasmarjaBerriesClient('sendMessage', {
@@ -102,6 +143,73 @@
       }
 
       return $(document.body).pakkasmarjaBerries('activePage') === 'conversations' || $(document.body).pakkasmarjaBerries('activePage') === 'questions';
+    },
+
+    /**
+     * Appends new text poll item into options container
+     * 
+     * @param {jQuery} optionsContainer options container
+     * @param {String} text label text
+     */
+    _appendTextPollItem(optionsContainer, text) {
+      this._appendPollItem(optionsContainer, "hidden", text, text)
+        .addClass("poll-item-text");
+    },
+
+    /**
+     * Appends new other poll item into options container
+     * 
+     * @param {jQuery} optionsContainer options container
+     */
+    _appendOtherPollItem(optionsContainer) {
+      this._appendPollItem(optionsContainer, "text", "Jokin muu: ", "")
+        .addClass("poll-item-other");
+    },
+
+    /**
+     * Appends new poll item into options container
+     * 
+     * @param {jQuery} optionsContainer options container
+     * @param {String} type input type 
+     * @param {String} text label text
+     * @param {String} value input value
+     */
+    _appendPollItem(optionsContainer, type, text, value) {
+      const input = $("<input>")
+        .attr({
+          "type": type
+        })
+        .val(value);
+
+      return $("<li>")
+        .append($("<span>").text(text).append(input))
+        .appendTo(optionsContainer);
+    },
+
+    /**
+     * Event handler for listening poll list clicks
+     * 
+     * @param {Object} e event
+     */
+    _onChatConversationPollClick: function (e) {
+      const li = $(e.target).closest("li");
+      const value = li.find('input').val();
+      $(".message-input").val(value);
+      $(".poll-item-selected").removeClass("poll-item-selected");
+      li.addClass("poll-item-selected");
+    },
+
+    /**
+     * Event handler for listening poll other input change event
+     * 
+     * @param {Object} e event
+     */
+    _onChatConversationPollOtherChange: function (e) {
+      const li = $(e.target).closest("li");
+      const value = li.find('input').val();
+      $(".message-input").val(value);
+      $(".poll-item-selected").removeClass("poll-item-selected");
+      li.addClass("poll-item-selected");
     },
 
     _onRemoveMessageBtnClick: function(e) {
@@ -286,6 +394,15 @@
       $(`.chat-conversation-wrapper`).animate({
         scrollTop: this.initialLoad || this.sending ? heightNew : heightDiff + marginTop - (marginTop - scrollTop)
       }, 0, "swing", () => {
+        if (this.answerType === "POLL" && this.sending) {
+          new Noty({ 
+            text: "Viesti lähetetty, voit muokata vastaustasi lähettämällä uuden vastauksen",
+            type: "info",
+            timeout: 3000,
+            layout: "center" 
+          }).show();
+        }
+
         this.initialLoad = false;
         this.loading = false;
         this.sending = false;
