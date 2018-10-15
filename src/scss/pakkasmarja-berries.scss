@@ -267,7 +267,7 @@ html {
 .questions-view {
   
   .item-row {
-    &:after {
+    &::after {
       font-family: FontAwesome;
       content: "\f105";
       padding-top: 10px;
@@ -312,11 +312,11 @@ html {
   li {
     height: 32px;
     margin-bottom: 10px;
-    list-style-image: url('../gfx/chat-conversation-poll.png');
+    list-style-image: url("../gfx/chat-conversation-poll.png");
 
     &.poll-item-selected,
     &:hover {
-      list-style-image: url('../gfx/chat-conversation-poll-selected.png');
+      list-style-image: url("../gfx/chat-conversation-poll-selected.png");
     }
 
     span {
@@ -448,7 +448,7 @@ html {
     display: block;
     background: #aff1fa;
     border-radius: 4px;
-    box-shadow: 1px 0px 3px #000;
+    box-shadow: 1px 0 3px #000;
     position: relative; 
     margin-top: 0;
     margin-right: 0;
