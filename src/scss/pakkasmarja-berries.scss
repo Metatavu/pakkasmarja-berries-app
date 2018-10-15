@@ -322,6 +322,11 @@ html {
     span {
       display: inline-block;
       vertical-align: top;
+      padding-top: 6px;
+
+      input {
+        margin-top: -6px;
+      }
     }
   }
 }
@@ -512,8 +517,8 @@ html {
       left: 50px;
       padding: 5px;
       text-align: center;
-      background: red;
-      color: #fff;
+      background: #ff0000;
+      color: #ffffff;
     }
   }
 
