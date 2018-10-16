@@ -206,7 +206,7 @@
       
       element.removeClass('unread').addClass('read');
       
-      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId, threadTitle, groupImageUrl, `Kysymysryhmä ${groupTitle}`);
+      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId, threadTitle, null, groupImageUrl, `Kysymysryhmä ${groupTitle}`, null, null, false, null);
     },
     
     _onPageChange: function (event, data) {
@@ -239,7 +239,7 @@
     
     _onQuestionThreadSelected: function (event, data) {
       const threadId = data['thread-id'];
-      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId, this.selectedQuestionGroupTitle, this.selectedQuestionGroupImageUrl, `Kysymysryhmä`);
+      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId, this.selectedQuestionGroupTitle, null, this.selectedQuestionGroupImageUrl, `Kysymysryhmä`, null, null, false, null);
       this.element.trigger('question-thread-selected', {threadId: threadId});
     },
     

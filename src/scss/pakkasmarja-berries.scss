@@ -267,7 +267,7 @@ html {
 .questions-view {
   
   .item-row {
-     &:after {
+    &::after {
       font-family: FontAwesome;
       content: "\f105";
       padding-top: 10px;
@@ -297,6 +297,40 @@ html {
   top: 0px;
 }
 
+.chat-conversation-poll-expires {
+  font-style: italic;
+}
+
+.chat-conversation-poll {
+  width: 100%;
+  padding: 50px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 70px;
+  height: 68vh;
+
+  li {
+    height: 32px;
+    margin-bottom: 10px;
+    list-style-image: url("../gfx/chat-conversation-poll.png");
+
+    &.poll-item-selected,
+    &:hover {
+      list-style-image: url("../gfx/chat-conversation-poll-selected.png");
+    }
+
+    span {
+      display: inline-block;
+      vertical-align: top;
+      padding-top: 6px;
+
+      input {
+        margin-top: -6px;
+      }
+    }
+  }
+}
+
 .chat-conversation-wrapper {
   background-image: url("../gfx/taustatapetti.png");
   background-repeat: no-repeat;
@@ -309,170 +343,185 @@ html {
   -webkit-overflow-scrolling: touch;
   height: 88vh;
   margin-bottom: 30px;
+}
+
+.speech-wrapper {
+  padding: 15px 20px;
+  overflow: auto;
+  
+  margin-top: 120px;
+
+  &.loading::before {
+    background-image: url("../gfx/loader.svg");
+    background-repeat: no-repeat;
+    height: 120px;
+    margin-top: -120px;
+    width: 100%; 
+    background-position: center;
+    content: "";
+    display: block;
+    position: absolute;
   }
 
-  .speech-wrapper {
-    padding: 15px 20px;
-    overflow: auto;
-    
-    margin-top: 120px;
+  &.sending::after {
+    background-image: url("../gfx/loader.svg");
+    background-repeat: no-repeat;
+    height: 120px;
+    background-position: center;
+    content: "";
+    display: block;
+  }
   
-    &.loading::before {
-      background-image: url("../gfx/loader.svg");
-      background-repeat: no-repeat;
-      height: 120px;
-      margin-top: -120px;
-      width: 100%; 
-      background-position: center;
-      content: "";
-      display: block;
+  .bubble-user,
+  .bubble-manager {
+    .remove-message-btn {
+      float: right;
+      font-size: 18px;
+      margin-right: 5px;
+      margin-top: 5px;
+    }
+    
+    .txt .message {
+      font-size: 14px; 
+      margin: 0;
+      
+      img {
+        max-width: 100%;
+      }
+    }
+  }
+  
+  
+  .bubble-user {
+    width: 85%;
+    height: auto;
+    display: block;
+    background: #f5f5f5;
+    border-radius: 4px;
+    box-shadow: 1px -1px 3px #000;
+    position: relative;
+    margin: 0 0 15px;
+
+    .txt {
+      padding-top: 8px;
+      padding-right: 30px;
+      padding-bottom: 8px;
+      padding-left: 14px; 
+      
+      .name {
+        font-weight: 600;
+        font-size: 16px;
+        margin: 0 0 4px;
+        color: #3498db;
+      }
+      
+      .message-time {
+        font-size: 12px;
+        color: #6a6a6b;
+        padding-bottom: 0;
+        margin-bottom: -5px;
+      }
+      
+      .message {
+        color: #2b2b2b;
+      }
+    }
+
+    .bubble-arrow {
       position: absolute;
-    }
+      left: -11px;
+      width: 15px;
+      z-index: 4;
+      bottom: 8px;
+      text-shadow: -1px 0 0 #999;
 
-    &.sending::after {
-      background-image: url("../gfx/loader.svg");
-      background-repeat: no-repeat;
-      height: 120px;
-      background-position: center;
-      content: "";
-      display: block;
+      i {
+        font-size: 36px;
+        color: #f5f5f5;
+      }
     }
-    
-    .bubble-user,
-    .bubble-manager {
-      .remove-message-btn {
-        float: right;
-        font-size: 18px;
-        margin-right: 5px;
-        margin-top: 5px;
+  }
+
+  .bubble-manager {
+    width: 85%;
+    height: auto;
+    display: block;
+    background: #aff1fa;
+    border-radius: 4px;
+    box-shadow: 1px 0 3px #000;
+    position: relative; 
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 20px;
+    margin-left: 40px;
+
+    .txt {
+      padding-top: 8px;
+      padding-right: 30px;
+      padding-bottom: 8px;
+      padding-left: 14px;
+      
+      .name {
+        font-weight: 600;
+        font-size: 16px;
+        margin: 0 0 4px;
+        color: #ff0000;
       }
       
-      .txt .message {
-        font-size: 14px; 
-        margin: 0;
-        
-        img {
-          max-width: 100%;
-        }
-      }
-    }
-    
-    
-    .bubble-user {
-      width: 85%;
-      height: auto;
-      display: block;
-      background: #f5f5f5;
-      border-radius: 4px;
-      box-shadow: 1px -1px 3px #000;
-      position: relative;
-      margin: 0 0 15px;
-
-      .txt {
-        padding-top: 8px;
-        padding-right: 30px;
-        padding-bottom: 8px;
-        padding-left: 14px; 
-        
-        .name {
-          font-weight: 600;
-          font-size: 16px;
-          margin: 0 0 4px;
-          color: #3498db;
-        }
-        
-        .message-time {
-          font-size: 12px;
-          color: #6a6a6b;
-          padding-bottom: 0;
-          margin-bottom: -5px;
-        }
-        
-        .message {
-          color: #2b2b2b;
-        }
-      }
-
-      .bubble-arrow {
-        position: absolute;
-        left: -11px;
-        width: 15px;
-        z-index: 4;
-        bottom: 8px;
-        text-shadow: -1px 0 0 #999;
-
-        i {
-          font-size: 36px;
-          color: #f5f5f5;
-        }
-      }
-    }
-
-    .bubble-manager {
-      width: 85%;
-      height: auto;
-      display: block;
-      background: #aff1fa;
-      border-radius: 4px;
-      box-shadow: 1px 0px 3px #000;
-      position: relative; 
-      margin-top: 0;
-      margin-right: 0;
-      margin-bottom: 20px;
-      margin-left: 40px;
-
-      .txt {
-        padding-top: 8px;
-        padding-right: 30px;
-        padding-bottom: 8px;
-        padding-left: 14px;
-        
-        .name {
-          font-weight: 600;
-          font-size: 16px;
-          margin: 0 0 4px;
-          color: #ff0000;
-        }
-        
-        .message-time {
-          font-size: 12px;
-          color: #6a6a6b;
-          padding-bottom: 0;
-          margin-bottom: -5px;
-        }
-        
-        .message {
-          color: #2b2b2b;
-        }
+      .message-time {
+        font-size: 12px;
+        color: #6a6a6b;
+        padding-bottom: 0;
+        margin-bottom: -5px;
       }
       
-      .bubble-arrow {
-        position: absolute;
-        right: -13px;
-        z-index: 4;
-        width: 15px;
-        bottom: 8px;
-        text-shadow: 1px 0 0 #333;
-
-        i {
-          font-size: 36px;
-          color: #aff1fa;
-        }
+      .message {
+        color: #2b2b2b;
       }
-    } 
+    }
+    
+    .bubble-arrow {
+      position: absolute;
+      right: -13px;
+      z-index: 4;
+      width: 15px;
+      bottom: 8px;
+      text-shadow: 1px 0 0 #333;
+
+      i {
+        font-size: 36px;
+        color: #aff1fa;
+      }
+    }
+  } 
 }
 
 .chat-footer {
   position: fixed;
   z-index: 9999;
   bottom: 0;
-  height: 48px;
   padding: 5px;
   background-color: #fff;
   width: 100%;
   padding-left: 5px + 33px + 5px; 
   padding-right: 5px + 33px + 5px;
-    
+  height: 48px;
+
+  &.chat-footer-poll {
+
+    .message-input {
+      visibility: hidden;
+    }
+
+    .message-send-btn {
+      left: 50px;
+      padding: 5px;
+      text-align: center;
+      background: #ff0000;
+      color: #ffffff;
+    }
+  }
+
   .upload-image {
     position: absolute;
     left: 5px;
