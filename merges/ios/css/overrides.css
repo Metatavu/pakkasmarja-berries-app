@@ -1,5 +1,5 @@
 body {
-  padding-top: 20px;
+  padding-top: 0;
 }
 
 .speech-wrapper.loading::before,
@@ -13,7 +13,7 @@ body {
 .navbar-top,
 .chat-container,
 .news-wrapper {
-  top: 27px;
+  top: 7px;
 }
 
 .secondary-menu {
@@ -22,7 +22,7 @@ body {
 
 .hamburger-menu,
 .settings-menu {
-  top: 80px;
+  top: 50px;
 }
 
 .settings-menu h5 {
@@ -34,7 +34,7 @@ body {
  }   
  
 .questions-view.show-list-header .list-header {
-  top: 45px; 
+  top: 75px; 
  }   
  
  
