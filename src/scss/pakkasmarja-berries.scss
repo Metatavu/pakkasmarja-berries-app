@@ -304,6 +304,7 @@ html {
 .chat-conversation-poll {
   width: 100%;
   padding: 50px;
+  padding-top: 60px;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   margin-top: 70px;
@@ -317,6 +318,10 @@ html {
     &.poll-item-selected,
     &:hover {
       list-style-image: url("../gfx/chat-conversation-poll-selected.png");
+    }
+
+    &.poll-item-other input {
+      margin-top: 5px;
     }
 
     span {
@@ -508,17 +513,22 @@ html {
   height: 48px;
 
   &.chat-footer-poll {
+    padding: 0;
 
     .message-input {
       visibility: hidden;
     }
 
     .message-send-btn {
-      left: 50px;
+      left: 0;
       padding: 5px;
       text-align: center;
       background: #ff0000;
       color: #ffffff;
+    }
+
+    .upload-image {
+      display: none;
     }
   }
 
