@@ -29,7 +29,6 @@
       this.element.on('click', '.chat-conversation-poll li', $.proxy(this._onChatConversationPollClick, this));
       this.element.on('change', '.poll-item-other input', $.proxy(this._onChatConversationPollOtherChange, this));
 
-
       $(document.body).on('click', '.chat-container .list-header-close-btn', $.proxy(this._onHeaderBackButtonClick, this));
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
       $(document.body).on('message:message-deleted', $.proxy(this._onMessageDeleted, this));
@@ -55,14 +54,16 @@
       this.initialLoad = true;
       this.page = 0;
       this.predefinedTexts = [];
+      this.pollAnswer = null;
     },
     
-    joinThread: function (threadId, threadTitle, threadDescription, threadImageUrl, threadCategory, answerType, predefinedTexts, allowOtherAnswer, expiresAt) {
+    joinThread: function (threadId, threadTitle, threadDescription, threadImageUrl, threadCategory, answerType, predefinedTexts, pollAnswer, allowOtherAnswer, expiresAt) {
       this.reset();
       
       this.activeThreadId = parseInt(threadId);
       this.answerType = answerType;
-      this.predefinedTexts = predefinedTexts;
+      this.predefinedTexts = predefinedTexts || [];
+      this.pollAnswer = pollAnswer;
       this.element.find('.message-input').val('');
 
       $(`.chat-container .speech-wrapper`).empty();
@@ -95,11 +96,11 @@
           .appendTo($(".chat-conversation-poll"));
 
         for (let i = 0; i < this.predefinedTexts.length; i++) {
-          this._appendTextPollItem(optionsContainer, this.predefinedTexts[i]);
+          this._appendTextPollItem(optionsContainer, this.predefinedTexts[i], this.predefinedTexts[i] == this.pollAnswer);
         }
 
         if (allowOtherAnswer) {
-          this._appendOtherPollItem(optionsContainer);
+          this._appendOtherPollItem(optionsContainer, this.predefinedTexts.indexOf(this.pollAnswer) === -1 ? this.pollAnswer : "");
         }
 
         $('.chat-footer')
@@ -160,9 +161,13 @@
      * @param {jQuery} optionsContainer options container
      * @param {String} text label text
      */
-    _appendTextPollItem(optionsContainer, text) {
-      this._appendPollItem(optionsContainer, "hidden", text, text)
+    _appendTextPollItem(optionsContainer, text, selected) {
+      const item = this._appendPollItem(optionsContainer, "hidden", text, text)
         .addClass("poll-item-text");
+
+      if (selected) {
+        item.addClass("poll-item-selected");
+      }
     },
 
     /**
@@ -170,9 +175,13 @@
      * 
      * @param {jQuery} optionsContainer options container
      */
-    _appendOtherPollItem(optionsContainer) {
-      this._appendPollItem(optionsContainer, "text", "Jokin muu: ", "")
+    _appendOtherPollItem(optionsContainer, value) {
+      const item = this._appendPollItem(optionsContainer, "text", "Jokin muu: ", value || "")
         .addClass("poll-item-other");
+
+      if (value) {
+        item.addClass("poll-item-selected");
+      }
     },
 
     /**
@@ -403,12 +412,18 @@
       $(`.chat-conversation-wrapper`).animate({
         scrollTop: this.initialLoad || this.sending ? heightNew : heightDiff + marginTop - (marginTop - scrollTop)
       }, 0, "swing", () => {
-        if (this.answerType === "POLL" && this.sending) {
+        if (this.answerType === "POLL" && this.sending) {          
           new Noty({ 
             text: "Viesti lähetetty, voit muokata vastaustasi lähettämällä uuden vastauksen",
             type: "info",
             timeout: 3000,
-            layout: "center" 
+            layout: "center",
+            modal: true,
+            callbacks: {
+              onClose: () => {
+                $(document.body).pakkasmarjaBerriesChatThreads("reloadChatThreads");
+              } 
+            }
           }).show();
         }
 

@@ -20,8 +20,12 @@
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
     },
     
-    joinThread: function(threadId, threadTitle, threadDescription, threadLogo, answerType, predefinedTexts, allowOtherAnswer, expiresAt) {
-      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId, threadTitle, threadDescription, threadLogo, 'Keskustelu', answerType, predefinedTexts, allowOtherAnswer, expiresAt);
+    joinThread: function(threadId, threadTitle, threadDescription, threadLogo, answerType, predefinedTexts, pollAnswer, allowOtherAnswer, expiresAt) {
+      $(".chat-container").pakkasmarjaBerriesChatThread('joinThread', threadId, threadTitle, threadDescription, threadLogo, 'Keskustelu', answerType, predefinedTexts, pollAnswer, allowOtherAnswer, expiresAt);
+    },
+
+    reloadChatThreads: function () {
+      this._loadChatThreads();
     },
     
     _addThreads: function (threads) {
@@ -88,8 +92,9 @@
       const predefinedTexts = JSON.parse($(element).attr('data-predefined-texts') || "[]");
       const allowOtherAnswer = "true" === $(element).attr('data-allow-other-answer');
       const expiresAt = $(element).attr('data-expires-at');
+      const pollAnswer = $(element).attr('data-poll-answer');
 
-      this.joinThread(threadId, threadTitle, threadDescription, threadImage, answerType, predefinedTexts, allowOtherAnswer, expiresAt);
+      this.joinThread(threadId, threadTitle, threadDescription, threadImage, answerType, predefinedTexts, pollAnswer, allowOtherAnswer, expiresAt);
     },
     
     _loadChatThreads: function () {
