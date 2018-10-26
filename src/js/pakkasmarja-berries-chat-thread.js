@@ -27,7 +27,7 @@
       this.element.on('click', '.full-image-btn', $.proxy(this._onFullImageBtnClick, this));
       this.element.on('click', '.remove-message-btn', $.proxy(this._onRemoveMessageBtnClick, this));
       this.element.on('click', '.chat-conversation-poll li', $.proxy(this._onChatConversationPollClick, this));
-      this.element.on('change', '.poll-item-other input', $.proxy(this._onChatConversationPollOtherChange, this));
+      this.element.on('change', '.chat-conversation-poll-other-answer', $.proxy(this._onChatConversationPollOtherChange, this));
 
       $(document.body).on('click', '.chat-container .list-header-close-btn', $.proxy(this._onHeaderBackButtonClick, this));
       $(document.body).on('message:messages-added', $.proxy(this._onMessagesAdded, this));
@@ -100,7 +100,11 @@
         }
 
         if (allowOtherAnswer) {
-          this._appendOtherPollItem(optionsContainer, this.predefinedTexts.indexOf(this.pollAnswer) === -1 ? this.pollAnswer : "");
+          this._appendOtherPollItem(optionsContainer, "");
+          autosize($("<textarea>")
+            .val(this.predefinedTexts.indexOf(this.pollAnswer) === -1 ? this.pollAnswer : "")
+            .addClass("chat-conversation-poll-other-answer")
+            .appendTo($(".chat-conversation-poll")));
         }
 
         $('.chat-footer')
@@ -162,7 +166,7 @@
      * @param {String} text label text
      */
     _appendTextPollItem(optionsContainer, text, selected) {
-      const item = this._appendPollItem(optionsContainer, "hidden", text, text)
+      const item = this._appendPollItem(optionsContainer, text, text)
         .addClass("poll-item-text");
 
       if (selected) {
@@ -176,7 +180,7 @@
      * @param {jQuery} optionsContainer options container
      */
     _appendOtherPollItem(optionsContainer, value) {
-      const item = this._appendPollItem(optionsContainer, "text", "Jokin muu: ", value || "")
+      const item = this._appendPollItem(optionsContainer, "Jokin muu: ", value || "")
         .addClass("poll-item-other");
 
       if (value) {
@@ -188,15 +192,12 @@
      * Appends new poll item into options container
      * 
      * @param {jQuery} optionsContainer options container
-     * @param {String} type input type 
      * @param {String} text label text
      * @param {String} value input value
      */
-    _appendPollItem(optionsContainer, type, text, value) {
+    _appendPollItem(optionsContainer, text, value) {
       const input = $("<input>")
-        .attr({
-          "type": type
-        })
+        .attr("type", "hidden")
         .val(value);
 
       return $("<li>")
@@ -223,11 +224,9 @@
      * @param {Object} e event
      */
     _onChatConversationPollOtherChange: function (e) {
-      const li = $(e.target).closest("li");
-      const value = li.find('input').val();
-      $(".message-input").val(value);
+      $(".message-input").val($(e.target).val());
       $(".poll-item-selected").removeClass("poll-item-selected");
-      li.addClass("poll-item-selected");
+      $(".poll-item-other").addClass("poll-item-selected");
     },
 
     _onRemoveMessageBtnClick: function(e) {
