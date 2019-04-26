@@ -22,6 +22,7 @@
       $(this.element).on('click', '.table-popup-link', this._onTablePopupLinkClick.bind(this));
       $(this.element).on('keyup', '#contractAmountInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
       $(this.element).on('change', '#contractDeliveryPlaceInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
+      $(this.element).on('change', '#deliverAllCheckBox', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
       $(this.element).on('change', '.hectare-table input', this._onHectareTableInputChange.bind(this));
     },
 
@@ -248,8 +249,10 @@
       const contractQuantity = $("#contractAmountInput").attr('data-contract-quantity');
       const currentDeliveryPlaceId = $("#contractDeliveryPlaceInput").val();
       const contractDeliveryPlaceId = $("#contractDeliveryPlaceInput").attr('data-contract-delivery-place-id');
+      const deliverAll = $("#deliverAllCheckBox").attr('data-deliver-all');
+      const currentDeliverAll = $('#deliverAllCheckBox').is(":checked") ? "true" : "false";
       
-      if (currentQuantity != contractQuantity || currentDeliveryPlaceId != contractDeliveryPlaceId) {
+      if (currentQuantity != contractQuantity || currentDeliveryPlaceId != contractDeliveryPlaceId || (deliverAll != currentDeliverAll)) {
         $('.accept-btn').text('EHDOTA MUUTOSTA');
       } else {
         $('.accept-btn').text('HYVÄKSYN');
@@ -357,7 +360,7 @@
       contract.quantityComment = $('#contractQuantityCommentInput').val();
       contract.deliveryPlaceComment = $('#contractDeliveryPlaceCommentInput').val();
       contract.areaDetails = this._getHectareTableData();
-      contract.deliverAll = $('#deliverAllCheckBox').is(':checked') ? true : false;
+      contract.proposedDeliverAll = $('#deliverAllCheckBox').is(':checked') ? true : false;
       const totalHectareAmount = this._getTotalHectareAmount(contract.areaDetails);
       
       if (itemGroupConfig[contract.itemGroupId] && itemGroupConfig[contract.itemGroupId]['require-area-details'] && contract.areaDetails.length < 1) {
@@ -369,7 +372,8 @@
         bootbox.alert(`Sopimusmäärä oltava vähintään ${contract.itemGroup.minimumProfitEstimation} kg/ha`);
         return;
       }
-      if (contract.proposedQuantity != contract.contractQuantity || contract.proposedDeliveryPlaceId != contract.deliveryPlaceId) {
+
+      if (contract.proposedQuantity != contract.contractQuantity || contract.proposedDeliveryPlaceId != contract.deliveryPlaceId || (contract.proposedDeliverAll !== contract.deliverAll)) {
         contract.status = 'ON_HOLD';
       }
       

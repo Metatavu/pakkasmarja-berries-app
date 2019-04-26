@@ -93,8 +93,13 @@ h3.contract-detail-header
             | edellisten vuosien sopimusmäärät ja toimitusmäärät
       if contract.allowDeliveryAll
         .form-check
-          input#deliverAllCheckBox.form-check-input(readonly=activeContract, disabled=activeContract, type='checkbox', checked=contract.deliverAll)
+          input#deliverAllCheckBox.form-check-input(readonly=activeContract, disabled=activeContract, type='checkbox', checked=contract.proposedDeliverAll, data-deliver-all=contract.deliverAll ? "true" : "false")
           label.form-check-label(for='deliverAllCheckBox') Haluaisin toimittaa kaiken tilallani viljeltävän sadon tästä marjasta Pakkasmarjalle pakastettavaksi ja tuorekauppaan (lisätietoja sopimuksen kohdasta 100 % toimittajuus).
+        .form-group
+          p 
+            |Pakkasmarjan ehdotus: 
+            b
+              =contract.deliverAll ? "Kyllä" : "Ei" 
       .form-group
         label(for='contractQuantityCommentInput') Kommentti
         textarea#contractQuantityCommentInput.form-control(readonly=activeContract, disabled=activeContract, rows='3')
