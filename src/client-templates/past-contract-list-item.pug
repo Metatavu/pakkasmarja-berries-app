@@ -1,0 +1,7 @@
+.row
+  .col(style="margin-left: 15px")
+    span
+      =contract.itemGroup.displayName || contract.itemGroup.name
+  .col
+    button.btn.btn-default.download-contract-pdf(data-contract-id=contract.id)
+      | Lataa sopimus

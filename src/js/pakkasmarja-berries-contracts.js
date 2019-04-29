@@ -24,6 +24,7 @@
       $(this.element).on('change', '#contractDeliveryPlaceInput', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
       $(this.element).on('change', '#deliverAllCheckBox', this._onContractQuantityOrDeliveryPlaceChange.bind(this));
       $(this.element).on('change', '.hectare-table input', this._onHectareTableInputChange.bind(this));
+      $(this.element).on('click', '.download-contract-pdf', this._onDownloadContractPdfClick.bind(this));
     },
 
     _onTablePopupLinkClick: function(e) {
@@ -259,6 +260,51 @@
       }
     },
 
+    _onDownloadContractPdfClick: function (e) {
+      e.preventDefault();
+      const button = $(e.target).closest('.download-contract-pdf');
+      const contractId = button.attr('data-contract-id');
+      const loader = $('<i>')
+        .addClass('fa fa-spinner fa-spin')
+        .appendTo(button);
+
+      $(document.body).pakkasmarjaBerriesRest('getContractDocumentPDF', contractId).then((contractDocument) => {
+        if (device.platform === 'browser') {
+          const reader = new FileReader();
+          reader.onload = function() {
+            loader.remove();
+            const link = $('<a>')
+              .css('display', 'none')
+              .appendTo('body');
+
+            link[0].href = reader.result;
+            link[0].download = "sopimus.pdf";
+            link[0].click();
+          };
+          reader.readAsDataURL(contractDocument);
+        } else {
+          const filename = `${new Date().getTime()}.pdf`;
+          window.resolveLocalFileSystemURL(cordova.file.dataDirectory, (dir) => {
+            dir.getFile(filename, { create:true }, (file) => {
+              file.createWriter((fileWriter) => {
+                fileWriter.write(contractDocument);
+                cordova.plugins.fileOpener2.open(`${cordova.file.dataDirectory}/${filename}`, 'application/pdf', {
+                  error : (e) => { 
+                    console.log('Error status: ' + e.status + ' - Error message: ' + e.message);
+                  },
+                  success :() => {
+                    loader.remove();
+                  }
+                });
+              }, () => {
+                alert("Virhe pdf:än tallennuksessa.");
+              });
+            });
+          });
+        }
+      });
+    },
+
     _onDownloadContractBtnClick: function(e) {
       e.preventDefault();
       const button = $(e.target).closest('.download-contract-btn');
@@ -376,7 +422,7 @@
       if (contract.proposedQuantity != contract.contractQuantity || contract.proposedDeliveryPlaceId != contract.deliveryPlaceId || (contract.proposedDeliverAll !== contract.deliverAll)) {
         contract.status = 'ON_HOLD';
       }
-      
+
       $(document.body).pakkasmarjaBerriesRest('updateUserContract', contract).then((updatedContract) => {
         
         if (updatedContract.status === 'DRAFT') {
@@ -633,6 +679,14 @@
               $('.fresh-list.active-contract-list-container').append(pugActiveContractListItem({contract: activeContract}));
             }
           });
+
+          const pastContracts = contracts.filter(contract => contract.status === 'TERMINATED');
+          pastContracts.forEach((pastContract) => {
+            pastContract.contact = contact;
+            pastContract.contact.businessCode = this._getBusinessCode(contact.taxCode);
+            $('.past-year-contract-list-container').append(pugPastContractListItem({contract: pastContract}));
+          });
+
           pendingContracts.forEach((pendingContract) => {
             if (itemGroupConfig[pendingContract.itemGroup.id] && itemGroupConfig[pendingContract.itemGroup.id]['allow-delivery-all']) {
               pendingContract.allowDeliveryAll = true;
